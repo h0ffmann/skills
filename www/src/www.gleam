@@ -1,13 +1,17 @@
-//// Writes a plain HTML view of the skills: one index page and one page for
-//// each skill. Run it from `www/` with `gleam run` (or `just site`).
+//// Writes a plain HTML view of the skills: one index page, one page for each
+//// skill and one page for `docs/awesome-skills.md`. Run it from `www/` with `gleam run` (or `just site`).
 
+import gleam/int
 import gleam/io
 import gleam/list
+import gleam/result
 import gleam/string
 
 const skills_dir = "../skills"
 
 const out_dir = "../docs/site"
+
+const awesome_md = "../docs/awesome-skills.md"
 
 @external(erlang, "www_ffi", "read")
 fn read(path: String) -> Result(String, Nil)
@@ -38,12 +42,13 @@ pub fn main() -> Nil {
   let skills = load_skills()
   make_dir(out_dir)
   write(out_dir <> "/index.html", index_page(skills))
+  write(out_dir <> "/awesome-skills.html", awesome_page())
   list.each(skills, fn(s) {
     write(out_dir <> "/" <> s.name <> ".html", skill_page(s))
   })
   io.println(
     "Wrote "
-    <> string.inspect(list.length(skills) + 1)
+    <> string.inspect(list.length(skills) + 2)
     <> " pages to docs/site/",
   )
 }
@@ -178,7 +183,8 @@ fn index_page(skills: List(Skill)) -> String {
     })
   page("skills", "<h1>skills</h1>
 <p>" <> string.inspect(list.length(skills)) <> " agent skills. A skill is one folder with a <code>SKILL.md</code> file.
-A ⏸ skill runs only when you call it by name.</p>
+A ⏸ skill runs only when you call it by name.
+<a href=\"awesome-skills.html\">awesome-skills</a> lists other skill collections.</p>
 " <> string.concat(sections))
 }
 
@@ -206,4 +212,55 @@ fn skill_page(s: Skill) -> String {
 <pre>" <> escape(s.body) <> "</pre>
 ",
   )
+}
+
+/// Writes the table of `docs/awesome-skills.md` as HTML. A row is
+/// `| n | [owner/repo](url) | stars | text |`.
+fn awesome_page() -> String {
+  let assert Ok(text) = read(awesome_md)
+  let intro = case string.split_once(text, "\n\n") {
+    Ok(#(_, rest)) ->
+      case string.split_once(rest, "\n\n") {
+        Ok(#(intro, _)) -> intro
+        Error(_) -> ""
+      }
+    Error(_) -> ""
+  }
+  let rows =
+    text
+    |> string.split("\n")
+    |> list.filter_map(awesome_row)
+  page("awesome-skills · skills", "<p><a href=\"index.html\">skills</a></p>
+<h1>awesome-skills</h1>
+<p>" <> escape(intro) <> "</p>
+<table>
+<tr><th>#</th><th>Repository</th><th>Stars</th><th>What it is</th></tr>
+" <> string.concat(rows) <> "</table>
+")
+}
+
+fn awesome_row(line: String) -> Result(String, Nil) {
+  case string.split(line, " | ") {
+    ["| " <> n, repo, stars, what] -> {
+      use _ <- result.try(int.parse(n))
+      use #(name, url) <- result.try(string.split_once(repo, "]("))
+      let name = string.drop_start(name, 1)
+      let url = string.drop_end(url, 1)
+      let what = what |> string.drop_end(2) |> string.replace("`", "")
+      Ok(
+        "<tr><td>"
+        <> n
+        <> "</td><td><a href=\""
+        <> escape(url)
+        <> "\">"
+        <> escape(name)
+        <> "</a></td><td>"
+        <> escape(stars)
+        <> "</td><td>"
+        <> escape(what)
+        <> "</td></tr>\n",
+      )
+    }
+    _ -> Error(Nil)
+  }
 }

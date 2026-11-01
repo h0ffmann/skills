@@ -4,7 +4,7 @@
 
 # skills
 
-<sub>🇨🇭 · 技 · <i>waza</i> · a swiss army knife of agent skills · <a href="https://h0ffmann.github.io/skills/site/">website</a> · <a href="#in-one-minute">in one minute</a> · <a href="#the-skills">the skills</a> · <a href="#token-budget">token budget</a> · <a href="#install">install</a> · <a href="#structure">structure</a> · <a href="docs/drawings/README.md">the drawing</a> · <a href="#license">license</a></sub>
+<sub>🇨🇭 · 技 · <i>waza</i> · a swiss army knife of agent skills · <a href="https://h0ffmann.github.io/skills/site/">website</a> · <a href="docs/awesome-skills.md">awesome-skills</a> · <a href="#in-one-minute">in one minute</a> · <a href="#the-skills">the skills</a> · <a href="#token-budget">token budget</a> · <a href="#install">install</a> · <a href="#structure">structure</a> · <a href="docs/drawings/README.md">the drawing</a> · <a href="#license">license</a></sub>
 
 [![skills: 41](https://img.shields.io/badge/skills-41-1682D4?style=flat-square)](#the-skills)
 [![writing: ASD-STE100](https://img.shields.io/badge/writing-ASD--STE100-1682D4?style=flat-square)](AGENTS.md)
@@ -168,6 +168,7 @@ skills/
 │   └── deepwiki-check.jq  # limits of .devin/wiki.json
 ├── drawings/              # pen.nix and waza.nix, pure Nix
 ├── docs/drawings/         # waza.svg, waza.desmos.json, README.md
+├── docs/awesome-skills.md # the 33 personal skill collections with the most stars
 ├── docs/site/             # the website, plain HTML that `just site` writes
 ├── www/                   # the Gleam program that writes docs/site/
 ├── vendor/archify/        # git submodule, MIT
