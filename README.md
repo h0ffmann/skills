@@ -172,7 +172,7 @@ skills/
 ├── docs/awesome-skills.md # the 33 personal skill collections with the most stars
 ├── docs/site/             # the website build, not committed (`just site`)
 ├── .github/workflows/     # pages.yml: CD of the website to GitHub Pages
-├── www/                   # the Gleam program that writes docs/site/
+├── www/                   # the Gleam program for docs/site/ and the skill tags (tags.txt)
 ├── vendor/archify/        # git submodule, MIT
 ├── .devin/wiki.json       # the DeepWiki outline
 └── .mcp.json              # the DeepWiki MCP server

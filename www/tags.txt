@@ -1,0 +1,43 @@
+# The tags of each skill, for the search on the website. One line for each skill: `name: tag tag`.
+# The site adds the category and `manual` (for a ⏸ skill) itself. `gleam run` fails if a skill has no line.
+lean-code: code review
+loco: code rust web
+bipr: github pr pt-br
+easy-issues: github issue pr automation
+handoff: notes obsidian agents
+mip-overnight: planning pr automation
+mip-tasks: planning pr github
+mip: planning design-doc
+pr-images: github pr pt-br
+triage: github issue planning
+voice-note: audio notes
+archify: diagram
+ddraw: diagram svg drawing
+figure: diagram markdown pt-br
+svg-diagram: diagram svg markdown
+nix-debug: nix nixos debug
+nix-lab: nix toolchain
+nixos-vps: nix nixos deploy
+systemd-hardening: nix systemd security
+pirsig-slips: notes zettelkasten
+pirsig: notes zettelkasten
+zk-method: notes zettelkasten lint
+retro: agents review
+sharingan: agents code licence
+writing-styles: writing english
+citation-score: citation research
+cite-release: citation release
+eli5: explain diagram
+open-text: research licence
+paper: research citation writing
+citizen-science: web open-data
+maps: web maps
+web-ui: web design review
+cientifico: pt-br research writing
+easy-translate: translation pt-br japanese chinese
+essay: writing review
+ptbr-routing: pt-br writing
+ptbr-writer: pt-br writing
+ptbr: pt-br writing
+retorica: pt-br writing
+ste100: english writing ste100
