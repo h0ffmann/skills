@@ -5,8 +5,8 @@ set positional-arguments
 default:
     @just --list
 
-# Run all checks: budgets, ASD-STE100, script self-tests, the drawing, the DeepWiki file
-check: deepwiki-check
+# Run all checks: budgets, ASD-STE100, script self-tests, the drawing, the site, the DeepWiki file
+check: deepwiki-check site
     python3 scripts/check.py --self-test
     python3 scripts/check.py
     bash skills/research/citation-score/scripts/citation-score.sh --self-test
@@ -15,6 +15,10 @@ check: deepwiki-check
     test "$(nix eval --json .#drawing.failures)" = "[]"
     nix eval --raw .#drawing.svg | cmp - docs/drawings/waza.svg
     nix eval --raw .#drawing.desmos | cmp - docs/drawings/waza.desmos.json
+
+# Write the plain HTML view of the skills into docs/site/ (needs Gleam and Erlang)
+site:
+    cd www && gleam run
 
 # Write the README drawing again from drawings/waza.nix
 drawing:
