@@ -15,8 +15,6 @@ check: deepwiki-check site
     test "$(nix eval --json .#drawing.failures)" = "[]"
     nix eval --raw .#drawing.svg | cmp - docs/drawings/waza.svg
     nix eval --raw .#drawing.desmos | cmp - docs/drawings/waza.desmos.json
-    git diff --exit-code --stat -- docs/site
-    test -z "$(git ls-files --others --exclude-standard docs/site)"
 
 # Write the plain HTML view of the skills into docs/site/ (needs Gleam and Erlang)
 site:

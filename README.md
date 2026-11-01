@@ -4,7 +4,7 @@
 
 # skills
 
-<sub>🇨🇭 · 技 · <i>waza</i> · a swiss army knife of agent skills · <a href="https://h0ffmann.github.io/skills/site/">website</a> · <a href="docs/awesome-skills.md">awesome-skills</a> · <a href="#in-one-minute">in one minute</a> · <a href="#the-skills">the skills</a> · <a href="#token-budget">token budget</a> · <a href="#install">install</a> · <a href="#structure">structure</a> · <a href="docs/drawings/README.md">the drawing</a> · <a href="#license">license</a></sub>
+<sub>🇨🇭 · 技 · <i>waza</i> · a swiss army knife of agent skills · <a href="https://h0ffmann.github.io/skills/">website</a> · <a href="docs/awesome-skills.md">awesome-skills</a> · <a href="#in-one-minute">in one minute</a> · <a href="#the-skills">the skills</a> · <a href="#token-budget">token budget</a> · <a href="#install">install</a> · <a href="#structure">structure</a> · <a href="docs/drawings/README.md">the drawing</a> · <a href="#license">license</a></sub>
 
 [![skills: 41](https://img.shields.io/badge/skills-41-1682D4?style=flat-square)](#the-skills)
 [![writing: ASD-STE100](https://img.shields.io/badge/writing-ASD--STE100-1682D4?style=flat-square)](AGENTS.md)
@@ -152,8 +152,9 @@ just check
 ```
 
 It runs `scripts/check.py`, the self-tests of the skill scripts, the tests of the drawing, a
-comparison of the committed drawing with a new evaluation, a new build of the site, and
-`scripts/deepwiki-check.jq`.
+comparison of the committed drawing with a new evaluation, a build of the site, and
+`scripts/deepwiki-check.jq`. One workflow is CD only: `.github/workflows/pages.yml` builds the site
+and deploys it to GitHub Pages after each merge to `main`.
 
 ## Structure
 
@@ -169,7 +170,8 @@ skills/
 ├── drawings/              # pen.nix and waza.nix, pure Nix
 ├── docs/drawings/         # waza.svg, waza.desmos.json, README.md
 ├── docs/awesome-skills.md # the 33 personal skill collections with the most stars
-├── docs/site/             # the website, plain HTML that `just site` writes
+├── docs/site/             # the website build, not committed (`just site`)
+├── .github/workflows/     # pages.yml: CD of the website to GitHub Pages
 ├── www/                   # the Gleam program that writes docs/site/
 ├── vendor/archify/        # git submodule, MIT
 ├── .devin/wiki.json       # the DeepWiki outline
