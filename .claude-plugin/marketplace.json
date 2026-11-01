@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "h0ffmann",
+  "description": "The agent skills of h0ffmann, as one Claude Code plugin.",
+  "owner": {
+    "name": "h0ffmann",
+    "url": "https://github.com/h0ffmann"
+  },
+  "plugins": [
+    {
+      "name": "waza",
+      "description": "The agent skills of h0ffmann, in ten categories.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

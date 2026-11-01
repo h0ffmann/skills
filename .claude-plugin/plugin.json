@@ -1,0 +1,31 @@
+{
+  "name": "waza",
+  "version": "0.1.0",
+  "description": "The agent skills of h0ffmann in ten categories: writing, research, dev-flow, nix, figures, web, notes, code, ouroboric and ww3.",
+  "author": {
+    "name": "h0ffmann",
+    "url": "https://github.com/h0ffmann"
+  },
+  "homepage": "https://h0ffmann.github.io/skills/",
+  "repository": "https://github.com/h0ffmann/skills",
+  "license": "MPL-2.0",
+  "keywords": [
+    "skills",
+    "ste100",
+    "nix",
+    "pt-br",
+    "research"
+  ],
+  "skills": [
+    "./skills/code/",
+    "./skills/dev-flow/",
+    "./skills/figures/",
+    "./skills/nix/",
+    "./skills/notes/",
+    "./skills/ouroboric/",
+    "./skills/research/",
+    "./skills/web/",
+    "./skills/writing/",
+    "./skills/ww3/"
+  ]
+}

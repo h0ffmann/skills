@@ -32,6 +32,9 @@ AS_IS = {
     "skills/writing/ptbr", "skills/writing/ptbr-writer", "skills/writing/ptbr-routing",
     "skills/writing/cientifico", "skills/writing/retorica", "skills/dev-flow/bipr",
     "skills/figures/figure", "skills/figures/archify",
+    # Copied as is on the owner's word: ww3-gpu and chaceon, and ponytail-review from havamal.
+    "skills/ww3/noaa-notices", "skills/ww3/release", "skills/ww3/wfip", "skills/ww3/ww3-port",
+    "skills/ww3/ww3-port-rust", "skills/ww3/ww4-status", "skills/ouroboric/ponytail-review",
 }
 
 PHRASAL = re.compile(

@@ -4,9 +4,9 @@
 
 # skills
 
-<sub>🇨🇭 · 技 · <i>waza</i> · a swiss army knife of agent skills · <a href="https://h0ffmann.github.io/skills/">website</a> · <a href="docs/awesome-skills.md">awesome-skills</a> · <a href="#in-one-minute">in one minute</a> · <a href="#the-skills">the skills</a> · <a href="#token-budget">token budget</a> · <a href="#install">install</a> · <a href="#structure">structure</a> · <a href="docs/drawings/README.md">the drawing</a> · <a href="#license">license</a></sub>
+<sub>🇨🇭 · 技 · <i>waza</i> · a swiss army knife of agent skills · <a href="https://h0ffmann.github.io/skills/">website</a> · <a href="docs/awesome-skills.md">awesome-skills</a> · <a href="docs/common-skills.md">common-skills</a> · <a href="#in-one-minute">in one minute</a> · <a href="#the-skills">the skills</a> · <a href="#token-budget">token budget</a> · <a href="#install">install</a> · <a href="#structure">structure</a> · <a href="docs/drawings/README.md">the drawing</a> · <a href="#license">license</a></sub>
 
-[![skills: 41](https://img.shields.io/badge/skills-41-1682D4?style=flat-square)](#the-skills)
+[![skills: 50](https://img.shields.io/badge/skills-50-1682D4?style=flat-square)](#the-skills)
 [![writing: ASD-STE100](https://img.shields.io/badge/writing-ASD--STE100-1682D4?style=flat-square)](AGENTS.md)
 [![license: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-1682D4?style=flat-square)](#license)
 [![Ask DeepWiki](https://img.shields.io/badge/Ask-DeepWiki-1682D4?style=flat-square)](https://deepwiki.com/h0ffmann/skills)
@@ -19,7 +19,7 @@
   reads the file when a task needs it.
 - Each skill comes from a real project of h0ffmann, piabrota or marola-dev. Each skill is written
   for those projects. It is not a copy of a public skill collection.
-- The skills are in nine category folders. A skill name is unique in all folders.
+- The skills are in ten category folders. A skill name is unique in all folders.
 - The whole repository is in ASD-STE100. The pt-BR skills follow `ptbr-writer`.
 - The repository is small for the agent. A description costs tokens in each session. Thus
   `scripts/check.py` makes the budgets hard limits.
@@ -43,6 +43,7 @@ A ⏸ skill runs only when you call it by name. Its description does not load in
 | `ptbr-routing` | Selects the pt-BR skill and level before it loads | gramatico, as is |
 | `cientifico` | Writes and reviews scientific pt-BR text with sources | gramatico, as is |
 | `retorica` | Rhetoric for pt-BR (in development, no rules yet) | gramatico, as is |
+| `ptbr-humanizer` | Makes the pt-BR copy of a site sound Brazilian | marola-site |
 
 ### `research/`
 
@@ -93,20 +94,27 @@ A ⏸ skill runs only when you call it by name. Its description does not load in
 | `web-ui` | Changes or reviews what a visitor sees | marola-site |
 | `maps` | Areas, points and data fields on a web map | marola-site, alerts |
 | `citizen-science` | Keeps an open-data site checkable and easy to join | marola-site |
+| `news-post` | A news post in pt-BR and English, with sources and a reading time | marola-site |
 | `zk-method` | Checks notes against the Zettelkasten method | pirsig |
 | `pirsig-slips` | Works with ideas on paper slips, as in Lila | closed-source |
 | `pirsig` | Drives the Pirsig second brain and its Hippo rhizomes | pirsig |
 | `lean-code` | The smallest correct diff | marola-devkit, marola-site |
 | `loco` | Writes or debugs a Loco app (Rust and SQLite) | pirsig |
 
+### `ww3/`
+
+`ww3-port`, `wfip`, `release`, `noaa-notices` and `ww4-status` come from ww3-gpu, the port of
+WAVEWATCH III to the GPU. `ww3-port-rust` is the `ww3-port` skill of chaceon. All are as is.
+
 ### `ouroboric/`
 
-`sharingan`, `retro` ⏸ and `writing-styles` borrow ideas from the ouroboric-dev projects. No file
-is copied. `skills/ouroboric/README.md` gives the credit and the index of the public ouroboric-dev
-repositories.
+`sharingan`, `retro` ⏸ and `writing-styles` borrow ideas from ouroboric-dev. `ponytail-review` is
+as is from havamal. `skills/ouroboric/README.md` gives the credit and the index of their skills.
 
 ### Not here
 
+`docs/common-skills.md` lists the skills of other authors that the projects use, such as
+`ponytail` and `frontend-design`, with the source, the licence and the install command.
 Some skills of the source projects are not here. A skill with the same job replaces a duplicate.
 A skill for one tool of one project stays in that project. Examples: `open-pr`, `write-pt-br`,
 `translate-ja`, `zenodo-release`, the `mapbox-*` skills, `routing`, `voice-to-feature`,
@@ -124,14 +132,24 @@ An agent loads a skill in three steps. Each step costs more tokens and occurs le
 
 - A ⏸ skill has `disable-model-invocation: true`. It costs no tokens in step 1.
 - A skill body has no `@` import and no link. An import loads a file eagerly.
-- `python3 scripts/check.py` prints the cost of step 1. Today: 34 descriptions in a session,
-  about 1,900 tokens.
+- `python3 scripts/check.py` prints the cost of step 1. Today: 43 descriptions in a session,
+  about 2,650 tokens.
 - The same script lints for ASD-STE100: sentence length, semicolons, phrasal verbs, marketing
   words and the em dash. It also limits `README.md` and `AGENTS.md` in lines and links.
 
 ## Install
 
-You need `git`, `python3` and `just`. Nix, `jq`, Gleam and Erlang are necessary only for `just check`.
+The repository is a Claude Code marketplace. Its plugin `waza` has all the skills. Copy one line,
+in a session (Claude Code 2.1.275 or newer) or in a terminal:
+
+```text
+/plugin install waza --marketplace h0ffmann/skills
+claude plugin install waza --marketplace h0ffmann/skills
+```
+
+An older Claude Code needs `/plugin marketplace add h0ffmann/skills` and `/plugin install waza@h0ffmann`.
+The plugin also adds the DeepWiki MCP server of `.mcp.json`. For another agent, you need `git`,
+`python3` and `just`. Nix, `jq`, Gleam and Erlang are necessary only for `just check`.
 
 ```bash
 git clone --recurse-submodules https://github.com/h0ffmann/skills
@@ -162,6 +180,7 @@ and deploys it to GitHub Pages after each merge to `main`.
 skills/
 ├── AGENTS.md              # the rules for agents and humans
 ├── CITATION.cff           # the citation data (GitHub "Cite this repository")
+├── .claude-plugin/        # plugin.json and marketplace.json: the Claude Code plugin
 ├── justfile               # check, link, drawing, site, deepwiki-check
 ├── flake.nix              # one input: nixpkgs-lib. Output: the drawing
 ├── skills/<category>/<name>/SKILL.md
@@ -195,6 +214,7 @@ The repository is MPL-2.0 (`LICENSE`). Some files keep the licence of their sour
 | `skills/dev-flow/voice-note/scripts/transcribe.py` | MIT | marola-dev/marola-devkit |
 | `skills/notes/zk-method/scripts/zk_lint.py` | MPL-2.0 | piabrota/pirsig |
 | The gramatico skills, as is | MPL-2.0 | piabrota/gramatico |
+| `skills/ouroboric/ponytail-review` | MIT | DietrichGebert/ponytail, through ouroboric-dev/havamal |
 
 The ideas in `skills/ouroboric/` are Bruno Valério's, from ouroboric-dev. The stroke order of 技
 follows KanjiVG (CC BY-SA 3.0), as a reference only.
