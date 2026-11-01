@@ -1,0 +1,84 @@
+---
+name: paper
+description: "Write, check and prepare a citable research text (paper, proposal or report). Each claim has a mark, and a log says how each source was checked. Use for a draft, a new section or reference, or a check before a PR."
+---
+
+# paper
+
+A paper here is prose, its sources, the log of how each source was checked, and the marks that
+say what was checked. The work documents itself as it documents its subject.
+
+## The loop
+
+1. **Read** what exists first: the design (a MIP), the notes and the code.
+2. **Evaluate** each thing yourself: fetch it, run it, or mark it as not checked.
+3. **Adopt** only what passed, with credit to a DOI or a commit.
+4. **Write**, with a mark on each claim.
+5. **Log** how each source was checked.
+6. **Say** what is not known.
+
+## Marks
+
+- `(v)`: checked while writing. The log says how.
+- `(v, title only)`: the record of the source was read, but not its text.
+- `(MIP §n)`: the claim comes from that place of a design.
+- `⚠`: not checked.
+
+A mark belongs to its words. When you change the words, do the check again. A mark from an
+earlier session tells you where to look. It is not a check.
+
+"The source does not say it" is not "it is false". Write which of the two you found.
+
+## Rules
+
+- **Never invent a reference.** Copy the title, authors, venue and year from the registry
+  record (Crossref, DataCite, arXiv). A snippet, a summary, your memory or the reference list of
+  another paper is not a reading of the source.
+- **Each number has its command** or its source, with its unit. A number copied by hand is `⚠`.
+- **No result before parity.** Show that a thing is correct before you say that it is faster.
+  Never widen a tolerance to get a pass.
+- **Keep facts apart from analysis.** Say which sentence has a source and which is your reading.
+- **The design wins.** If the paper and its MIP do not agree, change the paper, or ask.
+- **A private source stays private.** Say that it exists. Do not copy its content.
+
+## Files
+
+```text
+<research>/
+  README.md        what the research is, its rules, its status
+  paper/paper.md   front matter (title, author, status: draft, version, date), then the prose
+  paper/refs.bib   each reference, with a DOI where one exists
+  paper/REFERENCES.md  one row for each entry: how it was checked, what the paper takes from it
+  notes/           one idea in one note
+  journal/         one entry for each problem that the work met
+```
+
+The text starts with a block that says what the text is and how to read the marks. The last
+sections are "What is not known" and "Where the thesis comes from".
+
+## Steps
+
+1. Find the design. If a MIP exists, the paper is an account of it.
+2. List the claims before the prose. Give each one its kind: a fact about a source, a
+   description, a cause, a forecast, a design choice or a claim of being first. A cause needs a
+   measurement. A claim of being first is narrowed to what was examined, and when.
+3. Check each claim. A reference passes three checks: it exists, it is the work that you mean,
+   and it says what you say. The verdict is *verified*, *mismatch* or *not found*. Write the row
+   of `REFERENCES.md` as you go.
+4. Write the body. Short sentences, active voice, numbers and not adjectives. Use the `ste100`
+   skill for English and the `cientifico` skill for pt-BR.
+5. Remove or mark each claim that you could not check. Do not soften it.
+6. Write the ends last: "What is not known", then the summary and the abstract.
+7. Do the mechanical pass. A number in two places is the same in both. One word names one thing.
+   After a style edit, compare the facts with the earlier version. Render the PDF and read it.
+8. Give the rendered paper, and nothing else, to a cold reader (a fresh agent). Ask five to ten
+   questions. Ask for faults: where, the quoted words, the rule, why it matters, what to do.
+9. Open a PR. Paste what each check printed. List the decisions that belong to the owner.
+
+## Release
+
+Use the `cite-release` skill. An agent never makes the tag.
+
+## Easy version
+
+Use the `easy-translate` skill. Keep each claim and each mark. Add no fact.
