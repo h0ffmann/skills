@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use these skills, cite them with the data in this file."
+type: software
+title: "skills"
+abstract: "A set of agent skills, tailored to the owner's projects and written in ASD-STE100."
+authors:
+  - alias: h0ffmann
+    orcid: "https://orcid.org/0009-0009-1056-7661"
+repository-code: "https://github.com/h0ffmann/skills"
+url: "https://h0ffmann.github.io/skills/"
+license: MPL-2.0
+keywords:
+  - agent skills
+  - ASD-STE100

@@ -15,6 +15,8 @@ const awesome_md = "../docs/awesome-skills.md"
 
 const tags_txt = "tags.txt"
 
+const logo_svg = "../docs/drawings/waza.svg"
+
 @external(erlang, "www_ffi", "read")
 fn read(path: String) -> Result(String, Nil)
 
@@ -44,6 +46,8 @@ pub type Skill {
 pub fn main() -> Nil {
   let skills = add_tags(load_skills(), read_tags())
   make_dir(out_dir)
+  let assert Ok(logo) = read(logo_svg)
+  write(out_dir <> "/waza.svg", logo)
   write(out_dir <> "/index.html", index_page(skills))
   write(out_dir <> "/awesome-skills.html", awesome_page())
   let prevs = [Error(Nil), ..list.map(skills, Ok)]
@@ -199,9 +203,22 @@ const style =
 }
 body { max-width: 52rem; margin: 0 auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; color: var(--fg); background: var(--bg); }
 a { color: var(--link); }
-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+header { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1.5rem 0 1rem; border-bottom: 1px solid var(--line); text-align: center; }
+header .logo img { display: block; width: 128px; height: 128px; }
 header .repo { font-weight: bold; font-size: 1.2rem; text-decoration: none; color: var(--fg); }
-header img { display: block; height: 20px; }
+header .actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 0.5rem; width: 100%; }
+details.cite[open] { flex-basis: 100%; display: flex; flex-direction: column; align-items: center; }
+header .orgs { font-size: 0.85rem; color: var(--muted); }
+header .orgs a { color: var(--muted); }
+.btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.7rem; border: 1px solid var(--line); border-radius: 0.4rem; background: var(--code); color: var(--fg); font-size: 0.85rem; text-decoration: none; cursor: pointer; list-style: none; }
+.btn::-webkit-details-marker { display: none; }
+.btn svg { fill: currentColor; }
+.btn:hover { border-color: var(--muted); }
+#stars:not(:empty) { padding-left: 0.4rem; border-left: 1px solid var(--line); }
+.cite-box { margin-top: 0.5rem; text-align: left; width: 100%; }
+.cite-box pre { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0.25rem 0 0.75rem; }
+.cite-box p { margin: 0; }
+.cite-box button { font: inherit; font-size: 0.8rem; margin-left: 0.5rem; cursor: pointer; }
 nav.crumbs { margin: 1rem 0 0; color: var(--muted); }
 nav.pager { display: flex; justify-content: space-between; gap: 1rem; margin: 1.5rem 0; }
 .scroll { overflow-x: auto; }
@@ -215,6 +232,40 @@ input[type=search] { width: 100%; box-sizing: border-box; padding: 0.4rem; font:
 footer { margin: 3rem 0 1rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
 "
 
+/// The citation. CITATION.cff at the repository root has the same data.
+const cite_apa =
+  "h0ffmann. (2026). skills [Computer software]. https://github.com/h0ffmann/skills"
+
+const cite_bibtex =
+  "@software{h0ffmann_skills_2026,
+  author = {h0ffmann},
+  title = {skills},
+  year = {2026},
+  url = {https://github.com/h0ffmann/skills},
+  license = {MPL-2.0},
+  note = {ORCID 0009-0009-1056-7661}
+}"
+
+/// Shows the star count from the GitHub API, if it answers, and copies a
+/// citation. The page works without it.
+const header_script =
+  "<script>
+(() => {
+  fetch('https://api.github.com/repos/h0ffmann/skills')
+    .then(r => r.ok ? r.json() : null)
+    .then(d => { if (d && typeof d.stargazers_count === 'number') document.getElementById('stars').textContent = d.stargazers_count; })
+    .catch(() => {});
+  for (const b of document.querySelectorAll('button[data-copy]')) {
+    b.addEventListener('click', () => {
+      navigator.clipboard.writeText(document.getElementById(b.dataset.copy).textContent)
+        .then(() => { b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy'; }, 1500); })
+        .catch(() => {});
+    });
+  }
+})();
+</script>
+"
+
 fn page(title: String, main: String) -> String {
   "<!doctype html>
 <html lang=\"en\">
@@ -226,17 +277,27 @@ fn page(title: String, main: String) -> String {
 </head>
 <body>
 <header>
+<a class=\"logo\" href=\"index.html\"><img src=\"waza.svg\" width=\"128\" height=\"128\" alt=\"技 (waza, skill), the logo\"></a>
 <a class=\"repo\" href=\"index.html\">h0ffmann/skills</a>
-<a href=\"" <> repo_url <> "\" title=\"Star h0ffmann/skills on GitHub\"><img alt=\"★ Star on GitHub\" src=\"https://img.shields.io/github/stars/h0ffmann/skills?style=social\"></a>
+<div class=\"actions\">
+<a class=\"btn\" href=\"" <> repo_url <> "\" title=\"Star h0ffmann/skills on GitHub\"><svg aria-hidden=\"true\" viewBox=\"0 0 16 16\" width=\"16\" height=\"16\"><path d=\"M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z\"/></svg> <svg aria-hidden=\"true\" viewBox=\"0 0 16 16\" width=\"16\" height=\"16\"><path d=\"M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z\"/></svg> Star <span id=\"stars\"></span></a>
+<details class=\"cite\"><summary class=\"btn\"><svg aria-hidden=\"true\" viewBox=\"0 0 16 16\" width=\"16\" height=\"16\"><path d=\"M1.75 2.5h10.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Zm4 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Zm0 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5ZM2.5 7.75v6a.75.75 0 0 1-1.5 0v-6a.75.75 0 0 1 1.5 0Z\"/></svg> Cite</summary>
+<div class=\"cite-box\">
+<p><b>APA</b> <button type=\"button\" data-copy=\"apa\">Copy</button></p>
+<pre id=\"apa\">" <> escape(cite_apa) <> "</pre>
+<p><b>BibTeX</b> <button type=\"button\" data-copy=\"bibtex\">Copy</button></p>
+<pre id=\"bibtex\">" <> escape(cite_bibtex) <> "</pre>
+<p>Source: <a href=\"" <> repo_url <> "/blob/main/CITATION.cff\">CITATION.cff</a></p>
+</div>
+</details>
+</div>
+<nav class=\"orgs\"><a href=\"https://github.com/marola-dev\">marola-dev</a> · <a href=\"https://piabrota.art\">piabrota.art</a> · <a href=\"https://github.com/ouroboric-dev\">ouroboric-dev</a></nav>
 </header>
 " <> main <> "<footer>
 <p>Built with Gleam on Erlang/OTP: plain HTML and CSS, and a small script for the search. GitHub Actions deploys it to GitHub Pages.</p>
-<p><a href=\"https://github.com/h0ffmann\">h0ffmann</a> ·
-<a href=\"https://piabrota.art\">piabrota.art</a> ·
-<a href=\"https://github.com/ouroboric-dev\">ouroboric-dev</a> ·
-<a href=\"https://github.com/marola-dev\">marola-dev</a></p>
+<p>Content by <a href=\"https://github.com/h0ffmann\">h0ffmann</a>, MPL-2.0.</p>
 </footer>
-</body>
+" <> header_script <> "</body>
 </html>
 "
 }

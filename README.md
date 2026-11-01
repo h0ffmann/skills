@@ -161,6 +161,7 @@ and deploys it to GitHub Pages after each merge to `main`.
 ```text
 skills/
 ├── AGENTS.md              # the rules for agents and humans
+├── CITATION.cff           # the citation data (GitHub "Cite this repository")
 ├── justfile               # check, link, drawing, site, deepwiki-check
 ├── flake.nix              # one input: nixpkgs-lib. Output: the drawing
 ├── skills/<category>/<name>/SKILL.md
