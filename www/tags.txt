@@ -2,6 +2,7 @@
 # The site adds the category and `manual` (for a ⏸ skill) itself. `gleam run` fails if a skill has no line.
 lean-code: code review
 loco: code rust web
+agentskills-checker: skills lint
 bipr: github pr pt-br
 easy-issues: github issue pr automation
 handoff: notes obsidian agents
@@ -9,6 +10,7 @@ mip-overnight: planning pr automation
 mip-tasks: planning pr github
 mip: planning design-doc
 pr-images: github pr pt-br
+skill-validator: skills review testing
 triage: github issue planning
 voice-note: audio notes
 archify: diagram

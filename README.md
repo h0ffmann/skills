@@ -6,7 +6,7 @@
 
 <sub>🇨🇭 · 技 · <i>waza</i> · a swiss army knife of agent skills · <a href="https://h0ffmann.github.io/skills/">website</a> · <a href="docs/awesome-skills.md">awesome-skills</a> · <a href="docs/common-skills.md">common-skills</a> · <a href="agents/README.md">agents</a> · <a href="#in-one-minute">in one minute</a> · <a href="#the-skills">the skills</a> · <a href="#token-budget">token budget</a> · <a href="#install">install</a> · <a href="#structure">structure</a> · <a href="docs/drawings/README.md">the drawing</a> · <a href="#license">license</a></sub>
 
-[![skills: 50](https://img.shields.io/badge/skills-50-1682D4?style=flat-square)](#the-skills)
+[![skills: 52](https://img.shields.io/badge/skills-52-1682D4?style=flat-square)](#the-skills)
 [![writing: ASD-STE100](https://img.shields.io/badge/writing-ASD--STE100-1682D4?style=flat-square)](AGENTS.md)
 [![license: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-1682D4?style=flat-square)](#license)
 [![Ask DeepWiki](https://img.shields.io/badge/Ask-DeepWiki-1682D4?style=flat-square)](https://deepwiki.com/h0ffmann/skills)
@@ -24,8 +24,7 @@
 - The repository is small for the agent. A description costs tokens in each session. Thus
   `scripts/check.py` makes the budgets hard limits.
 - Fork it, delete what you do not use, and run `just link`. `AGENTS.md` has the rules for a change.
-- The layout of this README comes from piabrota/nix-os. The structure of the skills comes from
-  davidondrej/skills.
+- The README layout comes from piabrota/nix-os. The skill structure comes from davidondrej/skills.
 
 ## The skills
 
@@ -38,8 +37,8 @@ A ⏸ skill runs only when you call it by name. Its description does not load in
 | `ste100` | Writes or rewrites English in ASD-STE100 | asd-ste100 and write-en (astrbot, alerts) |
 | `easy-translate` | Easy pt-BR, Easy Japanese or controlled Chinese, from one source | alerts, closed-source, h0ffmann |
 | `essay` | Checks that an essay keeps the form of Montaigne | closed-source |
-| `ptbr-writer` | Rewrites pt-BR technical text by level of rigour | gramatico, as is |
-| `ptbr` | The same skill under its short name | gramatico, as is |
+| `ptbr-writer` | Rewrites pt-BR technical text by level of rigour | gramatico, with a `name` |
+| `ptbr` | The same skill under its short name | gramatico, with a `name` |
 | `ptbr-routing` | Selects the pt-BR skill and level before it loads | gramatico, as is |
 | `cientifico` | Writes and reviews scientific pt-BR text with sources | gramatico, as is |
 | `retorica` | Rhetoric for pt-BR (in development, no rules yet) | gramatico, as is |
@@ -68,6 +67,8 @@ A ⏸ skill runs only when you call it by name. Its description does not load in
 | `pr-images` ⏸ | A `bipr` PR with before and after images | alerts |
 | `handoff` | Saves and resumes sessions as notes in an Obsidian vault | marola-devkit |
 | `voice-note` | Transcribes a voice note with local Whisper | marola-devkit |
+| `agentskills-checker` | Checks skill folders against the Agent Skills specification | agentskills.io |
+| `skill-validator` | Writes, reviews, debugs and evolves a skill | effective-agent-skills, davidondrej/skills |
 
 ### `nix/`
 
@@ -131,8 +132,7 @@ An agent loads a skill in three steps. Each step costs more tokens and occurs le
 
 - A ⏸ skill has `disable-model-invocation: true`. It costs no tokens in step 1.
 - A skill body has no `@` import and no link. An import loads a file eagerly.
-- `python3 scripts/check.py` prints the cost of step 1. Today: 43 descriptions in a session,
-  about 2,650 tokens.
+- `python3 scripts/check.py` prints the cost of step 1. Today: 45 descriptions, about 2,750 tokens.
 - The same script lints for ASD-STE100: sentence length, semicolons, phrasal verbs, marketing
   words and the em dash. It also limits `README.md` and `AGENTS.md` in lines and links.
 
@@ -157,8 +157,7 @@ just link                       # ~/.claude/skills
 just link ~/project/.agents/skills
 ```
 
-`just link` makes one symlink for each skill. The agent sees a flat folder. The category folders
-stay only in this repository. For one skill, copy its folder.
+`just link` makes one symlink for each skill in a flat folder. For one skill, copy its folder.
 
 ## Checks
 
@@ -168,8 +167,8 @@ There is no CI. Run the checks before each commit:
 just check
 ```
 
-It runs `scripts/check.py`, the self-tests of the skill scripts, the tests of the drawing, a
-comparison of the committed drawing with a new evaluation, a build of the site, and
+It runs `scripts/check.py`, `agentskills-checker`, the self-tests of the skill scripts, the tests
+of the drawing, a comparison of the committed drawing with a new evaluation, a build of the site, and
 `scripts/deepwiki-check.jq`. One workflow is CD only: `.github/workflows/pages.yml` builds the site
 and deploys it to GitHub Pages after each merge to `main`.
 
@@ -214,6 +213,7 @@ The repository is MPL-2.0 (`LICENSE`). Some files keep the licence of their sour
 | `skills/dev-flow/voice-note/scripts/transcribe.py` | MIT | marola-dev/marola-devkit |
 | `skills/notes/zk-method/scripts/zk_lint.py` | MPL-2.0 | piabrota/pirsig |
 | The gramatico skills, as is | MPL-2.0 | piabrota/gramatico |
+| `skills/dev-flow/skill-validator` | MIT | davidondrej/skills |
 | `skills/ouroboric/ponytail-review` | MIT | DietrichGebert/ponytail, through ouroboric-dev/havamal |
 
 The ideas in `skills/ouroboric/` are Bruno Valério's, from ouroboric-dev. The stroke order of 技

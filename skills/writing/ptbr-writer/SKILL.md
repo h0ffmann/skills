@@ -1,4 +1,5 @@
 ---
+name: ptbr-writer
 description: Reescreve texto técnico em português brasileiro por nível de rigor (estrito, descritivo, leve, científico, smart-note). Use ao escrever, reescrever ou revisar runbook, documentação, comunicado ou notas em pt-BR.
 ---
 
