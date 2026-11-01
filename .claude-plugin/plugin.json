@@ -27,5 +27,6 @@
     "./skills/web/",
     "./skills/writing/",
     "./skills/ww3/"
-  ]
+  ],
+  "agents": []
 }

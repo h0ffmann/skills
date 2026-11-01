@@ -4,7 +4,7 @@
 
 # skills
 
-<sub>🇨🇭 · 技 · <i>waza</i> · a swiss army knife of agent skills · <a href="https://h0ffmann.github.io/skills/">website</a> · <a href="docs/awesome-skills.md">awesome-skills</a> · <a href="docs/common-skills.md">common-skills</a> · <a href="#in-one-minute">in one minute</a> · <a href="#the-skills">the skills</a> · <a href="#token-budget">token budget</a> · <a href="#install">install</a> · <a href="#structure">structure</a> · <a href="docs/drawings/README.md">the drawing</a> · <a href="#license">license</a></sub>
+<sub>🇨🇭 · 技 · <i>waza</i> · a swiss army knife of agent skills · <a href="https://h0ffmann.github.io/skills/">website</a> · <a href="docs/awesome-skills.md">awesome-skills</a> · <a href="docs/common-skills.md">common-skills</a> · <a href="agents/README.md">agents</a> · <a href="#in-one-minute">in one minute</a> · <a href="#the-skills">the skills</a> · <a href="#token-budget">token budget</a> · <a href="#install">install</a> · <a href="#structure">structure</a> · <a href="docs/drawings/README.md">the drawing</a> · <a href="#license">license</a></sub>
 
 [![skills: 50](https://img.shields.io/badge/skills-50-1682D4?style=flat-square)](#the-skills)
 [![writing: ASD-STE100](https://img.shields.io/badge/writing-ASD--STE100-1682D4?style=flat-square)](AGENTS.md)
@@ -113,8 +113,7 @@ as is from havamal. `skills/ouroboric/README.md` gives the credit and the index 
 
 ### Not here
 
-`docs/common-skills.md` lists the skills of other authors that the projects use, such as
-`ponytail` and `frontend-design`, with the source, the licence and the install command.
+`docs/common-skills.md` lists the skills of other authors that the projects use, with their install.
 Some skills of the source projects are not here. A skill with the same job replaces a duplicate.
 A skill for one tool of one project stays in that project. Examples: `open-pr`, `write-pt-br`,
 `translate-ja`, `zenodo-release`, the `mapbox-*` skills, `routing`, `voice-to-feature`,
@@ -184,6 +183,7 @@ skills/
 ├── justfile               # check, link, drawing, site, deepwiki-check
 ├── flake.nix              # one input: nixpkgs-lib. Output: the drawing
 ├── skills/<category>/<name>/SKILL.md
+├── agents/                # the index of the Claude agents, and their files as is
 ├── scripts/
 │   ├── check.py           # budgets and ASD-STE100 lint
 │   └── deepwiki-check.jq  # limits of .devin/wiki.json

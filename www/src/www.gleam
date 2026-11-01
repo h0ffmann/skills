@@ -1,6 +1,8 @@
 //// Writes a plain HTML view of the skills: one index page, one page for each
 //// skill and one page for `docs/awesome-skills.md`. The index also lists the
-//// skills of other authors from `docs/common-skills.md`. Run it from `www/` with `gleam run` (or `just site`).
+//// skills of other authors from `docs/common-skills.md`. The agents have
+//// their own index: `agents.html` from `agents/README.md`, and one page for each
+//// agent file in `agents/`. Run it from `www/` with `gleam run` (or `just site`).
 
 import gleam/int
 import gleam/io
@@ -15,6 +17,8 @@ const out_dir = "../docs/site"
 const awesome_md = "../docs/awesome-skills.md"
 
 const common_md = "../docs/common-skills.md"
+
+const agents_dir = "../agents"
 
 const tags_txt = "tags.txt"
 
@@ -56,6 +60,11 @@ pub fn main() -> Nil {
   write(out_dir <> "/waza.svg", logo)
   write(out_dir <> "/index.html", index_page(skills, common))
   write(out_dir <> "/awesome-skills.html", awesome_page())
+  let agents = load_agents()
+  write(out_dir <> "/agents.html", agents_page())
+  list.each(agents, fn(a) {
+    write(out_dir <> "/agent-" <> a.name <> ".html", agent_page(a))
+  })
   let prevs = [Error(Nil), ..list.map(skills, Ok)]
   let nexts = list.append(list.drop(list.map(skills, Ok), 1), [Error(Nil)])
   list.zip(skills, list.zip(prevs, nexts))
@@ -65,7 +74,7 @@ pub fn main() -> Nil {
   })
   io.println(
     "Wrote "
-    <> string.inspect(list.length(skills) + 2)
+    <> string.inspect(list.length(skills) + list.length(agents) + 3)
     <> " pages to docs/site/",
   )
 }
@@ -242,6 +251,7 @@ header .repo { font-weight: bold; font-size: 1.2rem; text-decoration: none; colo
 header .actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 0.5rem; width: 100%; }
 details.cite[open] { flex-basis: 100%; display: flex; flex-direction: column; align-items: center; }
 header .orgs { font-size: 0.85rem; color: var(--muted); }
+header .sections { font-weight: bold; }
 header .orgs a { color: var(--muted); }
 .btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.7rem; border: 1px solid var(--line); border-radius: 0.4rem; background: var(--code); color: var(--fg); font-size: 0.85rem; text-decoration: none; cursor: pointer; list-style: none; }
 .btn::-webkit-details-marker { display: none; }
@@ -325,6 +335,7 @@ fn page(title: String, main: String) -> String {
 </div>
 </details>
 </div>
+<nav class=\"sections\"><a href=\"index.html\">skills</a> · <a href=\"agents.html\">agents</a> · <a href=\"awesome-skills.html\">awesome-skills</a></nav>
 <nav class=\"orgs\"><a href=\"https://github.com/marola-dev\">marola-dev</a> · <a href=\"https://piabrota.art\">piabrota.art</a> · <a href=\"https://github.com/ouroboric-dev\">ouroboric-dev</a></nav>
 </header>
 " <> main <> "<footer>
@@ -392,7 +403,8 @@ fn index_page(skills: List(Skill), common: List(Skill)) -> String {
   page("skills", "<h1>The skills</h1>
 <p>" <> int.to_string(list.length(skills)) <> " agent skills. A skill is one folder with a <code>SKILL.md</code> file.
 A ⏸ skill runs only when you call it by name (tag <code>manual</code>).
-<a href=\"awesome-skills.html\">awesome-skills</a> lists other skill collections.</p>
+<a href=\"awesome-skills.html\">awesome-skills</a> lists other skill collections.
+<a href=\"agents.html\">agents</a> is the separate index of the Claude agents.</p>
 <p><b>Categories:</b> " <> string.join(contents, " · ") <> "</p>
 " <> install_box <> "
 <p><input id=\"q\" type=\"search\" placeholder=\"Search by name, text or tag\" aria-label=\"Search the skills\"></p>
@@ -598,4 +610,158 @@ fn awesome_row(line: String) -> Result(String, Nil) {
     }
     _ -> Error(Nil)
   }
+}
+
+/// The agent files in `agents/`: each one is a Claude Code subagent, copied as
+/// is. `README.md` is the index, not an agent.
+fn load_agents() -> List(Skill) {
+  list_dir(agents_dir)
+  |> list.filter(fn(f) { string.ends_with(f, ".md") && f != "README.md" })
+  |> list.sort(string.compare)
+  |> list.filter_map(fn(f) {
+    let name = string.drop_end(f, 3)
+    use text <- result.try(read(agents_dir <> "/" <> f))
+    Ok(parse("agents", name, text))
+  })
+}
+
+/// The agents index: `agents/README.md` as HTML. A link to an agent file goes
+/// to the page of that agent.
+fn agents_page() -> String {
+  let assert Ok(text) = read(agents_dir <> "/README.md")
+  page(
+    "agents · skills",
+    "<nav class=\"crumbs\"><a href=\"index.html\">skills</a> / agents</nav>\n"
+      <> markdown(text)
+      <> "<p><a href=\""
+      <> repo_url
+      <> "/blob/main/agents/README.md\">agents/README.md on GitHub</a></p>\n",
+  )
+}
+
+fn agent_page(a: Skill) -> String {
+  page(
+    a.name <> " · agents",
+    "<nav class=\"crumbs\"><a href=\"index.html\">skills</a> / <a href=\"agents.html\">agents</a> / "
+      <> escape(a.name)
+      <> "</nav>
+<h1>"
+      <> escape(a.name)
+      <> "</h1>
+<p>"
+      <> escape(a.description)
+      <> "</p>
+<p><a href=\"agents.html\">← Back to all agents</a> · <a href=\""
+      <> repo_url
+      <> "/blob/main/agents/"
+      <> a.name
+      <> ".md\">The file on GitHub</a></p>
+<pre>"
+      <> escape(a.body)
+      <> "</pre>
+",
+  )
+}
+
+/// A small Markdown to HTML step for the agents index: headings, paragraphs,
+/// lists, tables, inline code and links. Nothing more is necessary there.
+fn markdown(text: String) -> String {
+  text
+  |> string.split("\n\n")
+  |> list.map(block)
+  |> string.concat
+}
+
+fn block(b: String) -> String {
+  let lines =
+    b
+    |> string.trim
+    |> string.split("\n")
+  case lines {
+    [""] -> ""
+    ["# " <> h] -> "<h1>" <> inline(h) <> "</h1>\n"
+    ["## " <> h] -> "<h2>" <> inline(h) <> "</h2>\n"
+    ["| " <> _, ..] -> table(lines)
+    ["- " <> _, ..] ->
+      "<ul>"
+      <> string.concat(
+        list.map(lines, fn(l) {
+          "<li>" <> inline(string.drop_start(l, 2)) <> "</li>"
+        }),
+      )
+      <> "</ul>\n"
+    _ -> "<p>" <> inline(string.join(lines, " ")) <> "</p>\n"
+  }
+}
+
+fn table(lines: List(String)) -> String {
+  let rows =
+    lines
+    |> list.filter(fn(l) { !string.starts_with(l, "|---") })
+    |> list.map(fn(l) {
+      l
+      |> string.drop_start(2)
+      |> string.drop_end(2)
+      |> string.split(" | ")
+    })
+  case rows {
+    [head, ..body] ->
+      "<div class=\"scroll\"><table>\n<tr>"
+      <> string.concat(list.map(head, fn(c) { "<th>" <> inline(c) <> "</th>" }))
+      <> "</tr>\n"
+      <> string.concat(
+        list.map(body, fn(r) {
+          "<tr>"
+          <> string.concat(
+            list.map(r, fn(c) { "<td>" <> inline(c) <> "</td>" }),
+          )
+          <> "</tr>\n"
+        }),
+      )
+      <> "</table></div>\n"
+    [] -> ""
+  }
+}
+
+/// Links first, then code spans and escapes in the text around them.
+fn inline(s: String) -> String {
+  case string.split_once(s, "[") {
+    Error(_) -> code(s)
+    Ok(#(before, rest)) ->
+      case string.split_once(rest, "](") {
+        Ok(#(label, rest2)) ->
+          case string.contains(label, "]"), string.split_once(rest2, ")") {
+            False, Ok(#(url, after)) ->
+              code(before)
+              <> "<a href=\""
+              <> escape(agent_link(url))
+              <> "\">"
+              <> code(label)
+              <> "</a>"
+              <> inline(after)
+            _, _ -> code(before) <> "[" <> inline(rest)
+          }
+        Error(_) -> code(before) <> "[" <> inline(rest)
+      }
+  }
+}
+
+/// A link to an agent file in the same folder goes to the page of that agent.
+fn agent_link(url: String) -> String {
+  case string.contains(url, "/"), string.ends_with(url, ".md") {
+    False, True -> "agent-" <> string.drop_end(url, 3) <> ".html"
+    _, _ -> url
+  }
+}
+
+fn code(s: String) -> String {
+  s
+  |> string.split("`")
+  |> list.index_map(fn(part, i) {
+    case i % 2 {
+      1 -> "<code>" <> escape(part) <> "</code>"
+      _ -> escape(part)
+    }
+  })
+  |> string.concat
 }
