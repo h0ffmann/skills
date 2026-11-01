@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ste100 · skills</title>
+<style>
+body { max-width: 50rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; vertical-align: top; padding: 0.25rem 0.5rem; border-bottom: 1px solid #ccc; }
+pre { overflow-x: auto; font-size: 0.85rem; background: #f4f4f4; padding: 1rem; }
+@media (prefers-color-scheme: dark) {
+  body { background: #111; color: #ddd; } a { color: #8bf; } pre { background: #222; }
+}
+</style>
+</head>
+<body>
+<p><a href="index.html">skills</a> / writing</p>
+<h1>ste100</h1>
+<p>Write or rewrite English text in ASD-STE100 Simplified Technical English. Use for docs, READMEs, PR bodies, tool descriptions, error messages, prompts and agent instructions, or when a text is dense, hedged or easy to misread. Not for pt-BR text (use ptbr-writer) or for creative copy.</p>
+<pre># ste100
+
+ASD-STE100 is a controlled form of English. It removes words with more than one meaning and
+sentences with more than one structure. A human or an agent then reads the text in one way only.
+
+## Two modes
+
+Select a mode before you write. If the request does not give one, select it from the text type.
+
+- **Strict**: procedures, runbooks, error messages, tool descriptions, prompts, agent rules and
+  safety text. Apply all rules.
+- **Descriptive**: READMEs, notes, PR bodies and changelogs. Apply all structural rules. Use the
+  word rules as a direction, because prose needs some range.
+
+## Structural rules
+
+| Rule | Do | Do not |
+|---|---|---|
+| Sentence length | 20 words or fewer for an instruction, 25 or fewer for a description | Long sentences with many clauses |
+| One instruction | &quot;Open the file. Read line 3.&quot; | &quot;Open the file and read line 3, then check it.&quot; |
+| Active voice | &quot;The script deletes the file.&quot; | &quot;The file is deleted.&quot; |
+| Simple tenses | &quot;We received the report.&quot; | &quot;We have received the report.&quot; |
+| No phrasal verbs | &quot;Start the job.&quot; &quot;Remove the panel.&quot; | &quot;Spin up the job.&quot; &quot;Take off the panel.&quot; |
+| No semicolons | Two sentences | A semicolon of any kind |
+| Short noun groups | Three nouns or fewer: &quot;fuel pump valve&quot; | &quot;high pressure fuel pump inlet valve&quot; |
+| No ellipsis | Keep the subject, the verb and the article | &quot;Files not saved will be lost.&quot; |
+| Paragraphs | One topic and six sentences or fewer | A paragraph with many topics |
+| Lists | A list for three steps or more | A sequence inside one sentence |
+
+Keep a compound tense only when it carries a fact that a simple tense cannot. Example: &quot;The job
+may have failed.&quot; Keep the hedge. Do not change it into &quot;The job failed.&quot;
+
+## Word rules
+
+- **One word, one meaning.** Select one word for one thing and use it each time. Do not change
+  &quot;check&quot;, &quot;verify&quot; and &quot;confirm&quot; for the same action.
+- **A verb, not a noun.** &quot;Analyze the log&quot;, not &quot;perform an analysis of the log&quot;.
+- **Plain words.** &quot;Use&quot;, not `utilize`. &quot;Start&quot;, not `kick off`.
+- **Define a technical word** the first time it occurs, in bold, with one plain sentence.
+- **Fixed modality.** &quot;Must&quot; is an obligation. &quot;Can&quot; is a capability. A probability is a number.
+- **No marketing words**: `seamless`, `robust`, `powerful`, `cutting-edge`, `effortless`, `world-class`.
+- **Keep the articles** (&quot;a&quot;, &quot;an&quot;, &quot;the&quot;). They make translation easier.
+
+## Process
+
+1. Read the text once for its meaning. Do not rewrite before you understand it.
+2. Examine each sentence. Find each broken rule.
+3. Rewrite each bad sentence. Keep every fact, number, condition and hedge.
+4. If a shorter form loses precision, keep the long form.
+5. Never add a fact, a cause or a frequency that the source does not state.
+6. If the text already obeys the rules, say so. Do not change correct text.
+
+## Two languages
+
+A page with a pt-BR mirror says the same facts in both languages. Write the pt-BR side with the
+`ptbr-writer` skill. Change the two pages in the same PR.
+
+## Output
+
+By default, give the rewritten text only. Add one line `Kept as is: &lt;phrase&gt;, &lt;reason&gt;` when you
+kept a long form on purpose.
+
+When the request asks for the reasons, give a table: rule, original, rewrite. Then give the mode
+and the number of changes.
+
+## What it does not do
+
+- It does not make weak content true or useful. It only fixes the form.
+- It does not use the official ASD dictionary. That dictionary is not free to copy. When exact
+  approved words are necessary, get the standard and check each word against it.</pre>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nixos-vps · skills</title>
+<style>
+body { max-width: 50rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; vertical-align: top; padding: 0.25rem 0.5rem; border-bottom: 1px solid #ccc; }
+pre { overflow-x: auto; font-size: 0.85rem; background: #f4f4f4; padding: 1rem; }
+@media (prefers-color-scheme: dark) {
+  body { background: #111; color: #ddd; } a { color: #8bf; } pre { background: #222; }
+}
+</style>
+</head>
+<body>
+<p><a href="index.html">skills</a> / nix</p>
+<h1>nixos-vps</h1>
+<p>Change the NixOS configuration of a small live VPS that a merge to main deploys (deploy-rs with magic rollback). Use for modules, services, nginx, ACME, users, the resource budget, flake updates and the deploy itself. Never deploys.</p>
+<pre># nixos-vps
+
+The VPS is live, small and remote. **A merge to `main` is the deploy.** Thus each PR is a change
+to production. An agent works in a clone, opens a PR and never deploys.
+
+## Hard rules
+
+- **Never run** `nixos-rebuild`, `deploy`, `just deploy` or a `switch`. The merge deploys.
+- **Never tighten** the services that keep the box reachable: `sshd`, `qemu-guest-agent` and
+  `cloud-init`. A bad sandbox there locks everyone out.
+- **Secrets stay on the box** (for example `/var/lib/&lt;name&gt;-secrets/*.env`, mode 0600). Never in
+  the repository, never in the Nix store.
+- **`nix flake update` goes in its own PR**, with the closure difference in the body.
+- **Nothing unfree.** `allowUnfree` stays off.
+- **A risky switch** (a new kernel, a new bootloader, a large service) waits for a snapshot of
+  the VPS that the owner makes.
+
+## The resource budget
+
+Judge each change by what it adds to the system closure and to memory.
+
+- No GUI, no fonts, no display server.
+- Give each new service `MemoryMax` and `CPUQuota`.
+- Compare closures before and after: `nix run nixpkgs#dix -- &lt;old&gt; &lt;new&gt;`.
+- Put large build tools on the builder only. Use `allowedReferences = [ ]` for a static site
+  derivation, so the build tools never reach the box.
+
+## Steps
+
+1. Read `AGENTS.md`, `flake.nix`, `configuration.nix` and the module that you change.
+2. Make the change as a module with an `enable` option. With the option off, the system is
+   unchanged.
+3. Evaluate: `nix flake check --no-build --no-update-lock-file`.
+4. Read one option: `nix eval .#nixosConfigurations.&lt;host&gt;.config.&lt;path&gt;`.
+5. Build the system: `nix build .#nixosConfigurations.&lt;host&gt;.config.system.build.toplevel`.
+6. Test a service in a VM check (`pkgs.testers.nixosTest`) when it has state or a port.
+7. Run the gate: `nixpkgs-fmt --check`, `statix check`, `deadnix --fail`, `shellcheck`.
+8. Open the PR. State what the merge changes on the box, and the closure difference.
+
+## Rollback
+
+Say the rollback in the PR of each risky change:
+
+1. Revert the PR. The merge of the revert deploys the old system.
+2. On the box: `nixos-rebuild switch --rollback`, or select the old generation in GRUB.
+3. Remove state that the change left in `/var/lib/&lt;name&gt;`.
+4. Last: restore the snapshot of the VPS.
+
+## A service
+
+Use the `systemd-hardening` skill for each new `systemd.services.&lt;name&gt;`. Bind the service to
+loopback when nginx is in front of it. Open a firewall port only when the owner asks for it.</pre>
+</body>
+</html>

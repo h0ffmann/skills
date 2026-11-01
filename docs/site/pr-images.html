@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pr-images · skills</title>
+<style>
+body { max-width: 50rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; vertical-align: top; padding: 0.25rem 0.5rem; border-bottom: 1px solid #ccc; }
+pre { overflow-x: auto; font-size: 0.85rem; background: #f4f4f4; padding: 1rem; }
+@media (prefers-color-scheme: dark) {
+  body { background: #111; color: #ddd; } a { color: #8bf; } pre { background: #222; }
+}
+</style>
+</head>
+<body>
+<p><a href="index.html">skills</a> / dev-flow</p>
+<h1>pr-images</h1>
+<p>Open or update a bilingual PR like bipr, with before and after images in its body. Use for each PR that changes an image, a drawing, a page or a screen, or for /bipri.</p>
+<pre># pr-images
+
+This skill is `bipr` with images. Do all the steps of `bipr`, in its order. Then do the steps
+below. A change with no visible effect uses `bipr` only.
+
+## 1. Capture before and after
+
+1. Render the state of the base branch (`origin/&lt;base&gt;`) and the state of `HEAD`. Use the same
+   size and the same background. Use the Playwright Chromium for SVG, HTML and pages.
+2. Save the images in `docs/screenshots/&lt;topic&gt;/`: `before.png` and `after.png`. When the image
+   proves a rule (a size, a grid, a ratio), add a third image that shows the proof.
+3. Commit the images on the same branch. An image outside the repository does not go in the PR.
+4. Keep the licence check of the repository green for each new file.
+
+## 2. Write the body
+
+Add an **Imagens** section to the pt-BR half and an **Images** section to the English half,
+after **O que mudou** and **What changed**:
+
+```
+**Images**
+
+| Before | After |
+|---|---|
+| ![before](&lt;url of before.png&gt;) | ![after](&lt;url of after.png&gt;) |
+
+&lt;one sentence: what the proof image shows&gt;
+```
+
+- The URL of an image is `https://github.com/&lt;owner&gt;/&lt;repo&gt;/blob/&lt;branch&gt;/&lt;path&gt;?raw=true`.
+- The two halves show the same images. Only the text changes language.
+- The image does not replace the text. The summary says what changed without the image.
+
+## 3. Footer
+
+The footer is the `footer.md` of `bipr`, unchanged.</pre>
+</body>
+</html>

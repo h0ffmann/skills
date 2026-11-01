@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>handoff · skills</title>
+<style>
+body { max-width: 50rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; vertical-align: top; padding: 0.25rem 0.5rem; border-bottom: 1px solid #ccc; }
+pre { overflow-x: auto; font-size: 0.85rem; background: #f4f4f4; padding: 1rem; }
+@media (prefers-color-scheme: dark) {
+  body { background: #111; color: #ddd; } a { color: #8bf; } pre { background: #222; }
+}
+</style>
+</head>
+<body>
+<p><a href="index.html">skills</a> / dev-flow</p>
+<h1>handoff</h1>
+<p>Save and resume work sessions as handoff notes in an Obsidian vault, and keep one digest note for each project there. Use for &quot;save this session&quot;, &quot;write a handoff&quot;, &quot;load my last context&quot; or &quot;what was I working on&quot;. Not for decisions (use mip) or conventions (use AGENTS.md).</p>
+<pre># handoff
+
+The repository is the source of truth. The vault holds only two things that the repository does
+not hold: handoff notes for a cold session, and one digest note that links to the project docs.
+
+## Where the vault is
+
+```bash
+V=&quot;${OBSIDIAN_VAULT:-$HOME/Documents/2nd-brain}&quot;; P=&quot;$(basename &quot;$(git rev-parse --show-toplevel)&quot;)&quot;; D=&quot;$V/$P&quot;
+```
+
+`$V` must exist and contain `.obsidian/`. If it does not, say so and stop. Never make a vault in
+another place. In a sandbox, the vault is often not visible. Then do the save from the host.
+
+## Resume
+
+1. **Try the agent tool first.** On the same machine, `claude --continue` or `claude --resume`
+   gives the full transcript. That is better than a summary. Say which one fits.
+2. Otherwise, list the five newest `$D/context/*.md` files. Let the person select one.
+3. **Check the note against the repository.** Does the branch exist? What merged since the date
+   of the note (`git log --since`)? Are its PRs merged or closed?
+4. Give the state, the next steps and the open questions. Mark each one &quot;still true&quot; or
+   &quot;changed&quot;. Do not paste the note.
+
+## Save
+
+1. The topic is the branch name. Ask only when the branch is `main`.
+2. Write `$D/context/YYYY-MM-DD-&lt;topic&gt;.md`. The same topic on the same day updates that file.
+3. Write for a reader with no context. Use paths from the repository root. No secrets.
+
+```markdown
+---
+project: &lt;project&gt;
+branch: &lt;branch&gt;
+date: YYYY-MM-DD
+tags: [&lt;project&gt;, handoff]
+---
+# &lt;topic&gt;
+
+Resume: `claude --resume &lt;session name&gt;` on &lt;machine&gt; · digest: [[&lt;project&gt;]]
+
+## Goal
+## Done            commits and PRs, what changed and why
+## Current state   files changed, test commands and their result
+## Next steps      in order
+## Open questions
+## Do not retry    what failed, and why
+## Key files       path, and why it matters
+```
+
+## Digest
+
+Write `$D/&lt;project&gt;.md` again from nothing each time. Nobody edits it by hand. It holds:
+
+- what the project is, in one line from `AGENTS.md`, and the repository URL.
+- open PRs and local branches ahead of `origin/main`.
+- MIPs that are not `Implemented`.
+- the last ten commits on `main`.
+- the handoff notes as `[[wikilinks]]`, newest first.
+
+## Offer
+
+After a long session, before a `/clear`, or when a PR goes up, offer one time: &quot;Save a handoff to
+the vault?&quot; Write nothing without a yes.</pre>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>retro · skills</title>
+<style>
+body { max-width: 50rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; vertical-align: top; padding: 0.25rem 0.5rem; border-bottom: 1px solid #ccc; }
+pre { overflow-x: auto; font-size: 0.85rem; background: #f4f4f4; padding: 1rem; }
+@media (prefers-color-scheme: dark) {
+  body { background: #111; color: #ddd; } a { color: #8bf; } pre { background: #222; }
+}
+</style>
+</head>
+<body>
+<p><a href="index.html">skills</a> / ouroboric</p>
+<h1>retro</h1>
+<p>Do a retrospective of a coding session and propose changes to the agent's environment: checks, navigation, steering files and tool cost. Use for /retro.</p>
+<pre># retro
+
+A retrospective improves the **environment** of the next run, not the code of this one.
+
+## Steps
+
+1. Read the session that the person names. With no name, read the current session.
+2. Find candidates in these groups:
+
+| Group | Question | Use when |
+|---|---|---|
+| Navigation | Was the correct file easy to find? Does a one-line pointer help? | The search took a long time |
+| Automated checks | Can a lint, a type check or a test catch the error? | The agent made a mechanical error |
+| Review rules | Does the reviewer need a new rule, or a clearer one? | The review did not catch an error |
+| Steering files | Can an instruction in `AGENTS.md` move to a check or to a doc? | `AGENTS.md` is large |
+| Tool cost | Did a tool call cost many tokens for little data? | One call was expensive |
+| No-ops | Does an instruction change nothing in the agent's behaviour? | The steering files are long |
+| Information | Did the agent lack a log, a doc or read access? | A key fact was not available |
+
+3. Read the repository's own check command first (`just check`, the CI workflow). A check that
+   exists but does not run is the finding. A repository with no guardrail is a finding too.
+4. Give the candidates to the person, the most severe first. Change nothing without a yes.
+
+## Where a rule goes
+
+- **A mechanical rule** (a pattern, a banned API, a file location) becomes a check: a lint rule,
+  a hook or a recipe. A check is better than a sentence.
+- **A judgement** (consistency across files, the style of the code around it) goes in the
+  review rules, which the reviewer reads. The reviewer has the least context pressure.
+- **`AGENTS.md`** loads in each session. Keep it for pointers and hard rules only.
+- **A skill** loads its description in each session and its body only in use. Put long reference
+  data in a file next to the skill.</pre>
+</body>
+</html>

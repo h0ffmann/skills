@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>voice-note · skills</title>
+<style>
+body { max-width: 50rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; vertical-align: top; padding: 0.25rem 0.5rem; border-bottom: 1px solid #ccc; }
+pre { overflow-x: auto; font-size: 0.85rem; background: #f4f4f4; padding: 1rem; }
+@media (prefers-color-scheme: dark) {
+  body { background: #111; color: #ddd; } a { color: #8bf; } pre { background: #222; }
+}
+</style>
+</head>
+<body>
+<p><a href="index.html">skills</a> / dev-flow</p>
+<h1>voice-note</h1>
+<p>Transcribe a local voice note (a WhatsApp .ogg or similar) with local Whisper, write the transcript next to the audio, then anonymize it by hand. Use when a MIP, an issue or a task needs the words of a voice note.</p>
+<pre># voice-note
+
+Transcribe one local audio file with a local Whisper backend. No network call, no upload, no
+external speech service. The skill does one thing: speech to text in the source language.
+
+## Run it
+
+```bash
+python3 scripts/transcribe.py &lt;audio&gt; [--model small] [--language pt]
+python3 scripts/transcribe.py --self-test
+```
+
+The path is relative to this skill folder.
+
+- It tries `faster_whisper` first, then `whisper`. With neither, it stops with exit code 2 and
+  an install hint.
+- `--model small` is the default. Use `medium` or `large` only when `small` gets names or numbers
+  wrong.
+- Always set `--language`. Automatic detection often fails on a short, noisy note.
+- The output is `&lt;audio&gt;.txt` next to the audio. The script prints only that path.
+
+Install a backend in the project's own environment, not globally: `pip install faster-whisper`.
+
+## After the transcript
+
+1. **Read it.** Correct the words that Whisper heard wrong.
+2. **Anonymize it by hand.** Replace each name, except the owner's, with a neutral word such as
+   &quot;a collaborator&quot;. A script cannot tell a name from a common word. Do it by reading.
+3. **Translate it yourself** if necessary, as a second step. Do not use Whisper's translate mode.
+   It hides which error occurred: a word heard wrong, or a word translated wrong.
+4. Then use the text: a `triage` draft, a `mip`, or a note.
+
+## Never
+
+- **Never commit the audio.** A voice note is personal data. Keep it outside the work tree, or
+  ignored by git. Delete it when the transcript is correct.
+- Never commit a transcript before it is anonymized.
+- Never turn a voice note into a merged feature in one pass. A voice note starts a design. It
+  does not replace the review of a MIP.</pre>
+</body>
+</html>

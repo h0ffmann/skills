@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ptbr-routing · skills</title>
+<style>
+body { max-width: 50rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; vertical-align: top; padding: 0.25rem 0.5rem; border-bottom: 1px solid #ccc; }
+pre { overflow-x: auto; font-size: 0.85rem; background: #f4f4f4; padding: 1rem; }
+@media (prefers-color-scheme: dark) {
+  body { background: #111; color: #ddd; } a { color: #8bf; } pre { background: #222; }
+}
+</style>
+</head>
+<body>
+<p><a href="index.html">skills</a> / writing</p>
+<h1>ptbr-routing</h1>
+<p>Escolhe a skill e o nível de rigor antes de carregar uma skill de escrita em pt-BR. Use quando o pedido é escrever, reescrever ou revisar texto em português e não diz o nível nem a skill.</p>
+<pre># Roteamento de um pedido de escrita
+
+`route` é `bash .claude/skills/ptbr-routing/bin/run.sh &quot;&lt;pedido&gt;&quot;` (binário estático, sem dependências). A
+resposta é uma linha: a skill a carregar e o nível.
+
+- Carregue só a skill que a linha nomeia. Não leia as outras.
+- Pedido que já diz o nível ou a skill: não rode `route`.
+- Sem correspondência: carregue `ptbr-writer` sem nível. Ela classifica o texto e declara o nível.
+- Mais de um nível empatado: escolha um e declare-o na saída.
+- `smart-note + &lt;nível&gt;`: aplique as regras do nível e entregue em notas.
+- Com o plugin instalado, a skill `X` é `gramatico:X`.
+- Sem o binário para o seu sistema: leia `routes.tsv`, ao lado deste arquivo, uma linha por nível com suas palavras.</pre>
+</body>
+</html>

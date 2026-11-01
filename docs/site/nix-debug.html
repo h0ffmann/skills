@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nix-debug · skills</title>
+<style>
+body { max-width: 50rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; vertical-align: top; padding: 0.25rem 0.5rem; border-bottom: 1px solid #ccc; }
+pre { overflow-x: auto; font-size: 0.85rem; background: #f4f4f4; padding: 1rem; }
+@media (prefers-color-scheme: dark) {
+  body { background: #111; color: #ddd; } a { color: #8bf; } pre { background: #222; }
+}
+</style>
+</head>
+<body>
+<p><a href="index.html">skills</a> / nix</p>
+<h1>nix-debug</h1>
+<p>Find why a Nix evaluation, build, activation, service or boot fails. Update inputs, pins, hashes and carried patches safely. Use for a failed nix flake check, build or deploy, a flake.lock bump, or a rescue from a live USB.</p>
+<pre># nix-debug
+
+First find the layer where the failure occurs. Then fix it in that layer only.
+
+## 1. Find the layer
+
+| Layer | Symptom | First command |
+|---|---|---|
+| Evaluation | `error:` with a Nix trace, before any build | `nix flake check --no-build --show-trace` |
+| Build | a derivation fails, `builder for ... failed` | `nix log &lt;drv&gt;` |
+| Activation | the switch fails, or a unit fails right after it | `journalctl -b -u &lt;unit&gt;` |
+| Runtime | the system runs, a service misbehaves | `systemctl status &lt;unit&gt;`, then the journal |
+| Boot | the machine does not start | section 4 |
+
+## 2. Evaluation and build
+
+- Read the trace from the bottom. The last frame in your own files is usually the cause.
+- Read one value: `nix eval .#&lt;path&gt;`. Inspect a set: `nix repl` then `:lf .`.
+- An option name that you are not sure of: search the option. Do not guess.
+- A hash mismatch: set `lib.fakeHash`, build, then copy the `got:` hash. Never copy a hash from
+  a web page.
+- A build that works on one machine only: check the `system`, the sandbox and an impure path.
+
+## 3. Updates are supply-chain events
+
+1. Update one input at a time: `nix flake update &lt;input&gt;`.
+2. Read what moved: `git diff flake.lock`, and the upstream log between the two revisions.
+3. Build before and after. Compare the closures: `nix run nixpkgs#dix -- &lt;old&gt; &lt;new&gt;`.
+4. Run the full gate.
+5. Open a PR with only the update, its closure difference and the inputs that moved.
+
+For a package pin: change the version, set the hash to `lib.fakeHash`, build, copy the real
+hash. For a carried patch: rebase it on the new source. If upstream merged it, delete it. Say
+which in the PR.
+
+Before you rely on an open nixpkgs PR, build its attribute and read its diff. Do not trust it
+because it has approvals.
+
+## 4. Rescue from a live USB
+
+Use this only with the owner present. Each step changes a real disk.
+
+```bash
+lsblk -f                                        # find root, boot and any LUKS volume
+sudo cryptsetup open /dev/&lt;dev&gt; root            # only for LUKS
+sudo mount /dev/disk/by-label/nixos /mnt
+sudo mount /dev/disk/by-label/boot /mnt/boot    # UEFI only
+sudo nixos-enter --root /mnt                    # a shell in the installed system
+```
+
+Inside: list the generations (`nix-env -p /nix/var/nix/profiles/system --list-generations`).
+Switch to the last good one, or rebuild from the flake. Reinstall the bootloader only when the
+bootloader is the cause.
+
+## Rules
+
+- Read the error before you change code.
+- Change one thing, then build again.
+- Never make a check weaker to get a pass.</pre>
+</body>
+</html>
