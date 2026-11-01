@@ -64,7 +64,7 @@ headless, with read-only tools. They run on the VPS as rax tasks and post as the
 
 | Agent | What it will do | State |
 |---|---|---|
-| `tcc-ufrj-writer` | Writes the text of the UFRJ undergraduate thesis (TCC). `revisor-proposta` reviews it | Planned. No file yet ⚠ |
+| `tcc-ufrj-writer` | Writes a UFRJ undergraduate thesis (TCC) from end to end. Each chapter is Markdown first. Desmos and Archify make the figures. The build makes the LaTeX project and the PDF | Planned, in [issue #3](https://github.com/h0ffmann/skills/issues/3) |
 | Post writer | Writes a draft news post in pt-BR and English for the two news reviewers | Idea, in marola-agents |
 | Site UI agents | Design review, worst-case data, motion review and screenshots on marola.dev | Idea, in marola-agents |
 
