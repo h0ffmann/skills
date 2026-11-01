@@ -5,10 +5,12 @@ set positional-arguments
 default:
     @just --list
 
-# Run all checks: budgets, ASD-STE100, script self-tests, the drawing, the site, the DeepWiki file
+# Run all checks: budgets, ASD-STE100, the Agent Skills format, script self-tests, the drawing, the site, the DeepWiki file
 check: deepwiki-check site
     python3 scripts/check.py --self-test
     python3 scripts/check.py
+    python3 skills/dev-flow/agentskills-checker/scripts/agentskills_check.py --self-test
+    python3 skills/dev-flow/agentskills-checker/scripts/agentskills_check.py skills
     bash skills/research/citation-score/scripts/citation-score.sh --self-test
     python3 skills/dev-flow/voice-note/scripts/transcribe.py --self-test
     python3 skills/notes/zk-method/scripts/zk_lint.py "$(mktemp -d)" > /dev/null
