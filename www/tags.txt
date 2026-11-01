@@ -41,3 +41,25 @@ ptbr-writer: pt-br writing
 ptbr: pt-br writing
 retorica: pt-br writing
 ste100: english writing ste100
+news-post: web writing pt-br
+ptbr-humanizer: pt-br writing web
+noaa-notices: ww3 noaa research
+release: ww3 citation release
+wfip: ww3 planning design-doc
+ww3-port: ww3 fortran kokkos port
+ww3-port-rust: ww3 fortran rust port
+ww4-status: ww3 research
+ponytail-review: code review
+# The skills of other authors, from docs/common-skills.md. The site adds the tag `elsewhere`.
+ponytail: code review
+frontend-design: web design
+webapp-testing: web testing
+design-taste-frontend: web design
+karpathy-guidelines: code review
+emil-design-eng: web design
+review-animations: web design review
+break-ui: web testing
+mapbox: web maps
+humanizer: english writing
+humanizar: pt-br writing
+humanizer-pt-br: pt-br writing

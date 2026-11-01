@@ -2,15 +2,26 @@
 
 Writing standard: ASD-STE100.
 
-The skills in this folder borrow ideas from Ouroboric, an open project of self-improving software
-factories by ouroboric-dev (the ideas are Bruno Valério's). No file of theirs is copied here. Their
-code is AGPL-3.0 and their docs are CC BY 4.0. These skills are this repository's own text.
+The skills in this folder come from Ouroboric, an open project of self-improving software
+factories by ouroboric-dev (the ideas are Bruno Valério's). Their code is AGPL-3.0 and their docs
+are CC BY 4.0. Three skills are this repository's own text. One skill is copied as is.
 
-| Skill | Idea from |
+| Skill | Source |
 |---|---|
-| `sharingan` | REA (read, evaluate, adopt) in `ouroboric`, and `ouroboric-sharingan` in h0ffmann/picasso |
-| `retro` | the `retro` skill of `havamal` |
-| `writing-styles` | `docs/4-ways-of-working/writing-styles.md` of `ouroboric` |
+| `sharingan` | The idea of REA (read, evaluate, adopt) in `ouroboric`, and `ouroboric-sharingan` in h0ffmann/picasso |
+| `retro` | The idea of the `retro` skill of `havamal` |
+| `writing-styles` | The idea of `docs/4-ways-of-working/writing-styles.md` of `ouroboric` |
+| `ponytail-review` | [havamal/skills/ponytail-review](https://github.com/ouroboric-dev/havamal/tree/main/skills/ponytail-review), as is. MIT, by DietrichGebert |
+
+## The skills of ouroboric-dev
+
+Read on 2026-11-01, at havamal commit `144be35`. Only `havamal` has skills. Both are vendored
+there from other authors, with `skills.lock`.
+
+| Skill | Upstream | Licence | Here |
+|---|---|---|---|
+| [`ponytail-review`](https://github.com/ouroboric-dev/havamal/tree/main/skills/ponytail-review) | DietrichGebert/ponytail | MIT | As is, in `ponytail-review` |
+| [`retro`](https://github.com/ouroboric-dev/havamal/tree/main/skills/retro) | mattpocock/skills | MIT | Our own version, in `retro` |
 
 ## The public repositories of ouroboric-dev
 

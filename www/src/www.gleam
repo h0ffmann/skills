@@ -1,5 +1,6 @@
 //// Writes a plain HTML view of the skills: one index page, one page for each
-//// skill and one page for `docs/awesome-skills.md`. Run it from `www/` with `gleam run` (or `just site`).
+//// skill and one page for `docs/awesome-skills.md`. The index also lists the
+//// skills of other authors from `docs/common-skills.md`. Run it from `www/` with `gleam run` (or `just site`).
 
 import gleam/int
 import gleam/io
@@ -12,6 +13,8 @@ const skills_dir = "../skills"
 const out_dir = "../docs/site"
 
 const awesome_md = "../docs/awesome-skills.md"
+
+const common_md = "../docs/common-skills.md"
 
 const tags_txt = "tags.txt"
 
@@ -40,15 +43,18 @@ pub type Skill {
     manual: Bool,
     tags: List(String),
     body: String,
+    url: String,
   )
 }
 
 pub fn main() -> Nil {
-  let skills = add_tags(load_skills(), read_tags())
+  let tags = read_tags()
+  let skills = add_tags(load_skills(), tags)
+  let common = add_tags(load_common(), tags)
   make_dir(out_dir)
   let assert Ok(logo) = read(logo_svg)
   write(out_dir <> "/waza.svg", logo)
-  write(out_dir <> "/index.html", index_page(skills))
+  write(out_dir <> "/index.html", index_page(skills, common))
   write(out_dir <> "/awesome-skills.html", awesome_page())
   let prevs = [Error(Nil), ..list.map(skills, Ok)]
   let nexts = list.append(list.drop(list.map(skills, Ok), 1), [Error(Nil)])
@@ -75,6 +81,32 @@ fn load_skills() -> List(Skill) {
         Error(_) -> Error(Nil)
       }
     })
+  })
+}
+
+/// Reads the table of `docs/common-skills.md`. A row is
+/// `| `name` | [owner/repo](url) | licence | text | install |`. The category of
+/// each one is `elsewhere`, and its link goes to its repository.
+fn load_common() -> List(Skill) {
+  let assert Ok(text) = read(common_md)
+  text
+  |> string.split("\n")
+  |> list.filter_map(fn(line) {
+    case string.split(line, " | ") {
+      ["| `" <> name, repo, _licence, what, _install] -> {
+        use #(_, url) <- result.try(string.split_once(repo, "]("))
+        Ok(Skill(
+          category: "elsewhere",
+          name: string.replace(name, "`", ""),
+          description: what,
+          manual: False,
+          tags: [],
+          body: "",
+          url: string.drop_end(url, 1),
+        ))
+      }
+      _ -> Error(Nil)
+    }
   })
 }
 
@@ -138,6 +170,7 @@ pub fn parse(category: String, name: String, text: String) -> Skill {
     manual: field(fields, "disable-model-invocation") == "true",
     tags: [],
     body: string.trim(body),
+    url: "",
   )
 }
 
@@ -226,6 +259,7 @@ table { border-collapse: collapse; width: 100%; }
 td { overflow-wrap: anywhere; }
 th, td { text-align: left; vertical-align: top; padding: 0.25rem 0.5rem; border-bottom: 1px solid var(--line); }
 pre { overflow-x: auto; font-size: 0.85rem; background: var(--code); padding: 1rem; }
+pre.cmd { white-space: pre-wrap; overflow-wrap: anywhere; padding: 0.6rem 1rem; }
 .tag { display: inline-block; margin: 0 0.25rem 0.25rem 0; padding: 0 0.4rem; border: 1px solid var(--line); border-radius: 0.6rem; font-size: 0.85rem; text-decoration: none; }
 .tag.on { background: var(--link); color: var(--bg); }
 input[type=search] { width: 100%; box-sizing: border-box; padding: 0.4rem; font: inherit; }
@@ -310,8 +344,9 @@ fn tag_link(tag: String) -> String {
   <> "</a>"
 }
 
-fn index_page(skills: List(Skill)) -> String {
-  let groups = list.chunk(skills, fn(s) { s.category })
+fn index_page(skills: List(Skill), common: List(Skill)) -> String {
+  let all = list.append(skills, common)
+  let groups = list.chunk(all, fn(s) { s.category })
   let contents =
     list.map(groups, fn(group) {
       let assert [first, ..] = group
@@ -324,7 +359,7 @@ fn index_page(skills: List(Skill)) -> String {
       <> ")"
     })
   let tag_counts =
-    skills
+    all
     |> list.flat_map(fn(s) { s.tags })
     |> list.sort(string.compare)
     |> list.chunk(fn(t) { t })
@@ -345,7 +380,10 @@ fn index_page(skills: List(Skill)) -> String {
       let assert [first, ..] = group
       "<section id=\"" <> first.category <> "\">
 <h2>" <> escape(first.category) <> "</h2>
-<div class=\"scroll\"><table>
+" <> case first.category {
+        "elsewhere" -> elsewhere_note
+        _ -> ""
+      } <> "<div class=\"scroll\"><table>
 <tr><th>Skill</th><th>What it does</th><th>Tags</th></tr>
 " <> string.concat(list.map(group, row)) <> "</table></div>
 </section>
@@ -356,6 +394,7 @@ fn index_page(skills: List(Skill)) -> String {
 A ⏸ skill runs only when you call it by name (tag <code>manual</code>).
 <a href=\"awesome-skills.html\">awesome-skills</a> lists other skill collections.</p>
 <p><b>Categories:</b> " <> string.join(contents, " · ") <> "</p>
+" <> install_box <> "
 <p><input id=\"q\" type=\"search\" placeholder=\"Search by name, text or tag\" aria-label=\"Search the skills\"></p>
 <p id=\"tags\">" <> string.join(tag_counts, "\n") <> "</p>
 <p id=\"count\" aria-live=\"polite\"></p>
@@ -403,12 +442,33 @@ const search_script =
 </script>
 "
 
+const elsewhere_note =
+  "<p>Skills of other authors that these projects use. They are not in the plugin.
+<a href=\""
+  <> repo_url
+  <> "/blob/main/docs/common-skills.md\">common-skills</a> gives the licence and the install command of each.</p>
+"
+
+/// One command installs the plugin with all the skills. Claude Code 2.1.275
+/// or newer adds the marketplace in the same step.
+const install_box =
+  "<h2 id=\"install\">Install</h2>
+<p>In a Claude Code session: <button type=\"button\" class=\"btn\" data-copy=\"install-session\">Copy</button></p>
+<pre class=\"cmd\" id=\"install-session\">/plugin install waza --marketplace h0ffmann/skills</pre>
+<p>In a terminal: <button type=\"button\" class=\"btn\" data-copy=\"install-shell\">Copy</button></p>
+<pre class=\"cmd\" id=\"install-shell\">claude plugin install waza --marketplace h0ffmann/skills</pre>
+"
+
 fn row(s: Skill) -> String {
+  let href = case s.url {
+    "" -> s.name <> ".html"
+    url -> url
+  }
   "<tr data-tags=\""
   <> escape(string.join(s.tags, " "))
   <> "\"><td><a href=\""
-  <> s.name
-  <> ".html\">"
+  <> escape(href)
+  <> "\">"
   <> escape(s.name)
   <> "</a>"
   <> case s.manual {
