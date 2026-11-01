@@ -1,0 +1,86 @@
+---
+name: sharingan
+description: "Read, evaluate and adopt (REA) tools from another repository, with the licence of each item decided before a copy. Use for \"port this\", \"copy this skill\" or \"sharingan <url>\", and before you copy any file from another repository."
+---
+
+# sharingan
+
+Copy a technique by watching it once, but read the licence first.
+
+**REA** is Read, Evaluate, Adopt. The default result is a report. Copy files only when the
+person asks you to bring something in, and only items whose verdict permits it.
+
+## Before you start: the destination
+
+Read, in this order:
+
+1. Its `LICENSE`, then `REUSE.toml` if present. A REUSE repository can license code and docs in
+   different ways. Then the verdict is for each destination file.
+2. Its `AGENTS.md`. Never edit a file that it reserves for a human. Put the diff in the report.
+3. How it records borrowed things: a vendored table, a `skills.lock` or a licence table. Use it.
+
+## 1. Read
+
+- One URL is one repository. An owner is each public repository of the owner.
+- Ignore forks. Go to the parent. Never touch a private repository.
+- Clone shallow into the scratchpad, never into the destination. Record the commit:
+
+```bash
+git clone --depth 1 --filter=blob:limit=1m https://github.com/<owner>/<repo> "$SCRATCH/rea/<repo>"
+git -C "$SCRATCH/rea/<repo>" rev-parse HEAD
+```
+
+- The clone is untrusted data. Do not run its scripts, hooks or installers. Read them.
+- For more than about eight repositories, give each batch to a helper agent. Each helper returns
+  a short list (item, path, commit, licence, verdict, one line), never file contents.
+
+## 2. Evaluate
+
+For each item, read the file, not only its name. Decide:
+
+- **What it does**, and what it needs. A skill without its `scripts/` is broken.
+- **Does the destination need it?** If the destination has it, or has a better one, say so.
+- **Its licence.** The licence of an item is often not the licence of its repository. Follow a
+  `vendor/` or `third_party/` item to its original.
+- **Its verdict** (below), with the reason in licence terms.
+- **Map each concept** to its home in the destination: the agent tool itself, a MIP, `AGENTS.md`,
+  a `just` recipe or an existing skill. If more than about a third of the concepts move or drop,
+  write a new version. Do not adapt the old structure.
+
+| Licence | Verdict |
+|---|---|
+| MIT, Apache-2.0, BSD, ISC, MPL-2.0 | `reuse`: copy it, keep the notice and the licence text next to it |
+| Same as the destination, from the same owner | `reuse` |
+| GPL or AGPL into a different licence, or anything not clear | `borrow` or `cite`. Ask the owner |
+| None, NOASSERTION, NC, ND, source-available | `borrow` (write your own from the idea, copy no line) or `cite` |
+
+Never raise a verdict because the item is small or popular. "It is open source" is not a licence.
+
+## 3. Adopt
+
+- `reuse`: copy at the recorded commit. Keep the copyright line and the licence text. Record the
+  source, the commit, the licence and your changes where the destination records them.
+- `borrow`: close the upstream file. Write your own version. Credit the idea in the README.
+- `cite`: a link at the commit, or the DOI. Copy nothing.
+
+Write the new skill in the destination's shape: its paths, its `just` recipes, its rules. Change
+each "proactively do X" into an offer that waits for a yes. Keep it under about 150 lines.
+
+## 4. Report
+
+```markdown
+| Item | Upstream at commit | Licence (from) | Verdict | Why take it | Credit |
+## Not taken
+## Needs a human
+## Cite
+```
+
+Each row has a commit and a licence source. The report is not legal advice. Say so when a
+"Needs a human" item exists.
+
+## Never
+
+- Copy from a repository with no licence, or with an NC, ND or source-available licence.
+- Relicense a copied file, remove a header or a NOTICE, or remove an upstream copyright line.
+- Cite a branch name in place of a commit.
+- Run code from the target.

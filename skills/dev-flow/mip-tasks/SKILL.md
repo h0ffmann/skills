@@ -1,0 +1,77 @@
+---
+name: mip-tasks
+description: "Turn an accepted MIP into an ordered task list and deliver it as small stacked PRs, one task for each branch and PR. Use for `/mip-tasks NNNN` or a restack."
+disable-model-invocation: true
+---
+
+# mip-tasks
+
+A MIP says what and why. This skill gives the how, in order. Each task is a branch on top of the
+previous task, with its own small PR. Review occurs in small parts. `main` gets only tested steps.
+
+## Argument
+
+One MIP number: `/mip-tasks 0009`. Accept `9`, `009`, `MIP-009` and `mip-0009`. Normalize to
+`MIP-0009` and say it. Make sure that the MIP file exists. If it does not, stop.
+
+- No number: stop and ask.
+- More than one number: stop and ask for one.
+
+## Step 1: the task list
+
+Read the MIP, `AGENTS.md` and the code. Write `docs/MIPs/MIP-NNNN.tasks.md`:
+
+```markdown
+| # | slug | delivers | tests (exist before the PR) | depends on |
+|---|---|---|---|---|
+| 1 | board-json | the serializer and its schema | spec from golden fixtures | - |
+| 2 | site-build | the build flag and its recipe | golden: dist/ has latest.json | 1 |
+```
+
+Rules for the list:
+
+- One task is one PR: about 400 changed lines or fewer, one concern, its own tests, green alone.
+- Order by dependency, then by risk. The task that can change the design comes first.
+- Name the tests now. The MIP's verification plan is the source.
+- Docs go with the task that changes the behaviour.
+- Reorder to prevent a later task from changing a file of an earlier task.
+
+Commit the list on the first task branch. Add `Tasks: docs/MIPs/MIP-NNNN.tasks.md` to the MIP.
+
+If the repository has a recipe that makes one issue for each row, run it with `--dry-run`
+first. Filing issues needs the owner's approval.
+
+## Step 2: one task, one branch, one PR
+
+Start a new session for each task. Then:
+
+1. Make the branch `mip-nnnn/<k>-<slug>` from the branch of the previous task.
+2. Write the test first. Then write the code.
+3. Run the full gate of the repository (`just build && just test && just quality`).
+4. Commit with the `Tested:` trailer.
+5. Push and open the PR with its base on the previous task branch. The body starts with
+   "Stacked on `<base>`, part of MIP-NNNN".
+
+Merge in order, from the bottom of the stack.
+
+## Step 3: restack
+
+A squash merge gives new hashes. The next PR then shows conflicts. Rebase it:
+
+```bash
+git rebase --onto origin/main <last commit of the merged base> <next branch>
+git push --force-with-lease
+```
+
+Find the fork point from the merged PR (`gh pr view <n> --json headRefOid`). If you cannot
+find it, stop. Do not rebase onto `main` without it.
+
+## Step 4: finish
+
+When the last task merges, set the MIP to `Implemented` with the PR numbers. Delete the task
+branches.
+
+## Rules
+
+- A follow-up to a merged PR is a new branch from `main`, not a child of the old branch.
+- Review occurs only when the owner asks for it, one PR at a time, from the bottom.

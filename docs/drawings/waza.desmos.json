@@ -1,0 +1,1514 @@
+{
+  "expressions": {
+    "list": [
+      {
+        "color": "#1682D4",
+        "id": "1",
+        "latex": "\\left(21+1.125t-0.07t^{2}+0.088t^{3},158.25+0.337t+0.155t^{2}-0.018t^{3}\\right)",
+        "lineWidth": "10.355",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "2",
+        "latex": "\\left(22.143+1.248t+0.193t^{2}+0.088t^{3},158.725+0.594t+0.102t^{2}-0.018t^{3}\\right)",
+        "lineWidth": "9.785",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "3",
+        "latex": "\\left(23.672+1.898t+0.457t^{2}+0.088t^{3},159.403+0.745t+0.049t^{2}-0.018t^{3}\\right)",
+        "lineWidth": "9.215",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "4",
+        "latex": "\\left(26.115+3.076t+0.721t^{2}+0.088t^{3},160.18+0.791t-0.004t^{2}-0.018t^{3}\\right)",
+        "lineWidth": "8.645",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "5",
+        "latex": "\\left(30+4.781t+1.512t^{2}-0.22t^{3},160.95+0.731t+0.028t^{2}-0.004t^{3}\\right)",
+        "lineWidth": "8.075",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "6",
+        "latex": "\\left(36.073+7.146t+0.853t^{2}-0.22t^{3},161.706+0.777t+0.018t^{2}-0.004t^{3}\\right)",
+        "lineWidth": "7.505",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "7",
+        "latex": "\\left(43.852+8.191t+0.193t^{2}-0.22t^{3},162.497+0.802t+0.007t^{2}-0.004t^{3}\\right)",
+        "lineWidth": "6.935",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "8",
+        "latex": "\\left(52.017+7.919t-0.466t^{2}-0.22t^{3},163.302+0.805t-0.004t^{2}-0.004t^{3}\\right)",
+        "lineWidth": "6.365",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "9",
+        "latex": "\\left(59.25+6.328t-0.035t^{2}-0.053t^{3},164.1+0.788t+0.169t^{2}-0.042t^{3}\\right)",
+        "lineWidth": "6.175",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "10",
+        "latex": "\\left(65.49+6.1t-0.193t^{2}-0.053t^{3},165.014+0.998t+0.042t^{2}-0.042t^{3}\\right)",
+        "lineWidth": "6.365",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "11",
+        "latex": "\\left(71.344+5.555t-0.352t^{2}-0.053t^{3},166.013+0.956t-0.084t^{2}-0.042t^{3}\\right)",
+        "lineWidth": "6.555",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "12",
+        "latex": "\\left(76.494+4.693t-0.51t^{2}-0.053t^{3},166.842+0.661t-0.211t^{2}-0.042t^{3}\\right)",
+        "lineWidth": "6.745",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "13",
+        "latex": "\\left(80.625+3.516t-0.703t^{2}+0.062t^{3},167.25+0.112t-0.408t^{2}+0.06t^{3}\\right)",
+        "lineWidth": "7.172",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "14",
+        "latex": "\\left(83.499+2.294t-0.519t^{2}+0.062t^{3},167.014-0.524t-0.229t^{2}+0.06t^{3}\\right)",
+        "lineWidth": "7.838",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "15",
+        "latex": "\\left(85.336+1.441t-0.334t^{2}+0.062t^{3},166.322-0.802t-0.049t^{2}+0.06t^{3}\\right)",
+        "lineWidth": "8.503",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "16",
+        "latex": "\\left(86.505+0.958t-0.149t^{2}+0.062t^{3},165.531-0.721t+0.13t^{2}+0.06t^{3}\\right)",
+        "lineWidth": "9.168",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "17",
+        "latex": "\\left(52.5+0.225t+0.169t^{2}-0.028t^{3},207.75-1.688t+0.773t^{2}-0.299t^{3}\\right)",
+        "lineWidth": "11.923",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "18",
+        "latex": "\\left(52.866+0.478t+0.084t^{2}-0.028t^{3},206.537-1.037t-0.123t^{2}-0.299t^{3}\\right)",
+        "lineWidth": "11.448",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "19",
+        "latex": "\\left(53.4+0.563t-0.028t^{3},205.078-2.18t-1.02t^{2}-0.299t^{3}\\right)",
+        "lineWidth": "10.973",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "20",
+        "latex": "\\left(53.934+0.478t-0.084t^{2}-0.028t^{3},201.58-5.115t-1.916t^{2}-0.299t^{3}\\right)",
+        "lineWidth": "10.498",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "21",
+        "latex": "\\left(54.3+0.225t-0.098t^{2}+0.011t^{3},194.25-9.844t-3.305t^{2}+0.422t^{3}\\right)",
+        "lineWidth": "10.118",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "22",
+        "latex": "\\left(54.437+0.06t-0.067t^{2}+0.011t^{3},181.523-15.188t-2.039t^{2}+0.422t^{3}\\right)",
+        "lineWidth": "9.833",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "23",
+        "latex": "\\left(54.441-0.042t-0.035t^{2}+0.011t^{3},164.719-18t-0.773t^{2}+0.422t^{3}\\right)",
+        "lineWidth": "9.548",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "24",
+        "latex": "\\left(54.374-0.081t-0.004t^{2}+0.011t^{3},146.367-18.281t+0.492t^{2}+0.422t^{3}\\right)",
+        "lineWidth": "9.263",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "25",
+        "latex": "\\left(54.3-0.056t-0.014t^{2},129-16.031t-1.266t^{2}+0.334t^{3}\\right)",
+        "lineWidth": "9.12",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "26",
+        "latex": "\\left(54.23-0.084t-0.014t^{2},112.037-17.561t-0.264t^{2}+0.334t^{3}\\right)",
+        "lineWidth": "9.12",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "27",
+        "latex": "\\left(54.131-0.113t-0.014t^{2},94.547-17.086t+0.738t^{2}+0.334t^{3}\\right)",
+        "lineWidth": "9.12",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "28",
+        "latex": "\\left(54.005-0.141t-0.014t^{2},78.533-14.607t+1.74t^{2}+0.334t^{3}\\right)",
+        "lineWidth": "9.12",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "29",
+        "latex": "\\left(53.85-0.169t+0.056t^{2}-0.018t^{3},66-10.125t+2.362t^{2}-0.239t^{3}\\right)",
+        "lineWidth": "9.263",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "30",
+        "latex": "\\left(53.72-0.109t+0.004t^{2}-0.018t^{3},57.998-6.117t+1.645t^{2}-0.239t^{3}\\right)",
+        "lineWidth": "9.548",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "31",
+        "latex": "\\left(53.597-0.155t-0.049t^{2}-0.018t^{3},53.287-3.544t+0.928t^{2}-0.239t^{3}\\right)",
+        "lineWidth": "9.833",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "32",
+        "latex": "\\left(53.375-0.306t-0.102t^{2}-0.018t^{3},50.433-2.405t+0.211t^{2}-0.239t^{3}\\right)",
+        "lineWidth": "10.118",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "33",
+        "latex": "\\left(52.95-0.563t-0.07t^{2}-0.004t^{3},48-2.7t+0.619t^{2}-0.042t^{3}\\right)",
+        "lineWidth": "10.07",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "34",
+        "latex": "\\left(52.314-0.714t-0.081t^{2}-0.004t^{3},45.877-1.589t+0.492t^{2}-0.042t^{3}\\right)",
+        "lineWidth": "9.69",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "35",
+        "latex": "\\left(51.516-0.886t-0.091t^{2}-0.004t^{3},44.738-0.731t+0.366t^{2}-0.042t^{3}\\right)",
+        "lineWidth": "9.31",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "36",
+        "latex": "\\left(50.535-1.079t-0.102t^{2}-0.004t^{3},44.33-0.127t+0.239t^{2}-0.042t^{3}\\right)",
+        "lineWidth": "8.93",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "37",
+        "latex": "\\left(49.35-1.294t-0.197t^{2}+0.025t^{3},44.4+0.225t+0.534t^{2}-0.063t^{3}\\right)",
+        "lineWidth": "8.265",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "38",
+        "latex": "\\left(47.884-1.614t-0.123t^{2}+0.025t^{3},45.096+1.104t+0.345t^{2}-0.063t^{3}\\right)",
+        "lineWidth": "7.315",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "39",
+        "latex": "\\left(46.172-1.786t-0.049t^{2}+0.025t^{3},46.481+1.603t+0.155t^{2}-0.063t^{3}\\right)",
+        "lineWidth": "6.365",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "40",
+        "latex": "\\left(44.361-1.811t+0.025t^{2}+0.025t^{3},48.176+1.723t-0.035t^{2}-0.063t^{3}\\right)",
+        "lineWidth": "5.415",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "41",
+        "latex": "\\left(42.6-1.688t-0.211t^{2}+0.053t^{3},49.8+1.462t+0.253t^{2}-0.056t^{3}\\right)",
+        "lineWidth": "4.512",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "42",
+        "latex": "\\left(40.754-1.951t-0.053t^{2}+0.053t^{3},51.459+1.8t+0.084t^{2}-0.056t^{3}\\right)",
+        "lineWidth": "3.657",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "43",
+        "latex": "\\left(38.803-1.898t+0.105t^{2}+0.053t^{3},53.287+1.8t-0.084t^{2}-0.056t^{3}\\right)",
+        "lineWidth": "2.802",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "44",
+        "latex": "\\left(37.063-1.529t+0.264t^{2}+0.053t^{3},54.947+1.463t-0.253t^{2}-0.056t^{3}\\right)",
+        "lineWidth": "1.948",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "45",
+        "latex": "\\left(19.875+1.266t+0.035t^{2}+0.07t^{3},88.5+0.619t-0.014t^{2}+0.042t^{3}\\right)",
+        "lineWidth": "11.115",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "46",
+        "latex": "\\left(21.246+1.547t+0.246t^{2}+0.07t^{3},89.147+0.717t+0.113t^{2}+0.042t^{3}\\right)",
+        "lineWidth": "10.545",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "47",
+        "latex": "\\left(23.109+2.25t+0.457t^{2}+0.07t^{3},90.019+1.069t+0.239t^{2}+0.042t^{3}\\right)",
+        "lineWidth": "9.975",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "48",
+        "latex": "\\left(25.887+3.375t+0.668t^{2}+0.07t^{3},91.369+1.673t+0.366t^{2}+0.042t^{3}\\right)",
+        "lineWidth": "9.405",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "49",
+        "latex": "\\left(30+4.922t+1.195t^{2}-0.149t^{3},93.45+2.531t+0.633t^{2}-0.077t^{3}\\right)",
+        "lineWidth": "8.645",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "50",
+        "latex": "\\left(35.968+6.864t+0.747t^{2}-0.149t^{3},96.537+3.565t+0.401t^{2}-0.077t^{3}\\right)",
+        "lineWidth": "7.695",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "51",
+        "latex": "\\left(43.43+7.91t+0.299t^{2}-0.149t^{3},100.425+4.134t+0.169t^{2}-0.077t^{3}\\right)",
+        "lineWidth": "6.745",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "52",
+        "latex": "\\left(51.489+8.06t-0.149t^{2}-0.149t^{3},104.651+4.24t-0.063t^{2}-0.077t^{3}\\right)",
+        "lineWidth": "5.795",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "53",
+        "latex": "\\left(59.25+7.313t+0.914t^{2}-0.229t^{3},108.75+3.881t+0.52t^{2}-0.127t^{3}\\right)",
+        "lineWidth": "4.845",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "54",
+        "latex": "\\left(67.248+8.455t+0.229t^{2}-0.229t^{3},113.025+4.542t+0.141t^{2}-0.127t^{3}\\right)",
+        "lineWidth": "3.895",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "55",
+        "latex": "\\left(75.703+8.227t-0.457t^{2}-0.229t^{3},117.581+4.444t-0.239t^{2}-0.127t^{3}\\right)",
+        "lineWidth": "2.945",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "56",
+        "latex": "\\left(83.244+6.627t-1.143t^{2}-0.229t^{3},121.659+3.586t-0.619t^{2}-0.127t^{3}\\right)",
+        "lineWidth": "1.995",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "57",
+        "latex": "\\left(102+1.125t-0.633t^{2}+0.229t^{3},167.25+0.337t+0.155t^{2}-0.018t^{3}\\right)",
+        "lineWidth": "11.067",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "58",
+        "latex": "\\left(102.721+0.545t+0.053t^{2}+0.229t^{3},167.725+0.594t+0.102t^{2}-0.018t^{3}\\right)",
+        "lineWidth": "10.402",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "59",
+        "latex": "\\left(103.547+1.336t+0.738t^{2}+0.229t^{3},168.403+0.745t+0.049t^{2}-0.018t^{3}\\right)",
+        "lineWidth": "9.737",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "60",
+        "latex": "\\left(105.85+3.498t+1.424t^{2}+0.229t^{3},169.18+0.791t-0.004t^{2}-0.018t^{3}\\right)",
+        "lineWidth": "9.072",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "61",
+        "latex": "\\left(111+7.031t+2.461t^{2}-0.316t^{3},169.95+0.731t+0.028t^{2}-0.004t^{3}\\right)",
+        "lineWidth": "8.407",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "62",
+        "latex": "\\left(120.176+11.004t+1.512t^{2}-0.316t^{3},170.706+0.777t+0.018t^{2}-0.004t^{3}\\right)",
+        "lineWidth": "7.742",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "63",
+        "latex": "\\left(132.375+13.078t+0.563t^{2}-0.316t^{3},171.497+0.802t+0.007t^{2}-0.004t^{3}\\right)",
+        "lineWidth": "7.078",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "64",
+        "latex": "\\left(145.699+13.254t-0.387t^{2}-0.316t^{3},172.302+0.805t-0.004t^{2}-0.004t^{3}\\right)",
+        "lineWidth": "6.413",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "65",
+        "latex": "\\left(158.25+11.531t+0.879t^{2}-0.237t^{3},173.1+0.788t+0.197t^{2}-0.049t^{3}\\right)",
+        "lineWidth": "6.128",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "66",
+        "latex": "\\left(170.423+12.577t+0.167t^{2}-0.237t^{3},174.035+1.034t+0.049t^{2}-0.049t^{3}\\right)",
+        "lineWidth": "6.223",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "67",
+        "latex": "\\left(182.93+12.199t-0.545t^{2}-0.237t^{3},175.069+0.984t-0.098t^{2}-0.049t^{3}\\right)",
+        "lineWidth": "6.318",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "68",
+        "latex": "\\left(194.347+10.397t-1.257t^{2}-0.237t^{3},175.905+0.64t-0.246t^{2}-0.049t^{3}\\right)",
+        "lineWidth": "6.413",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "69",
+        "latex": "\\left(203.25+7.172t-1.652t^{2}+0.158t^{3},176.25-0.492t^{2}+0.074t^{3}\\right)",
+        "lineWidth": "6.983",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "70",
+        "latex": "\\left(208.928+4.342t-1.178t^{2}+0.158t^{3},175.832-0.763t-0.271t^{2}+0.074t^{3}\\right)",
+        "lineWidth": "8.028",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "71",
+        "latex": "\\left(212.25+2.461t-0.703t^{2}+0.158t^{3},174.872-1.083t-0.049t^{2}+0.074t^{3}\\right)",
+        "lineWidth": "9.073",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "72",
+        "latex": "\\left(214.166+1.529t-0.229t^{2}+0.158t^{3},173.814-0.96t+0.172t^{2}+0.074t^{3}\\right)",
+        "lineWidth": "10.118",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "73",
+        "latex": "\\left(156+0.169t+0.127t^{2}-0.021t^{3},212.25-1.688t-0.07t^{2}-0.088t^{3}\\right)",
+        "lineWidth": "11.495",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "74",
+        "latex": "\\left(156.274+0.359t+0.063t^{2}-0.021t^{3},210.404-2.092t-0.334t^{2}-0.088t^{3}\\right)",
+        "lineWidth": "10.925",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "75",
+        "latex": "\\left(156.675+0.422t-0.021t^{3},207.891-3.023t-0.598t^{2}-0.088t^{3}\\right)",
+        "lineWidth": "10.355",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "76",
+        "latex": "\\left(157.076+0.359t-0.063t^{2}-0.021t^{3},204.182-4.482t-0.861t^{2}-0.088t^{3}\\right)",
+        "lineWidth": "9.785",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "77",
+        "latex": "\\left(157.35+0.169t-0.07t^{2}+0.007t^{3},198.75-6.469t-1.969t^{2}+0.299t^{3}\\right)",
+        "lineWidth": "9.358",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "78",
+        "latex": "\\left(157.455+0.049t-0.049t^{2}+0.007t^{3},190.611-9.51t-1.072t^{2}+0.299t^{3}\\right)",
+        "lineWidth": "9.073",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "79",
+        "latex": "\\left(157.462-0.028t-0.028t^{2}+0.007t^{3},180.328-10.758t-0.176t^{2}+0.299t^{3}\\right)",
+        "lineWidth": "8.788",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "80",
+        "latex": "\\left(157.413-0.063t-0.007t^{2}+0.007t^{3},169.693-10.213t+0.721t^{2}+0.299t^{3}\\right)",
+        "lineWidth": "8.503",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "81",
+        "latex": "\\left(157.35-0.056t-0.042t^{2}+0.007t^{3},160.5-7.875t+0.07t^{2}+0.088t^{3}\\right)",
+        "lineWidth": "8.55",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "82",
+        "latex": "\\left(157.259-0.12t-0.021t^{2}+0.007t^{3},152.783-7.471t+0.334t^{2}+0.088t^{3}\\right)",
+        "lineWidth": "8.93",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "83",
+        "latex": "\\left(157.125-0.141t+0.007t^{3},145.734-6.539t+0.598t^{2}+0.088t^{3}\\right)",
+        "lineWidth": "9.31",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "84",
+        "latex": "\\left(156.991-0.12t+0.021t^{2}+0.007t^{3},139.881-5.08t+0.861t^{2}+0.088t^{3}\\right)",
+        "lineWidth": "9.69",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "85",
+        "latex": "\\left(113.25+1.125t-0.422t^{2}+0.176t^{3},120+0.337t+0.169t^{2}-0.021t^{3}\\right)",
+        "lineWidth": "10.308",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "86",
+        "latex": "\\left(114.129+0.809t+0.105t^{2}+0.176t^{3},120.485+0.612t+0.105t^{2}-0.021t^{3}\\right)",
+        "lineWidth": "9.642",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "87",
+        "latex": "\\left(115.219+1.547t+0.633t^{2}+0.176t^{3},121.181+0.759t+0.042t^{2}-0.021t^{3}\\right)",
+        "lineWidth": "8.978",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "88",
+        "latex": "\\left(117.574+3.34t+1.16t^{2}+0.176t^{3},121.962+0.78t-0.021t^{2}-0.021t^{3}\\right)",
+        "lineWidth": "8.313",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "89",
+        "latex": "\\left(122.25+6.188t+2.391t^{2}-0.352t^{3},122.7+0.675t+0.028t^{2}-0.007t^{3}\\right)",
+        "lineWidth": "7.743",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "90",
+        "latex": "\\left(130.477+9.914t+1.336t^{2}-0.352t^{3},123.396+0.71t+0.007t^{2}-0.007t^{3}\\right)",
+        "lineWidth": "7.268",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "91",
+        "latex": "\\left(141.375+11.531t+0.281t^{2}-0.352t^{3},124.106+0.703t-0.014t^{2}-0.007t^{3}\\right)",
+        "lineWidth": "6.792",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "92",
+        "latex": "\\left(152.836+11.039t-0.773t^{2}-0.352t^{3},124.788+0.654t-0.035t^{2}-0.007t^{3}\\right)",
+        "lineWidth": "6.318",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "93",
+        "latex": "\\left(162.75+8.438t-0.141t^{2}-0.07t^{3},125.4+0.563t+0.155t^{2}-0.046t^{3}\\right)",
+        "lineWidth": "6.413",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "94",
+        "latex": "\\left(170.977+7.945t-0.352t^{2}-0.07t^{3},126.071+0.735t+0.018t^{2}-0.046t^{3}\\right)",
+        "lineWidth": "7.078",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "95",
+        "latex": "\\left(178.5+7.031t-0.563t^{2}-0.07t^{3},126.778+0.633t-0.12t^{2}-0.046t^{3}\\right)",
+        "lineWidth": "7.742",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "96",
+        "latex": "\\left(184.898+5.695t-0.773t^{2}-0.07t^{3},127.246+0.257t-0.257t^{2}-0.046t^{3}\\right)",
+        "lineWidth": "8.407",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "97",
+        "latex": "\\left(189.75+3.938t-0.844t^{2}+0.035t^{3},127.2-0.394t+0.197t^{2}-0.102t^{3}\\right)",
+        "lineWidth": "8.787",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "98",
+        "latex": "\\left(192.879+2.355t-0.738t^{2}+0.035t^{3},126.901-0.306t-0.109t^{2}-0.102t^{3}\\right)",
+        "lineWidth": "8.882",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "99",
+        "latex": "\\left(194.531+0.984t-0.633t^{2}+0.035t^{3},126.384-0.83t-0.415t^{2}-0.102t^{3}\\right)",
+        "lineWidth": "8.978",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "100",
+        "latex": "\\left(194.918-0.176t-0.527t^{2}+0.035t^{3},125.038-1.965t-0.721t^{2}-0.102t^{3}\\right)",
+        "lineWidth": "9.073",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "101",
+        "latex": "\\left(194.25-1.125t-0.703t^{2}+0.035t^{3},122.25-3.712t-1.027t^{2}+0.102t^{3}\\right)",
+        "lineWidth": "8.93",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "102",
+        "latex": "\\left(192.457-2.426t-0.598t^{2}+0.035t^{3},117.613-5.46t-0.721t^{2}+0.102t^{3}\\right)",
+        "lineWidth": "8.55",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "103",
+        "latex": "\\left(189.469-3.516t-0.492t^{2}+0.035t^{3},111.534-6.595t-0.415t^{2}+0.102t^{3}\\right)",
+        "lineWidth": "8.17",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "104",
+        "latex": "\\left(185.496-4.395t-0.387t^{2}+0.035t^{3},104.626-7.119t-0.109t^{2}+0.102t^{3}\\right)",
+        "lineWidth": "7.79",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "105",
+        "latex": "\\left(180.75-5.063t-0.844t^{2}+0.105t^{3},97.5-7.031t-0.703t^{2}+0.123t^{3}\\right)",
+        "lineWidth": "7.41",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "106",
+        "latex": "\\left(174.949-6.434t-0.527t^{2}+0.105t^{3},89.889-8.068t-0.334t^{2}+0.123t^{3}\\right)",
+        "lineWidth": "7.03",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "107",
+        "latex": "\\left(168.094-7.172t-0.211t^{2}+0.105t^{3},81.609-8.367t+0.035t^{2}+0.123t^{3}\\right)",
+        "lineWidth": "6.65",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "108",
+        "latex": "\\left(160.816-7.277t+0.105t^{2}+0.105t^{3},73.4-7.928t+0.404t^{2}+0.123t^{3}\\right)",
+        "lineWidth": "6.27",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "109",
+        "latex": "\\left(153.75-6.75t-0.035t^{2}+0.009t^{3},66-6.75t+0.316t^{2}-0.009t^{3}\\right)",
+        "lineWidth": "5.795",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "110",
+        "latex": "\\left(146.974-6.794t-0.009t^{2}+0.009t^{3},59.558-6.144t+0.29t^{2}-0.009t^{3}\\right)",
+        "lineWidth": "5.225",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "111",
+        "latex": "\\left(140.18-6.785t+0.018t^{2}+0.009t^{3},53.695-5.59t+0.264t^{2}-0.009t^{3}\\right)",
+        "lineWidth": "4.655",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "112",
+        "latex": "\\left(133.421-6.724t+0.044t^{2}+0.009t^{3},48.36-5.089t+0.237t^{2}-0.009t^{3}\\right)",
+        "lineWidth": "4.085",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "113",
+        "latex": "\\left(126.75-6.609t-0.738t^{2}+0.193t^{3},43.5-4.641t+0.035t^{2}+0.053t^{3}\\right)",
+        "lineWidth": "3.515",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "114",
+        "latex": "\\left(119.596-7.506t-0.158t^{2}+0.193t^{3},38.947-4.412t+0.193t^{2}+0.053t^{3}\\right)",
+        "lineWidth": "2.945",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "115",
+        "latex": "\\left(112.125-7.242t+0.422t^{2}+0.193t^{3},34.781-3.867t+0.352t^{2}+0.053t^{3}\\right)",
+        "lineWidth": "2.375",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "116",
+        "latex": "\\left(105.498-5.818t+1.002t^{2}+0.193t^{3},31.318-3.006t+0.51t^{2}+0.053t^{3}\\right)",
+        "lineWidth": "1.805",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "117",
+        "latex": "\\left(129+1.688t+0.633t^{2}-0.053t^{3},102-1.969t-0.773t^{2}+0.07t^{3}\\right)",
+        "lineWidth": "4.797",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "118",
+        "latex": "\\left(131.268+2.795t+0.475t^{2}-0.053t^{3},99.328-3.305t-0.563t^{2}+0.07t^{3}\\right)",
+        "lineWidth": "5.273",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "119",
+        "latex": "\\left(134.484+3.586t+0.316t^{2}-0.053t^{3},95.531-4.219t-0.352t^{2}+0.07t^{3}\\right)",
+        "lineWidth": "5.748",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "120",
+        "latex": "\\left(138.334+4.061t+0.158t^{2}-0.053t^{3},91.031-4.711t-0.141t^{2}+0.07t^{3}\\right)",
+        "lineWidth": "6.223",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "121",
+        "latex": "\\left(142.5+4.219t+0.352t^{2}-0.035t^{3},86.25-4.781t-0.52t^{2}+0.077t^{3}\\right)",
+        "lineWidth": "6.745",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "122",
+        "latex": "\\left(147.035+4.816t+0.246t^{2}-0.035t^{3},81.026-5.59t-0.288t^{2}+0.077t^{3}\\right)",
+        "lineWidth": "7.315",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "123",
+        "latex": "\\left(152.063+5.203t+0.141t^{2}-0.035t^{3},75.225-5.934t-0.056t^{2}+0.077t^{3}\\right)",
+        "lineWidth": "7.885",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "124",
+        "latex": "\\left(157.371+5.379t+0.035t^{2}-0.035t^{3},69.312-5.815t+0.176t^{2}+0.077t^{3}\\right)",
+        "lineWidth": "8.455",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "125",
+        "latex": "\\left(162.75+5.344t+0.281t^{2}-0.053t^{3},63.75-5.231t-0.141t^{2}+0.06t^{3}\\right)",
+        "lineWidth": "9.12",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "126",
+        "latex": "\\left(168.322+5.748t+0.123t^{2}-0.053t^{3},58.438-5.333t+0.039t^{2}+0.06t^{3}\\right)",
+        "lineWidth": "9.88",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "127",
+        "latex": "\\left(174.141+5.836t-0.035t^{2}-0.053t^{3},53.203-5.077t+0.218t^{2}+0.06t^{3}\\right)",
+        "lineWidth": "10.64",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "128",
+        "latex": "\\left(179.889+5.607t-0.193t^{2}-0.053t^{3},48.404-4.461t+0.397t^{2}+0.06t^{3}\\right)",
+        "lineWidth": "11.4",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "129",
+        "latex": "\\left(185.25+5.063t-0.246t^{2}+0.026t^{3},44.4-3.487t+0.492t^{2}-0.039t^{3}\\right)",
+        "lineWidth": "11.875",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "130",
+        "latex": "\\left(190.093+4.649t-0.167t^{2}+0.026t^{3},41.366-2.619t+0.376t^{2}-0.039t^{3}\\right)",
+        "lineWidth": "12.065",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "131",
+        "latex": "\\left(194.602+4.395t-0.088t^{2}+0.026t^{3},39.084-1.983t+0.26t^{2}-0.039t^{3}\\right)",
+        "lineWidth": "12.255",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "132",
+        "latex": "\\left(198.935+4.298t-0.009t^{2}+0.026t^{3},37.323-1.579t+0.144t^{2}-0.039t^{3}\\right)",
+        "lineWidth": "12.445",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "133",
+        "latex": "\\left(203.25+4.359t+0.457t^{2}-0.123t^{3},35.85-1.406t+0.281t^{2}-0.025t^{3}\\right)",
+        "lineWidth": "11.21",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "134",
+        "latex": "\\left(207.943+4.904t+0.088t^{2}-0.123t^{3},34.7-0.918t+0.207t^{2}-0.025t^{3}\\right)",
+        "lineWidth": "8.55",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "135",
+        "latex": "\\left(212.813+4.711t-0.281t^{2}-0.123t^{3},33.966-0.577t+0.134t^{2}-0.025t^{3}\\right)",
+        "lineWidth": "5.89",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      },
+      {
+        "color": "#1682D4",
+        "id": "136",
+        "latex": "\\left(217.119+3.779t-0.65t^{2}-0.123t^{3},33.498-0.383t+0.06t^{2}-0.025t^{3}\\right)",
+        "lineWidth": "3.23",
+        "parametricDomain": {
+          "max": "1",
+          "min": "0"
+        },
+        "type": "expression"
+      }
+    ]
+  },
+  "graph": {
+    "showGrid": false,
+    "showXAxis": false,
+    "showYAxis": false,
+    "viewport": {
+      "xmax": 240.0,
+      "xmin": 0,
+      "ymax": 240.0,
+      "ymin": 0
+    }
+  },
+  "version": 11
+}

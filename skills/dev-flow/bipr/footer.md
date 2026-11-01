@@ -1,0 +1,1 @@
+<img src="https://raw.githubusercontent.com/piabrota/gramatico/main/site/static/favicon.svg" width="16" height="16" alt="gramatico"> Generated with [piabrota/gramatico](https://github.com/piabrota/gramatico) [`bipr`](https://github.com/piabrota/gramatico/blob/main/skills/bipr/SKILL.md) skill

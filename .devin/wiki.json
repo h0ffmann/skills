@@ -1,0 +1,82 @@
+{
+  "repo_notes": [
+    {
+      "content": "skills is a set of agent skills (SKILL.md folders) tailored to the owner's projects: h0ffmann, piabrota and marola-dev. It is not a vendored collection. Each skill is written for those projects. README.md is the index. It is easy to fork: `just link` symlinks every skill into one flat folder that an agent reads."
+    },
+    {
+      "content": "Skills live in category folders: skills/<category>/<name>/SKILL.md. Categories: writing, research, dev-flow, nix, figures, web, notes, code, ouroboric. A skill name is unique across all categories and equals its folder name."
+    },
+    {
+      "content": "AGENTS.md holds the hard rules. Prefer its wording when documenting rules. The main ones: the whole repository is ASD-STE100; few links and low cognitive load; no duplicate skills; tailored, not vendored; never invent a fact; never weaken a check; the agent never merges or releases."
+    },
+    {
+      "content": "Token budget is a design goal. A description loads in every session, a body loads only when the skill is used, and a reference file loads only when the body names it. scripts/check.py enforces the budgets: 300 characters a description, 12000 in all, 150 lines a SKILL.md. Skills with `disable-model-invocation: true` add no description to the session and are run by name only."
+    },
+    {
+      "content": "Some files are copied as is and keep their text and language: the skills of piabrota/gramatico (ptbr-writer, ptbr, ptbr-routing, cientifico, retorica, bipr, figure) and archify (a git submodule in vendor/archify, MIT). check.py gives them warnings, not failures. Many of them are in Brazilian Portuguese."
+    },
+    {
+      "content": "skills/ouroboric borrows ideas from the ouroboric-dev organization (ideas by Bruno Valerio). No file of theirs is copied. Its README.md lists the public ouroboric-dev repositories."
+    },
+    {
+      "content": "The README drawing is the kanji 技 (waza, skill), drawn in pure Nix from hand-placed points: drawings/pen.nix (Catmull-Rom to cubic Bezier to Desmos expressions) and drawings/waza.nix. `just drawing` writes docs/drawings/waza.svg and waza.desmos.json. The flake has one input, nixpkgs-lib. There is no CI: `just check` runs every check locally."
+    },
+    {
+      "content": "Write this DeepWiki in English, in short and plain sentences. Cite the SKILL.md of a skill for its behaviour."
+    }
+  ],
+  "pages": [
+    {
+      "title": "Overview",
+      "purpose": "What the repository is, how to install the skills with just link, and the README index."
+    },
+    {
+      "title": "Repository rules",
+      "purpose": "The hard rules in AGENTS.md and why each exists."
+    },
+    {
+      "title": "Token budget and checks",
+      "purpose": "How scripts/check.py keeps descriptions and bodies small, the lazy skills, and the ASD-STE100 lint."
+    },
+    {
+      "title": "Writing skills",
+      "purpose": "ste100, easy-translate, essay, and the pt-BR skills copied from gramatico."
+    },
+    {
+      "title": "Research skills",
+      "purpose": "paper, cite-release, citation-score, open-text and eli5."
+    },
+    {
+      "title": "Development flow skills",
+      "purpose": "MIP design docs, stacked PRs, triage, bilingual PRs, handoff notes and voice notes."
+    },
+    {
+      "title": "Nix skills",
+      "purpose": "nix-lab, nixos-vps, nix-debug and systemd-hardening."
+    },
+    {
+      "title": "Figure skills",
+      "purpose": "figure, archify, svg-diagram and ddraw."
+    },
+    {
+      "title": "Web skills",
+      "purpose": "web-ui, maps and citizen-science."
+    },
+    {
+      "title": "Notes skills",
+      "purpose": "zk-method, pirsig-slips and pirsig."
+    },
+    {
+      "title": "Code skills",
+      "purpose": "lean-code and loco."
+    },
+    {
+      "title": "Ouroboric skills",
+      "purpose": "sharingan, retro and writing-styles, and the index of ouroboric-dev repositories."
+    },
+    {
+      "title": "The kanji drawing",
+      "purpose": "How the 技 drawing is made in pure Nix and how its tests work."
+    }
+  ]
+}

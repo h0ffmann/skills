@@ -1,0 +1,54 @@
+---
+name: triage
+description: "Turn a raw idea, a voice note or a bug report into one issue body that is ready to claim. A human files it. Use for \"triage this\" or \"make an issue out of this\"."
+disable-model-invocation: true
+---
+
+# triage
+
+The output is a draft body with its labels and its command. It is not a filed issue. **Draft,
+show, stop.** The person files it. An agent that files its own issues fills the queue faster than
+anyone can triage it.
+
+## Step 1: the tier
+
+The tier is the size of the change. The form is the surface where it occurs.
+
+| It is | Tier | Form | Headings |
+|---|---|---|---|
+| A defect in what a user touches | 1 | bug report | What happened · What you expected instead · How to reproduce · Failing test · Logs |
+| A chore, a refactor, a doc, or a defect in the repository's own tools | 1 | task | What · Acceptance criteria · Named test · Size |
+| A small feature (two tasks or fewer, no new dependency) | 2 | story | Problem · Proposed behaviour · Acceptance criteria · Named test · Out of scope |
+| A new data source, a score change, a new integration, anything paid | 3 | MIP proposal | a design request, never claimable work |
+
+Read the form in `.github/ISSUE_TEMPLATE/` before you write. Copy its headings exactly. A check
+reads them.
+
+## Step 2: the body
+
+Fill each heading. A required field with no content means that the idea is not ready. Say so.
+Do not invent content.
+
+The two fields that make an issue claimable:
+
+- **Acceptance criteria**: checkboxes that a test can prove, in the words of the repository.
+- **Named test**: a file and a test name. For a bug, this is the test that fails today.
+
+Propose the labels: the label of the form, one `area/*`, one `layer/*`, one `size/*`
+(S below 100 changed lines, M from 100 to 400, L means "cut it in two").
+
+## Step 3: check and hand over
+
+Check the draft against the five rules: acceptance criteria, a named test, `area/*` and
+`layer/*`, `size/*`, and no open blocker. Then show the body, the labels and the command:
+
+```bash
+gh issue create --repo <owner>/<repo> --title "<title>" --body-file <draft> \
+  --label "<form label>,<area>,<layer>,<size>"
+```
+
+`--repo` is necessary, because a fork resolves to another default. The form label is
+necessary, because `gh issue create` does not apply the label of the form.
+
+After the person files it, the repository's readiness recipe (`just issue-ready <n>`) is the
+real check. It adds `agent-ready` when all rules pass.

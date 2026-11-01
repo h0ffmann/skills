@@ -1,0 +1,71 @@
+---
+name: mip-overnight
+description: "Unattended runner for MIP task lists. Works one ready task at a time, opens a Draft PR for each, and stops cleanly at a usage limit or a real blocker. Only when typed by the owner."
+disable-model-invocation: true
+---
+
+# mip-overnight
+
+This skill works through `docs/MIPs/MIP-NNNN.tasks.md` files while the owner is away. It never
+merges. The owner reviews in the morning.
+
+## Before the run
+
+Make sure that `.claude/settings.json` has `permissions.deny` for `Bash(gh pr merge*)` and
+`Bash(gh pr close*)`. The deny rule holds for the whole run. If it is missing, stop. Tell the
+owner to add it.
+
+## Arguments
+
+`$ARGUMENTS`: one or more MIP numbers, in order. With no number, select the easiest ready MIP:
+
+1. Candidates are MIPs with a task issue that has the `agent-ready` label.
+2. Remove each candidate that a missing earlier phase blocks.
+3. Sort by effort (S, M, L, XL). Prefer the verdict "cheap win". Then the lowest number.
+4. If the MIP has no tasks file, run the `mip-tasks` steps first.
+
+Say the selected MIP and the reason in the first line and in each PR body.
+
+## Goal
+
+Each row of each tasks file has an open Draft PR, or a log line that says it is blocked. At the
+end, print `GOAL_COMPLETE: <summary>` or `GOAL_FAILED: <reason>`.
+
+## Rules
+
+- Work a task only when its issue has `agent-ready`. Otherwise log it as "not ready".
+- One task is one branch and one Draft PR, stacked as in `mip-tasks`.
+- Before each commit, the full gate is green. Each commit has the `Tested:` trailer.
+- Never merge or close a PR. Never push to `main`. Never use `--force` without `-with-lease`.
+- Never start a paid resource.
+- Two failures on one task: log it as blocked and go to the next task.
+- If `gh` has no login: push the branch, and write the exact `gh pr create` command into
+  `GH_POST_MORTEM.md` (ignored by git). Then continue.
+
+## Effort
+
+- A mechanical task (one small file, configuration) starts at low effort.
+- A real task starts at the default effort.
+- After one failure, raise the effort. Change the model only after two more failures, and only
+  if the usage budget permits it. Go back to the default after that task.
+- Write in each PR body which effort and model did the task.
+
+## Usage guard
+
+Before each task, read the usage of the five-hour window and of the weekly window. For each
+window, project the usage at the end of the window from the current rate.
+
+- Projection below 75% (five-hour) or 85% (weekly): continue.
+- Above that: finish the current task, then stop.
+- Above 90% (five-hour) or 95% (weekly): stop now, after the checkpoint below.
+
+If no usage data is available, use a dollar budget that the owner gave at the start.
+
+## Checkpoint
+
+Before a stop, the current task is in one of two states only:
+
+1. **Done**: green, committed, pushed, and its PR open (or its command logged).
+2. **Abandoned**: the work tree is clean again, with one line in the report that says why.
+
+Never stop with a half-built tree and no note.
