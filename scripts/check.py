@@ -149,7 +149,8 @@ def check(root=ROOT):
             fails.append(f"{doc}: {links} links, the limit is {LINKS_MAX_DOC}")
         for f in ste(text):
             fails.append(f"{doc}: {f}")
-    for p in sorted(list((root / "docs").rglob("*.md")) + list((root / "skills").glob("*/README.md"))):
+    for p in sorted(list((root / "docs").rglob("*.md")) + list((root / "skills").glob("*/README.md"))
+                    + list((root / "agents").glob("README.md"))):
         for f in ste(p.read_text(encoding="utf-8")):
             fails.append(f"{p.relative_to(root)}: {f}")
     return fails, warns, budget, total_desc
