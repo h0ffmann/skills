@@ -142,16 +142,16 @@ The repository is a Claude Code marketplace. Its plugin `waza` has all the skill
 in a session (Claude Code 2.1.275 or newer) or in a terminal:
 
 ```text
-/plugin install waza --marketplace h0ffmann/skills
-claude plugin install waza --marketplace h0ffmann/skills
+/plugin install waza --marketplace piabrota/skills
+claude plugin install waza --marketplace piabrota/skills
 ```
 
-An older Claude Code needs `/plugin marketplace add h0ffmann/skills` and `/plugin install waza@h0ffmann`.
+An older Claude Code needs `/plugin marketplace add piabrota/skills` and `/plugin install waza@h0ffmann`.
 The plugin also adds the DeepWiki MCP server of `.mcp.json`. For another agent, you need `git`,
 `python3` and `just`. Nix and `jq` are necessary only for `just check`.
 
 ```bash
-git clone --recurse-submodules https://github.com/h0ffmann/skills
+git clone --recurse-submodules https://github.com/piabrota/skills
 cd skills
 just link                       # ~/.claude/skills
 just link ~/project/.agents/skills
