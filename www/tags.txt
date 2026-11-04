@@ -65,3 +65,7 @@ mapbox: web maps
 humanizer: english writing
 humanizar: pt-br writing
 humanizer-pt-br: pt-br writing
+piabrota-owner-workflows: hermes-skill
+smart-notes: hermes-skill
+video-indexer: hermes-skill
+hermes-omp: hermes-skill

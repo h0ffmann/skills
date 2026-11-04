@@ -106,7 +106,8 @@ def check(root=ROOT):
     skills = sorted((root / "skills").glob("*/*/SKILL.md"))
     for path in skills:
         rel = str(path.parent.relative_to(root))
-        as_is = rel in AS_IS
+        # skills/hermes/ holds the skills of Hermes, copied as is on the owner's word.
+        as_is = rel in AS_IS or rel.startswith("skills/hermes/")
         report = warns if as_is else fails
         text = path.read_text(encoding="utf-8")
         fields, body = front_matter(text)
