@@ -4,7 +4,7 @@
 
 # skills
 
-<sub>🇨🇭 · 技 · <i>waza</i> · a swiss army knife of agent skills · <a href="https://h0ffmann.github.io/skills/">website</a> · <a href="docs/awesome-skills.md">awesome-skills</a> · <a href="docs/common-skills.md">common-skills</a> · <a href="agents/README.md">agents</a> · <a href="#in-one-minute">in one minute</a> · <a href="#the-skills">the skills</a> · <a href="#token-budget">token budget</a> · <a href="#install">install</a> · <a href="#structure">structure</a> · <a href="docs/drawings/README.md">the drawing</a> · <a href="#license">license</a></sub>
+<sub>🇨🇭 · 技 · <i>waza</i> · a swiss army knife of agent skills · <a href="https://www.piabrota.art/skills/">website</a> · <a href="docs/awesome-skills.md">awesome-skills</a> · <a href="docs/common-skills.md">common-skills</a> · <a href="agents/README.md">agents</a> · <a href="#in-one-minute">in one minute</a> · <a href="#the-skills">the skills</a> · <a href="#token-budget">token budget</a> · <a href="#install">install</a> · <a href="#structure">structure</a> · <a href="docs/drawings/README.md">the drawing</a> · <a href="#license">license</a></sub>
 
 [![skills: 52](https://img.shields.io/badge/skills-52-1682D4?style=flat-square)](#the-skills)
 [![writing: ASD-STE100](https://img.shields.io/badge/writing-ASD--STE100-1682D4?style=flat-square)](AGENTS.md)
@@ -148,7 +148,7 @@ claude plugin install waza --marketplace h0ffmann/skills
 
 An older Claude Code needs `/plugin marketplace add h0ffmann/skills` and `/plugin install waza@h0ffmann`.
 The plugin also adds the DeepWiki MCP server of `.mcp.json`. For another agent, you need `git`,
-`python3` and `just`. Nix, `jq`, Gleam and Erlang are necessary only for `just check`.
+`python3` and `just`. Nix and `jq` are necessary only for `just check`.
 
 ```bash
 git clone --recurse-submodules https://github.com/h0ffmann/skills
@@ -168,9 +168,8 @@ just check
 ```
 
 It runs `scripts/check.py`, `agentskills-checker`, the self-tests of the skill scripts, the tests
-of the drawing, a comparison of the committed drawing with a new evaluation, a build of the site, and
-`scripts/deepwiki-check.jq`. One workflow is CD only: `.github/workflows/pages.yml` builds the site
-and deploys it to GitHub Pages after each merge to `main`.
+of the drawing, a comparison of the committed drawing with a new evaluation, and
+`scripts/deepwiki-check.jq`.
 
 ## Structure
 
@@ -179,7 +178,7 @@ skills/
 ├── AGENTS.md              # the rules for agents and humans
 ├── CITATION.cff           # the citation data (GitHub "Cite this repository")
 ├── .claude-plugin/        # plugin.json and marketplace.json: the Claude Code plugin
-├── justfile               # check, link, drawing, site, deepwiki-check
+├── justfile               # check, link, drawing, deepwiki-check
 ├── flake.nix              # one input: nixpkgs-lib. Output: the drawing
 ├── skills/<category>/<name>/SKILL.md
 ├── agents/                # the index of the Claude agents, and their files as is
@@ -189,9 +188,7 @@ skills/
 ├── drawings/              # pen.nix and waza.nix, pure Nix
 ├── docs/drawings/         # waza.svg, waza.desmos.json, README.md
 ├── docs/awesome-skills.md # the 33 personal skill collections with the most stars
-├── docs/site/             # the website build, not committed (`just site`)
-├── .github/workflows/     # pages.yml: CD of the website to GitHub Pages
-├── www/                   # the Gleam program for docs/site/ and the skill tags (tags.txt)
+├── www/                   # the skill tags (tags.txt)
 ├── vendor/archify/        # git submodule, MIT
 ├── .devin/wiki.json       # the DeepWiki outline
 └── .mcp.json              # the DeepWiki MCP server

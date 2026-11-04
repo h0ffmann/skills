@@ -1,5 +1,5 @@
 # The tags of each skill, for the search on the website. One line for each skill: `name: tag tag`.
-# The site adds the category and `manual` (for a ⏸ skill) itself. `gleam run` fails if a skill has no line.
+# The website build in `skills-site/` of `piabrota/nix-os` reads this file. It adds the category and `manual` (for a ⏸ skill) itself. The build fails if a skill has no line.
 lean-code: code review
 loco: code rust web
 agentskills-checker: skills lint
