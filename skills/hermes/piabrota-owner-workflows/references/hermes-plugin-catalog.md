@@ -1,0 +1,73 @@
+# Choosing Hermes plugins from the community catalog
+
+Use for "which plugins fit instance X", "always index the catalog", or any plan that adds a
+plugin to `hermes.nix`.
+
+## Where the catalog really is
+
+- The docs page `/docs/plugins` is drawn in the browser ("Loading the catalog…"). A plain fetch
+  returns no entries and the obvious `*.json` URLs 404. Do not keep guessing endpoints.
+- The source of truth is `plugin-catalog/<name>.yaml` in NousResearch/hermes-agent. Fields: `tier`
+  (official, verified, community), `version`, `requires_hermes`, `repo`, a pinned `sha`,
+  `category`, and a description whose "Disclosure" sentences say what the plugin reads, writes,
+  sends and registers.
+- Never clone hermes-agent for this (workspace rule). Fetch the listing and each file through the
+  API, six in parallel (about 75 s for ~1,000 files):
+  `gh api 'repos/NousResearch/hermes-agent/contents/plugin-catalog?ref=main' --jq '.[].name'`, then
+  `xargs -P 6 -I{} sh -c 'gh api "repos/NousResearch/hermes-agent/contents/plugin-catalog/{}?ref=main" --jq .content | base64 -d > dir/{}'`.
+  The newest catalog commit: `gh api 'repos/NousResearch/hermes-agent/commits?path=plugin-catalog&per_page=1'`.
+  The catalog at the commit that `flake.lock` pins is older than `main`; say which one you read.
+- Keep the index outside git unless the owner asks (a JSON file in the workspace: name, tier,
+  version, requires, repo, sha, category, short description, rough flags, catalog commit, date).
+  Keyword flags are hints, not a review. A refresh reads only commits that touched `plugin-catalog/`
+  since the stored commit.
+- Plugins in community lists but not in the catalog are unreviewed by Nous: scan them before use.
+
+## Fit test for a long-living instance
+
+For each candidate record: tier, version, `requires_hermes`, stars, last push, licence (GitHub
+API), and the disclosure text read in full. Then reject or defer on any of these:
+
+- Background model calls or registered recurring agent cron jobs: they spend the owner's quota.
+  Require a measured tokens-per-day figure first.
+- A default mode that enforces money budgets or blocks tool calls: on a subscription the cost
+  figures are estimates. Only a monitor-only mode is acceptable.
+- Lazy downloads at first use (models from a hub, `uvx`, `npm`): `allow_lazy_installs` is off, so
+  the artifact must become a pinned store path.
+- Cloud mode that sends turns or traces out, API keys, paid credits (needs the owner's yes).
+- Docker, Node, a browser, a dashboard or Desktop the box does not run. A catalog entry with
+  `category: desktop` is a UI for the Hermes Desktop app. Its tool may only queue commands that
+  the app runs and then wait for a reply, so it does nothing on this headless box. Read its
+  `tools.py` before you call it usable, and check `provides_tools` in the catalog YAML (an empty
+  list means UI only).
+- A repo that returns 404 (dead catalog entry): flag it in the index.
+- A tool built to defeat bot detection: it conflicts with the stop-on-refusal rule of the video
+  indexer.
+
+Wave the shortlist: adopt after checks (local, read-only or sandboxing, no network), evaluate with
+a measurement, and not now with the reason. One plugin per PR, pinned by the catalog `sha`.
+
+## A single-need request ("is there a plugin for X, add it by PR")
+
+1. Search the local index with `jq` (name, desc, title, category match on the keyword; `python3`
+   is not on the box). Then read the YAML and the plugin's `tools.py` / `plugin.yaml` at the
+   pinned `sha` through `gh api ...?ref=<sha>`.
+2. Check whether the box already does the job: `hermes.nix` lists bundled and external skills
+   (for example `research/rss-feeds` and `devops/watchers` already cover feeds with dedup). A
+   skill beats a plugin when it covers the need, because it adds no third-party code.
+3. Apply the fit test above. Plugins enter through `extraPlugins` and `settings.plugins.enabled`
+   in `hermes.nix`, pinned by commit with `fetchFromGitHub` (`subPlugin` when `plugin.yaml` sits
+   in a subdirectory). That is a nix-os PR, so a merge deploys and restarts the unit.
+4. When no candidate fits, open no PR. Say so first, give the table of candidates with the
+   reason each fails, and offer: use the existing skill, install anyway with its stated limit, or
+   write an own plugin in `hermes/plugins/` (the `pirsig-*` mould). Recommend one.
+
+## Issue shape for a plan like this
+
+Summary with the target specs and what is measured versus quoted; candidate tables with reasons;
+what the new size changes (raise each cap in its own PR, keep the repo rules until the owner
+lifts them); a Definition of Done in three parts: the index itself, checks common to every plugin
+(pinned, disclosure read, scanner run, `requires_hermes` met, RAM and disk measured on the new
+host, listed in `extraPlugins` and the check script, rollback line), and one drill per plugin
+(for example restore from backup into an empty folder); a closing item that lists each plugin as
+adopted, rejected or postponed. Measure on the target host, never extrapolate from the old one.
