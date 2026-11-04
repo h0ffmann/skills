@@ -218,6 +218,3 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
-
-# The site build output. The pages workflow writes it again on each deploy.
-docs/site/
