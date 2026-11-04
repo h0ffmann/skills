@@ -106,6 +106,15 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   under `bash -e` with `GITHUB_OUTPUT` set, once per case (unset, each value, unknown value,
   each event). Say the YAML itself was not parsed or run.
 
+## Daily skills export (piabrota/skills)
+
+The repo h0ffmann/skills moved to piabrota/skills (2026-11-04); the App token is `/run/hermes-github/piabrota`.
+Cron job `skills-export` (01:45 America/Sao_Paulo, no-agent) runs `~/.hermes/scripts/export-skills.sh`; the master copy is
+`/var/lib/hermes/workspace/export-skills/export-skills.sh` (copy it to the scripts dir after an edit). It exports every skill
+this Hermes loads (bundled, made here, plugin skills, nix-os external_dirs) to `skills/hermes/`, tags them `hermes-skill` in
+`www/tags.txt`, and opens or updates one PR from `hermes/skills-export-*`. Silent when nothing changed. `DRY_RUN=1 OUT_PATCH=<file>` tests it.
+Pitfalls: the secret scan skips plain placeholders (xxxx, ..., your-); external_dirs skills sit at depth 2 or 3; a plain `pkill omp` can hit the wrong process.
+
 ## Org profile repo (piabrota/.github)
 
 - Members and projects tables are in `profile/README.md` and `profile/README.pt-BR.md` (Board =

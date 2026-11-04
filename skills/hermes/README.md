@@ -2,7 +2,7 @@
 
 The skills that a Hermes Agent loads. Hermes copies them here once a day. Do not edit them by hand.
 Each skill has the tag `hermes-skill` in `www/tags.txt`.
-These skills are copied as is. They keep their own text and their own licence.
+These skills are copied as is. Only the file `SKILL.md` of each skill is here. The files next to it stay in Hermes.
 The `license` column is the value in the front matter of the skill. `not stated` means that the skill has no value.
 Check the licence of the source before you reuse a skill.
 
