@@ -36,4 +36,7 @@ nix derivation show -r <drvPath> | grep -o '\\"baseVersion\\":\\"[^"\\]*'       
 - Flakes see only tracked files: `git add` moved and new files first. A `Git tree is dirty`
   warning is harmless.
 - To work on a second branch while omp edits the first, use `git worktree add ../<dir> -b
-  hermes/<slug> origin/main`; do not switch the branch omp is editing.
+  hermes/<slug> origin/main`; do not switch the branch omp is editing. A worktree of a shallow
+  clone cannot evaluate the flake (`nix eval` stops with "getting Git object ... not found"): use
+  the worktree for Python, shell and docs work, and run every `nix eval` and `nix build` in the
+  primary clone on the branch you are testing.
