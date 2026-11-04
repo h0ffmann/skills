@@ -62,6 +62,60 @@ emil-design-eng: web design
 review-animations: web design review
 break-ui: web testing
 mapbox: web maps
-humanizer: english writing
+humanizer: english writing hermes-skill
 humanizar: pt-br writing
 humanizer-pt-br: pt-br writing
+apple-notes: hermes-skill
+apple-reminders: hermes-skill
+findmy: hermes-skill
+imessage: hermes-skill
+claude-code: hermes-skill
+codex: hermes-skill
+computer-use: hermes-skill
+hermes-agent: hermes-skill
+architecture-diagram: hermes-skill
+ascii-video: hermes-skill
+baoyu-infographic: hermes-skill
+claude-design: hermes-skill
+manim-video: hermes-skill
+p5js: hermes-skill
+popular-web-designs: hermes-skill
+songwriting-and-ai-music: hermes-skill
+sdlc-review: hermes-skill
+email-inbox-triage: hermes-skill
+himalaya: hermes-skill
+youtube-content: hermes-skill
+obsidian: hermes-skill
+document-to-action-items: hermes-skill
+google-workspace: hermes-skill
+meeting-action-items: hermes-skill
+microsoft-office: hermes-skill
+pdf: hermes-skill
+product-price-monitor: hermes-skill
+teams-meeting-pipeline: hermes-skill
+weekly-review-planning: hermes-skill
+arxiv: hermes-skill
+competitor-news-monitor: hermes-skill
+grounded-citations: hermes-skill
+xurl: hermes-skill
+codebase-inspection: hermes-skill
+dogfood: hermes-skill
+github: hermes-skill
+piabrota-owner-workflows: hermes-skill
+requesting-code-review: hermes-skill
+simplify-code: hermes-skill
+spike: hermes-skill
+systematic-debugging: hermes-skill
+test-driven-development: hermes-skill
+blocked-page-recovery: hermes-skill
+smart-notes: hermes-skill
+video-indexer: hermes-skill
+replay-recording: hermes-skill
+hermes-cron: hermes-skill
+watchers: hermes-skill
+duckduckgo-search: hermes-skill
+evidence-ledger-research: hermes-skill
+research-paper-writing: hermes-skill
+rss-feeds: hermes-skill
+ast-grep: hermes-skill
+hermes-omp: hermes-skill
