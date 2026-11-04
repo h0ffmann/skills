@@ -67,6 +67,7 @@ humanizar: pt-br writing
 humanizer-pt-br: pt-br writing
 hermes-plugin-inspection: hermes-skill
 piabrota-owner-workflows: hermes-skill
+update-skills: hermes-skill
 smart-notes: hermes-skill
 video-indexer: hermes-skill
 hermes-omp: hermes-skill

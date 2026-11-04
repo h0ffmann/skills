@@ -92,12 +92,29 @@ controls, who edits it, when it takes effect.
   (`git grep -n -i '<old>' -- . ':!<excluded dirs>'` lists only keep-list items, each with a reason).
   Do the `git mv` yourself before the run, and run the evaluation checks afterwards: omp cannot
   run `nix`.
+- **A deploy kills a background omp.** It is a child of the gateway; when a merge reloads or
+  restarts `hermes-agent`, omp gets SIGTERM and no completion notice arrives. Tell the owner not to
+  merge a deploying PR while omp runs, check `ps` and the output file at the start of the next
+  turn, and rerun the same task file (details: `references/hermes-gateway-unit.md`).
+- **Size the time limit.** The default `--max-time 15m` suits an edit; a task that adds a script,
+  a config, tests and two docs gets `--max-time 30m`.
 - **Two jobs in one session:** the omp run owns the working tree until it ends. Start the other
   branch in a `git worktree`, and do not touch the files omp reads.
 - **The owner changes where the work lands while omp runs** ("in the same PR" becomes "in a new
   PR"). `git switch -c hermes/<new-slug>` on the same tree moves the uncommitted edits to the
   new branch and leaves the old branch clean; omp keeps working. Commit on the new branch from
   the base the owner named. Follow the latest order and say where the work went.
+- **Paths in a task file.** Give omp paths under the workspace or `/tmp` only. A path that contains
+  `.hermes/` (even a cache directory in an `export XDG_CACHE_HOME=...` line) is refused by omp's
+  policy, and omp then falls back to its own temp path. Put inputs it must read, such as a pinned
+  analyzer binary, in `/var/lib/hermes/workspace/`.
+- **Numbers in a task file.** Never write a count you did not compute (interests, sources,
+  tests). Ask omp to count in code and report the result: a wrong number in the task makes omp
+  chase a mismatch or copy the error. Read the task file once before the run for such slips.
+- **Big, data-heavy tasks** (a new script plus config plus tests plus docs in two languages): put
+  the verified data (the config, the source list) in the task file verbatim and the code design as
+  rules; ask omp to tell you when an instruction is impossible or wrong, and for the complexity
+  score of the new code, because the CI smell report counts it.
 - **Vendored files** (`.claude/skills/<name>/`, `vendor/`) are refreshed by copying upstream. Put
   them in the task file's keep-list: omp edits them when a grep hit sits there, and the next
   refresh brings the old text back. Revert such an edit and report the hit instead.

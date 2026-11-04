@@ -35,7 +35,7 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   .#packages.x86_64-linux.<pkg> --no-link --print-out-paths` (a site package also runs its
   compiler and tests) and `.#checks.x86_64-linux.<name>`; `git add -A` new files first. Run
   long builds as one call under 600 s or let them background. Always available: `nix-instantiate
-  --parse <file>.nix` (syntax only), `scripts/reading-time.sh --check`, `perl`, `jq`. Not
+  --parse <file>.nix` (syntax only), the repo's reading-time script with `--check`, `perl`, `jq`. Not
   available: `just`, Chrome. **Run the repo's lint before every push, not after CI fails.** Read
   the `check` recipe of the justfile and run each line except `nix flake check` through
   `nix run nixpkgs#<tool>` (`nixpkgs-fmt --check <the file list>`, `statix check .`,
@@ -70,14 +70,14 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   first sentence and give the PR link.
 - **The deny list reads the whole command text.** Run `git add`, `git commit` and `git push
   origin <branch>` as three separate calls, and push with no pipe, no `&&` chain and no second
-  refspec. A blocked-word inside a harmless `grep` pattern (for example `sudo`) blocks the call:
-  drop the word from the pattern. When a call is blocked, split or reword it; never look for a way around.
+  refspec. A blocked word inside a harmless `grep` pattern blocks the call (for example `sudo`, `.env`, or the
+  name of the secrets folder): drop the word from the pattern and search for the shape instead. When a call is blocked, split or reword it; never look for a way around.
 - **An explicit order stands.** When the owner says "install X" or "do Y", do the work and put the
   cost and the risk in the PR body or the reply. Do not stop to ask for a "yes" he has already
   given. Stop only for a rule that forbids the act, and then name the rule in the first sentence.
 - **Hermes cuts a context file at 32,000 characters** and drops the middle (the log says
   `Context file ... TRUNCATED`). Keep nix-os `AGENTS.md`, `hermes/AGENTS.md` and `hermes/SOUL.md`
-  under 30,000 (`wc -m`; the repo has `scripts/context-size.sh`). Shrink by cutting rows of the
+  under 30,000 (`wc -m`; the nix-os justfile has a `context-size` recipe). Shrink by cutting rows of the
   file table and moving the detail to the doc the row links, never by cutting the rule sections.
 - **A terminal call over 600 s becomes a background process** and `process_manage wait` is clamped
   to 180 s per call: for an omp run, start it, do the next file work (the next task file, the PR
@@ -130,152 +130,45 @@ then split the real run into one PR per doc group.
   (flakes ignore untracked files). Use `git add -A <dirs>` before the commit and check
   `git status --short` shows no `??` line.
 
-## CI speed requests
+## CI speed requests and workflow edits
 
-- Measure before you propose. Run times: `gh run list -R <r> --workflow ci.yml --limit 8 --json
-  databaseId,event,conclusion,createdAt,updatedAt,headBranch`. Step times of one run:
-  `gh api repos/<r>/actions/runs/<id>/jobs --jq '.jobs[].steps[] | ...'` and keep steps of 10 s or
-  more. Report the numbers, not a guess about the cause.
-- Moving `nix flake check` from PRs to after merge removes the pre-merge gate on a repo where a
-  merge deploys: do not suggest it unprompted and say the trade-off. Offer options that keep the
-  gate: split the cheap lint into its own job (fast feedback); widen the skip list only for paths
-  that cannot change the system (never `hermes/**`, it is installed on the box).
-- A rename that workflows still reference (a flake node, a check name) must not break the merge:
-  keep the old name as an alias in the non-workflow files, ship the workflow rename as a patch
-  file, and remove the alias in the PR that applies the patch. Renaming a job also renames the
-  check that a branch ruleset may require, and Hermes cannot read rulesets (403): put that risk
-  in the PR body and tell the owner to look in Settings, Rules before he applies the patch. A
-  tool's download URL keeps the tool's own name; rename only what the owner sees (job name,
-  local file name, PR comment footer) and keep one credit line with the licence.
-- To measure or reduce a CI score (code smell, lint count), load `references/code-smell-refactor.md`.
-- A workflow edit is a diff for the owner or piabrota-ops to apply. Write it as a file in the
-  workspace (edit a throwaway clone, `git diff > ../x.patch`, `git apply --check` on a fresh
-  `main`), never as a PR that touches `.github/workflows`. When the owner asks "where is the PR"
-  or "create a PR" for it, the first sentence says no PR exists and why, then give the patch path
-  and the exact `git switch -c` / `git apply` / `git push` commands.
-- A request to widen your own access (App "Workflows" permission, the deny-list rule, SOUL.md
-  rule 2) is a request to weaken a guardrail: do not write that PR. Name the three places it
-  lives (App settings, `hermes/dangerous-patterns.yaml`, `hermes/SOUL.md`) so the owner can
-  decide, and offer an owner-controlled switch instead: a repository variable the workflow reads
-  (`vars.X`), changed in the GitHub UI, so later "disable or restrict" needs no workflow edit.
-- Design rules for a gated job: keep cheap lint on every PR and gate only the slow steps with a
-  step-level `if` on a `gate` job output; the `pull_request` payload has no head commit message,
-  so check out the head SHA and read it with `git log -1 --format=%B`; pass variables and commit
-  text through `env:` and `grep -qF`, never interpolate them into the script; default to the
-  safe value when the variable is unset or unknown; state which events the variable controls
-  (push to main and manual runs keep running) and that a skipped step still shows a green job.
-- Test the shell logic you cannot run in Actions: extract the `run:` block to a file and run it
-  under `bash -e` with `GITHUB_OUTPUT` set, once per case (unset, each value, unknown value,
-  each event). Say the YAML itself was not parsed or run.
+For "make CI faster", a job or host rename that workflows name, or any change under
+`.github/workflows`, load `references/ci-speed-requests.md`: measure first, deliver the workflow
+change as a patch file (never a PR), alias a renamed node, warn about a ruleset's required check,
+and the design rules for a gated job.
+To measure or reduce a CI score (code smell, lint count), load `references/code-smell-refactor.md`.
 
-## Daily skills export (piabrota/skills)
+## Skills export (piabrota/skills)
 
-The repo h0ffmann/skills moved to piabrota/skills (2026-11-04); the App token is `/run/hermes-github/piabrota`.
-Cron job `skills-export` (01:45 America/Sao_Paulo, no-agent) runs `~/.hermes/scripts/export-skills.sh`; the master copy is
-`/var/lib/hermes/workspace/export-skills/export-skills.sh` (copy it to the scripts dir after an edit). It exports every skill
-this Hermes loads (bundled, made here, plugin skills, nix-os external_dirs) to `skills/hermes/`, tags them `hermes-skill` in
-`www/tags.txt`, and opens or updates one PR from `hermes/skills-export-*`. Silent when nothing changed. `DRY_RUN=1 OUT_PATCH=<file>` tests it.
-`www/tags.txt` must stay in that repo at that path: the website build in nix-os (`skills-site/`) reads it, and the export script writes it.
-Pitfalls: the secret scan skips plain placeholders (xxxx, ..., your-); external_dirs skills sit at depth 2 or 3; a plain `pkill omp` can hit the wrong process.
+For "send the skills you updated to piabrota/skills" or the daily `skills-export` job, load the
+skill `update-skills`: it has the export script, its checks and the pull request steps.
+
+## Feeds and digests (RSS, trending, podcasts)
+
+For "build me a feed / watch these sources / trending repos or podcasts", load
+`references/personal-feed.md`: interests from evidence, probe each source, parse huge podcast
+feeds, wire the script into Hermes cron, and the overnight hand-over.
 
 ## Org profile repo (piabrota/.github)
 
 - Members and projects tables are in `profile/README.md` and `profile/README.pt-BR.md` (Board =
-  Equipe). Change both. Run `scripts/reading-time.sh --write` then `--check` after any edit.
+  Equipe). Change both. Run the repo's reading-time script with `--write`, then with `--check`, after any edit.
 - GitHub Apps are not organisation members: list them in a separate agents table. Take IDs and
   avatars from `gh api apps/<slug>` and `gh api 'users/<slug>[bot]'`.
 - Pinned repositories are set only in the GitHub UI (org page, "Customize pins", up to 6 public
   repos of that org). No README edit or API call sets them: do not promise it.
 
-## Routing Hermes work to cheaper models
+## Model routing, project surveys, service costing
 
-- Hermes has no per-turn router. `smart_model_routing` is an unread stub. Real levers:
-  `delegation.model` (all `delegate_task` subagents, global pin), `auxiliary.<task>.model` (side
-  calls: `title_generation`, `skills_hub`, `vision`, ...), per-cron-job `model`, and the external
-  `advanced-delegation` plugin (`model_map` routes the main model picks per task).
-- Put mechanical work on the small model (subagents, titles, skill matching). Keep compression,
-  the dangerous-command `approval` classifier (a guardrail), the post-turn review and every
-  decision on the main model.
-- The main model delegates only if SOUL.md tells it when. Add: check subagent output before use.
-- Use a model ID found in the pinned source or in the live model list; say that run-time
-  acceptance on the owner's subscription is unverified until a delegated run works.
-- **Bumping a model ID (for example a newer Haiku).** Check three things before the PR:
-  the ID is in `~/.hermes/provider_models_cache.json` (`grep -o 'claude-[a-z0-9.-]*'`; the
-  provider's own list, so no web fetch is needed, and `web_extract` may be search-only) plus one
-  web search for the vendor's announcement; `~/.hermes/config.yaml` is generated from nix-os
-  `hermes.nix` (a hand edit is overwritten, so the change is a PR that deploys); and the full
-  list of places that name the old ID (`git grep -n '<old-id>'` on nix-os `main`).
-  Those places split into two groups with different owners: Hermes settings (`settings.auxiliary.*`,
-  `settings.delegation.model`, and the docs, wiki pages and AGENTS.md rows that describe them in
-  both languages) and omp's own roles in `hermes/omp.yml` (and the docs lines that describe
-  those). Move the Hermes group together, because one docs row lists `delegation.model` and the
-  `auxiliary.*` keys side by side. Leave `omp.yml` out unless the owner asks, because omp's model
-  registry is pinned to its own version and may not know the new ID. Say in chat which group
-  moved and which did not, and offer the second as a follow-up. Put the grep result as the
-  "how to prove it is done" check in the omp task file.
-- On NixOS set these in the module (`settings.delegation.model`, `settings.auxiliary.*`), never
-  with `hermes config set`.
+For "use a cheaper model for X", a model-ID bump, a survey of forks or plugins, or "can the box run
+service Y", load `references/model-routing-and-surveys.md`: the real routing levers, the grep
+before a model bump, how to classify and measure projects, and the three-table costing answer.
 
-## Surveying GitHub projects (forks, derivatives)
+## Loading skill repos into Hermes
 
-- GitHub's `fork` flag is false for detached forks and renames. Classify by README and LICENSE
-  ("fork of", copyright lines), not by metadata alone: fork, plugin on stock core, or rewrite.
-- Record per project: stars, last push, releases, licence (flag non-OSI ones such as AGPL with
-  addenda), and the read date. A last push months older than upstream is a maintenance risk.
-- Read the pinned Hermes source with `gh api repos/NousResearch/hermes-agent/contents/<path>?ref=<rev>`
-  (rev from the `hermes-agent` node of nix-os `flake.lock`), not with a clone: the workspace rule
-  forbids cloning that repo, and a blobless clone still pulls its whole history.
-- For community Hermes plugins and the plugin catalog, load `references/hermes-plugin-catalog.md`.
-- `web_extract` may be unavailable (search-only backend): fetch pages with
-  `curl -sL -A 'Mozilla/5.0'` and strip tags with perl; use `gh api repos/<r>`, `/readme`,
-  `/license`, `/releases` for repo facts.
-- Separate official sources from trade or community articles; label price or feature claims from
-  the latter as unverified.
-- Check resource claims against the box before answering "is it heavy?": `free -m`,
-  `systemctl show <unit> -p MemoryCurrent -p MemoryPeak -p MemoryMax`, and the cgroup
-  `memory.stat` (anon vs file: page cache is reclaimable, so do not read it as use).
-
-## Costing a self-hosted service for the box (Paperclip-style requests)
-
-- Put three things side by side: the vendor's stated minimum (official docs only), the box's
-  measured headroom (`free -m` available, swap used, `/proc/pressure/memory`, `nproc`, `df -h /`),
-  and the repo rules that the service would break (nix-os AGENTS.md resource budget and the
-  AWESOME-HERMES yardstick: no Node/Go/Docker/browser on the host, no PostgreSQL server for an
-  app, no resident daemon unless needed). Verdict first, then the three tables.
-- Do not install the service to measure it: the deny list blocks installs and it breaks the "no
-  writes outside your own state" rule. Say its real use is unmeasured; never turn a vendor
-  minimum into a measured figure.
-- Do not run `nix search nixpkgs ...` on the box: it evaluates all of nixpkgs and spiked memory
-  pressure on the 1 vCPU / 4 GB machine. Check packaging with DeepWiki or the web instead.
-- Offer the off-box option (second VPS or the owner's computer) and what Hermes already has
-  (profiles, kanban, cron, subagents) before any install plan.
-
-## Loading the owner's skills (h0ffmann/skills) or other skill repos into Hermes
-
-- External skills need no new code: every skill in `settings.skills.external_dirs` is a `/name`
-  command (Telegram and others), and on Discord `/skill` with an autocomplete list (25 shown).
-  Hermes ignores the `disable-model-invocation` frontmatter key, so "manual-only" skills can still
-  load on their own; tell the owner.
-- Pin with `pkgs.fetchFromGitHub` (rev + hash), not a git submodule: a flake reads its git tree
-  without submodules unless the URL has `?submodules=1`, and enabling them in CI is a workflow edit.
-  Hash: `nix-prefetch-url --unpack https://github.com/<o>/<r>/archive/<rev>.tar.gz`, then
-  `nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri <base32>`.
-  A wrong hash fails the CI build and prints the right one; say so in the PR.
-- Copy an allowlist of skill folders with `pkgs.runCommand ... { allowedReferences = [ ]; }`
-  (mirror `optionalSkills` in `hermes.nix`), set it in `external_dirs`, and add the derivation to
-  `restartTriggers`. A missing path fails the build, so list paths from the pinned tree.
-- Vet every skill before listing it. Leave out: a skill that makes a bilingual PR (conflicts with
-  the English-only rule), tells the agent to merge or force-push, assumes Claude Code settings or
-  an Obsidian vault, runs a script that needs `python3`/`pandoc`/`just`/Chrome/Docker/`psg`/`zk`
-  (not on the box), duplicates another skill, is an empty stub, or shares a name with a bundled
-  skill (the bundled one wins). Scan frontmatter and bodies with a script, then read the borderline
-  ones. Document included and excluded skills, each with its reason, in the PR docs.
-- Test without touching the live config: put `skills:\n  external_dirs: [<dir>]` in a temp
-  `HERMES_HOME/config.yaml` and run `HERMES_HOME=<tmp> hermes skills list`; compare names with
-  `find ~/.hermes/skills -name SKILL.md` for clashes. Copies out of the Nix store are read-only:
-  `chmod -R u+w` before `rm -rf` in scratch.
-- The pinned repo's own AGENTS.md rules (for example a `Co-Authored-By` trailer) do not govern
-  this agent's PRs; add a short note to `hermes/AGENTS.md` saying which rules win over a skill.
+For "load the skills of repo X as commands" or a change to `settings.skills.external_dirs`, load
+`references/loading-skill-repos.md`: pin with `fetchFromGitHub`, copy an allowlist, vet each
+skill, test with a temp `HERMES_HOME`.
 
 ## Owner plugin requests (pirsig-notes, pirsig-videos)
 
@@ -318,6 +211,12 @@ For "which DNS records do I change" or "what do I do before I merge" on a host m
 `references/host-cutover.md`: DNS checks through DNS-over-HTTPS, the one-record answer, the order
 of stacked PRs, VPS prep and cutover, and what stays unverified.
 
+## Gateway unit loops, reloads, "debug yourself"
+
+For a unit that restarts without end, a background job killed after a deploy, or "use the doctor
+commands", load `references/hermes-gateway-unit.md`: the read-only diagnosis order, the
+`--external-supervisor` loop, and the rule that a reload kills jobs you started.
+
 ## Dashboard errors (Chat tab, nginx auth)
 
 For a pasted error from `hermes.piabrota.art` ("retrying in 30s", queued message), load
@@ -353,6 +252,13 @@ PR (deploy first in the body) instead of listing options without a next step.
 
 ## Output hygiene
 
+- This SKILL.md is exported to piabrota/skills, whose check wants a body of about 150 lines and
+  5,000 tokens. Add new depth to a `references/<topic>.md` and leave a pointer here; keep only a
+  rule that applies to every task in this body.
+
 - Do not `cat` a large AGENTS.md, a big `git diff` or a whole docs site page into the tool output:
   repo AGENTS.md files re-load into context as subdirectory context and flood it. Use
-  `grep -n`, `sed -n 'a,bp'`, `--stat`, or strip HTML with perl and `head -c`.
+  `grep -n`, `sed -n 'a,bp'`, `--stat`, or strip HTML with perl and `head -c`. A command whose
+  working directory is inside a repository (or a command that `cd`s into one) re-loads that
+  repo's AGENTS.md into the output even when it only runs `grep`: use absolute paths, `git -C`, or
+  `read_file` with an offset, and run from a neutral directory.
