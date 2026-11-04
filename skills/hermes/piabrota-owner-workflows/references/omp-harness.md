@@ -86,6 +86,21 @@ controls, who edits it, when it takes effect.
   second time for a review unless a whole area was skipped.
 - **Fix runs on a PR you do not own** go in at most two omp runs of one theme each (for example
   checklist and doc claims first, stale docs second). Inspect the diff between runs.
+- **A wide rename or sweep** (a name changes in code, docs and config) needs a keep-list in the task
+  file: what must NOT change (names of skills, plans, secrets, a human's shortcuts, files under
+  `.github/`, drawn figures) and the grep that proves it
+  (`git grep -n -i '<old>' -- . ':!<excluded dirs>'` lists only keep-list items, each with a reason).
+  Do the `git mv` yourself before the run, and run the evaluation checks afterwards: omp cannot
+  run `nix`.
+- **Two jobs in one session:** the omp run owns the working tree until it ends. Start the other
+  branch in a `git worktree`, and do not touch the files omp reads.
+- **The owner changes where the work lands while omp runs** ("in the same PR" becomes "in a new
+  PR"). `git switch -c hermes/<new-slug>` on the same tree moves the uncommitted edits to the
+  new branch and leaves the old branch clean; omp keeps working. Commit on the new branch from
+  the base the owner named. Follow the latest order and say where the work went.
+- **Vendored files** (`.claude/skills/<name>/`, `vendor/`) are refreshed by copying upstream. Put
+  them in the task file's keep-list: omp edits them when a grep hit sits there, and the next
+  refresh brings the old text back. Revert such an edit and report the hit instead.
 
 ## Rules that stay
 

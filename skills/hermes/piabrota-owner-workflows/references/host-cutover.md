@@ -75,7 +75,12 @@ Re-read the live state before you answer; the owner acts between your turns:
   first deploy proves the OS name.
 
 - A host name the owner gives is pinned in `networking.hostName`; the flake attribute, directory
-  and secret names keep the old label until the owner asks for a rename PR.
+  and secret names keep the old label until the owner asks for one name per VPS. Then the VPS
+  name in the provider panel, `hosts/<name>/`, `nixosConfigurations.<name>` and `deploy.nodes.<name>`
+  are the same string, and the rename goes in the same PR as the docs. Keep the old node name as
+  an alias while the workflows use it, ship their patch, and leave alone what is not a host name
+  (a skill named after the plan, the plan name, secret names, an owner's ssh shortcuts, the text
+  of drawn figures, which cannot be redrawn here).
 - You cannot tell whether the name in the provider panel is the OS hostname: ask the owner to run
   `hostname` after the first deploy.
 - The public host key is not a secret; the owner, not you, confirms it came from the new VPS.

@@ -36,5 +36,17 @@ Options, which are the owner's call because both cost something:
   strengthens a guardrail, so it is allowed.
 - Keep the group. The CLI works and the Chat tab stays broken.
 
+## Version shows v0.0.0 and plugins are skipped
+
+The dashboard and `hermes --version` read `install-stamp.json`; the upstream flake package writes
+its `version` argument there, default `0.0.0`. Plugins whose `requires_hermes` is higher are then
+refused at load time (`errors.log`: `Plugin '<n>' skipped: requires hermes >=X, running 0.0.0`),
+including the deny list and tripwire. `hermes plugins list` still says `enabled` (config state).
+Confirm with `grep "skipped: requires hermes" ~/.hermes/logs/errors.log | sed "s/.*Plugin '\([^']*\)'.*/\1/" | sort -u`
+and one harmless command the deny list must match (for example `gh workflow run --help`): if it
+runs, the guardrail is off. Fix: pass the pinned release as `version` to the package (see
+`nix-eval-checks.md`). Tell the owner the guardrails come alive after the deploy and may block
+commands that used to run. Count the skipped plugins with the command, not from memory.
+
 Give the diagnosis and the two options first; open the PR after the owner picks one (the merge
 restarts `hermes-agent`). Say the check script change could not be tested on the box.

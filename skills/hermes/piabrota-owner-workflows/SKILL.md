@@ -27,13 +27,61 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
 - **No secrets in output.** `gh auth status` echoes a masked token: check the login with
   `gh auth status 2>&1 | grep -i 'logged in'`.
 - **Good news opens with the owner's phrase** (see SOUL.md) and plain answers do not.
-- **Say what you could not run** (no `nix`/`just`/Chrome on the box) in the PR body. What does
-  run: `nix-instantiate --parse <file>.nix` (syntax only), `scripts/reading-time.sh --check`,
-  `perl`, `jq`. CI runs the real checks; do not claim a lint passed that you did not run.
+- **Run the build before you claim it works, and say what you could not run** in the PR body.
+  Read the memory cap first (`cat /sys/fs/cgroup$(cut -d: -f3 /proc/self/cgroup)/memory.max`,
+  `free -m`, `nproc`): the box's real cap can be far above the "1 GB" of the brief. With room,
+  build the exact attributes the change touches, never the whole system or a nixpkgs search:
+  `/run/current-system/sw/bin/nix --extra-experimental-features 'nix-command flakes' build
+  .#packages.x86_64-linux.<pkg> --no-link --print-out-paths` (a site package also runs its
+  compiler and tests) and `.#checks.x86_64-linux.<name>`; `git add -A` new files first. Run
+  long builds as one call under 600 s or let them background. Always available: `nix-instantiate
+  --parse <file>.nix` (syntax only), `scripts/reading-time.sh --check`, `perl`, `jq`. Not
+  available: `just`, Chrome. **Run the repo's lint before every push, not after CI fails.** Read
+  the `check` recipe of the justfile and run each line except `nix flake check` through
+  `nix run nixpkgs#<tool>` (`nixpkgs-fmt --check <the file list>`, `statix check .`,
+  `deadnix --fail .`, `shellcheck`, the `jq` wiki check), with `export XDG_CACHE_HOME=<scratch>/nixcache`
+  first: the default cache holds a stuck `flake-registry.json` symlink and `nix run` stops with
+  "cannot create symlink". Read each exit code (`echo $?`), not the look of the output. A
+  formatter failure from a hand or omp edit is fixed by running the formatter, then a separate
+  commit. Never claim a lint or build that you did not run.
+- **Numbers in a PR body come from a command run just before** (a count of log lines, a list of
+  plugins), never from an estimate. If one is wrong after the PR is open, fix it with
+  `gh pr edit <n> --body-file`. Name who did what: "omp made the edits, Hermes read the diff".
+- **Evaluate when you cannot build.** For `.nix` and `flake.lock` changes, and when the owner waives
+  verification, run the evaluation checks in `references/nix-eval-checks.md` (also the recipe for
+  bumping a flake input) and still list in the body what did not run.
+- **Check the PR is still open before you push a follow-up to its branch.** The owner merges
+  fast. A commit pushed after the merge lands on no base: `gh pr view <n> --json state` first, and
+  if it says MERGED, open a new PR from the same branch (or a fresh `hermes/` branch off `main`).
+- **Base your own PRs on `main`, never on another `hermes/*` branch.** A stacked PR merges into a
+  dead branch when the owner merges its base first, and the change never reaches `main` while the
+  PR shows MERGED. After the owner says "merged", prove the content is on `main`:
+  `git fetch origin main` then `git cat-file -e origin/main:<a path the PR added or removed>`.
+  When it is not, `git switch -c hermes/<slug>-main origin/main`, `git cherry-pick <sha>`, push, open
+  a replacement PR with `--base main`, and name the replaced PR in the first lines of its body
+  and in chat. Stack only on the owner's own PR branch (see `references/pr-review-suggestions.md`),
+  and re-check that base's state before you report the stacked PR as delivered.
 - **Ship before you answer side questions.** When the owner interrupts a long task with another
   question, the owner assumes finished files are already a PR. Push and open the PR as soon as
   the files are done (or say plainly that it is staged and not pushed), and give the link in the
-  next message. Never leave work only in a local branch across turns.
+  next message. Never leave work only in a local branch across turns. When the owner asks for an
+  update that "is not there yet" (README, wiki, DeepWiki), check first whether the PR is open and
+  unmerged: `main`, the GitHub page and DeepWiki change only after the merge, so say that in the
+  first sentence and give the PR link.
+- **The deny list reads the whole command text.** Run `git add`, `git commit` and `git push
+  origin <branch>` as three separate calls, and push with no pipe, no `&&` chain and no second
+  refspec. A blocked-word inside a harmless `grep` pattern (for example `sudo`) blocks the call:
+  drop the word from the pattern. When a call is blocked, split or reword it; never look for a way around.
+- **An explicit order stands.** When the owner says "install X" or "do Y", do the work and put the
+  cost and the risk in the PR body or the reply. Do not stop to ask for a "yes" he has already
+  given. Stop only for a rule that forbids the act, and then name the rule in the first sentence.
+- **Hermes cuts a context file at 32,000 characters** and drops the middle (the log says
+  `Context file ... TRUNCATED`). Keep nix-os `AGENTS.md`, `hermes/AGENTS.md` and `hermes/SOUL.md`
+  under 30,000 (`wc -m`; the repo has `scripts/context-size.sh`). Shrink by cutting rows of the
+  file table and moving the detail to the doc the row links, never by cutting the rule sections.
+- **A terminal call over 600 s becomes a background process** and `process_manage wait` is clamped
+  to 180 s per call: for an omp run, start it, do the next file work (the next task file, the PR
+  body), and end the turn when only the wait is left; the completion notice returns.
 - **Verify the PR after `gh pr create`:** `gh pr view <n> --json state,headRefName,files` and
   `gh pr checks <n>`; report pending checks as pending.
 - **Never touch `.github/workflows`** (rule 2, no App permission, deny list). For a CI change,
@@ -47,6 +95,12 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   After it: files changed, checks omp ran, checks you ran, what is unverified, run time, PR link.
   The owner finds the `hermes-omp` interface unclear, so name it ("omp made the edits") and never
   present omp's work as yours. Procedure: `references/omp-harness.md`.
+
+## Bulk English cleanup (ASD-STE100 across a repo)
+
+For "convert the docs to ASD-STE100 / cut Markdown verbosity", load `references/ste100-bulk-conversion.md`:
+pilot on two files with Haiku subagents, check them with `scripts/md_structure_check.py`, measure,
+then split the real run into one PR per doc group.
 
 ## Applying a patch prepared earlier
 
@@ -86,6 +140,14 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   merge deploys: do not suggest it unprompted and say the trade-off. Offer options that keep the
   gate: split the cheap lint into its own job (fast feedback); widen the skip list only for paths
   that cannot change the system (never `hermes/**`, it is installed on the box).
+- A rename that workflows still reference (a flake node, a check name) must not break the merge:
+  keep the old name as an alias in the non-workflow files, ship the workflow rename as a patch
+  file, and remove the alias in the PR that applies the patch. Renaming a job also renames the
+  check that a branch ruleset may require, and Hermes cannot read rulesets (403): put that risk
+  in the PR body and tell the owner to look in Settings, Rules before he applies the patch. A
+  tool's download URL keeps the tool's own name; rename only what the owner sees (job name,
+  local file name, PR comment footer) and keep one credit line with the licence.
+- To measure or reduce a CI score (code smell, lint count), load `references/code-smell-refactor.md`.
 - A workflow edit is a diff for the owner or piabrota-ops to apply. Write it as a file in the
   workspace (edit a throwaway clone, `git diff > ../x.patch`, `git apply --check` on a fresh
   `main`), never as a PR that touches `.github/workflows`. When the owner asks "where is the PR"
@@ -113,6 +175,7 @@ Cron job `skills-export` (01:45 America/Sao_Paulo, no-agent) runs `~/.hermes/scr
 `/var/lib/hermes/workspace/export-skills/export-skills.sh` (copy it to the scripts dir after an edit). It exports every skill
 this Hermes loads (bundled, made here, plugin skills, nix-os external_dirs) to `skills/hermes/`, tags them `hermes-skill` in
 `www/tags.txt`, and opens or updates one PR from `hermes/skills-export-*`. Silent when nothing changed. `DRY_RUN=1 OUT_PATCH=<file>` tests it.
+`www/tags.txt` must stay in that repo at that path: the website build in nix-os (`skills-site/`) reads it, and the export script writes it.
 Pitfalls: the secret scan skips plain placeholders (xxxx, ..., your-); external_dirs skills sit at depth 2 or 3; a plain `pkill omp` can hit the wrong process.
 
 ## Org profile repo (piabrota/.github)
@@ -134,8 +197,22 @@ Pitfalls: the secret scan skips plain placeholders (xxxx, ..., your-); external_
   the dangerous-command `approval` classifier (a guardrail), the post-turn review and every
   decision on the main model.
 - The main model delegates only if SOUL.md tells it when. Add: check subagent output before use.
-- Use a model ID found in the pinned source (`claude-haiku-4-5`); say that run-time acceptance on
-  the owner's subscription is unverified until a delegated run works.
+- Use a model ID found in the pinned source or in the live model list; say that run-time
+  acceptance on the owner's subscription is unverified until a delegated run works.
+- **Bumping a model ID (for example a newer Haiku).** Check three things before the PR:
+  the ID is in `~/.hermes/provider_models_cache.json` (`grep -o 'claude-[a-z0-9.-]*'`; the
+  provider's own list, so no web fetch is needed, and `web_extract` may be search-only) plus one
+  web search for the vendor's announcement; `~/.hermes/config.yaml` is generated from nix-os
+  `hermes.nix` (a hand edit is overwritten, so the change is a PR that deploys); and the full
+  list of places that name the old ID (`git grep -n '<old-id>'` on nix-os `main`).
+  Those places split into two groups with different owners: Hermes settings (`settings.auxiliary.*`,
+  `settings.delegation.model`, and the docs, wiki pages and AGENTS.md rows that describe them in
+  both languages) and omp's own roles in `hermes/omp.yml` (and the docs lines that describe
+  those). Move the Hermes group together, because one docs row lists `delegation.model` and the
+  `auxiliary.*` keys side by side. Leave `omp.yml` out unless the owner asks, because omp's model
+  registry is pinned to its own version and may not know the new ID. Say in chat which group
+  moved and which did not, and offer the second as a follow-up. Put the grep result as the
+  "how to prove it is done" check in the omp task file.
 - On NixOS set these in the module (`settings.delegation.model`, `settings.auxiliary.*`), never
   with `hermes config set`.
 
@@ -226,6 +303,14 @@ small safe fixes, list decisions you cannot make for the owner, never approve. F
 OMP" use `references/omp-harness.md` (review-only run), and when the owner then says "fix it
 yourself", the same file and `pr-review-suggestions.md` give the stacked-PR route: you may push only
 `hermes/*`, so open a PR whose base is the owner's PR branch.
+
+## Moving a site or generator into nix-os
+
+For "move the site implementation to nix-os / serve it at www.piabrota.art/<path>", load
+`references/move-site-between-repos.md`: copy the program verbatim, pin the content by commit,
+build with Nix, serve with an nginx alias, then a second PR that removes it from the source repo,
+then the rename sweep (old `owner/repo` names and the dead `github.io` address in the program's
+strings, the source README and the homepage facts) and the live URL check after "merged".
 
 ## Moving a service to a new host (DNS, order of steps)
 
