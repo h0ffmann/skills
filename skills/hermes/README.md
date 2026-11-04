@@ -9,6 +9,8 @@ Check the licence of the source before you reuse a skill.
 | Skill | Origin | Licence | Author |
 |---|---|---|---|
 | `hermes-omp` | Added by nix-os (skills) | MPL-2.0 | piabrota |
+| `hermes-plugin-inspection` | Made by Hermes on this box | MPL-2.0 | piabrota |
+| `kvm4-health` | Added by nix-os (skills) | MPL-2.0 | piabrota |
 | `piabrota-owner-workflows` | Made by Hermes on this box | not stated | not stated |
 | `smart-notes` | Plugin pirsig-notes | not stated | not stated |
 | `video-indexer` | Plugin pirsig-videos | not stated | not stated |

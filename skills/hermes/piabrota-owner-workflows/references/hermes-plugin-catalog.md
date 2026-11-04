@@ -62,6 +62,34 @@ a measurement, and not now with the reason. One plugin per PR, pinned by the cat
    reason each fails, and offer: use the existing skill, install anyway with its stated limit, or
    write an own plugin in `hermes/plugins/` (the `pirsig-*` mould). Recommend one.
 
+## "A mature plugin to run a long task overnight"
+
+- The catalog has no maturity data. Measure each shortlisted repo with `gh api repos/<o>/<r>`
+  (stars, forks, open issues, `created_at`, `pushed_at`, licence) and `.../contributors`; report
+  age and idle days, and flag `NOASSERTION` licences. Most community plugins have one to three
+  contributors: say that none is mature when that is what the numbers show.
+- Before any plugin, offer what the core already has and read it in the pinned source and user
+  docs (`website/docs/user-guide/features/`): `/goal` (a standing objective, a judge model after
+  each turn, quality gates, a turn budget that pauses it), cron jobs, and the kanban board
+  (durable, with retries and a circuit breaker). Check the configured turn cap in this box's
+  settings before you promise a number of turns, and whether kanban is enabled before you offer it.
+- A memory-consolidation plugin is not a task runner: match the plugin's purpose to the request
+  before you spend a PR on it.
+- Ask the one missing input (the task and how to verify it), not a permission already given.
+
+## Adding a plugin through `extraPlugins`
+
+- The NixOS module refuses an `extraPlugins` entry without `plugin.yaml` and `__init__.py` at its
+  root (`nix/moduleCommon.nix`, a check near line 918 at the pinned rev). A plugin that ships only
+  the portable `plugin.json`, or only a skill and scripts, fails the build. Do not fabricate a
+  manifest for a third-party plugin. Load only its skill through `settings.skills.external_dirs`
+  (pinned by `fetchFromGitHub`), and run its installer for cron jobs after the merge with a dry
+  run first.
+- Run `hermes plugin-guard scan <dir> --fail-on high` and read every HIGH at its line before you
+  report. `HPG103` on `subprocess.run([...])` with a list and no shell that runs the plugin's own
+  script is low risk; `HPG001` means the manifest format is not `plugin.yaml`, which matters for
+  the point above. Show the owner the counts and your reading of each HIGH.
+
 ## Issue shape for a plan like this
 
 Summary with the target specs and what is measured versus quoted; candidate tables with reasons;
