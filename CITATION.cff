@@ -6,7 +6,7 @@ abstract: "A set of agent skills, tailored to the owner's projects and written i
 authors:
   - alias: h0ffmann
     orcid: "https://orcid.org/0009-0009-1056-7661"
-repository-code: "https://github.com/h0ffmann/skills"
+repository-code: "https://github.com/piabrota/skills"
 url: "https://www.piabrota.art/skills/"
 license: MPL-2.0
 keywords:
