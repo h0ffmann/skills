@@ -60,18 +60,36 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   When it is not, `git switch -c hermes/<slug>-main origin/main`, `git cherry-pick <sha>`, push, open
   a replacement PR with `--base main`, and name the replaced PR in the first lines of its body
   and in chat. Stack only on the owner's own PR branch (see `references/pr-review-suggestions.md`),
-  and re-check that base's state before you report the stacked PR as delivered.
+  and re-check that base's state before you report the stacked PR as delivered. Before the push,
+  `git fetch origin main`: a shallow clone does not know the owner merged another PR meanwhile, and
+  a PR from the old base then reverts that work. Move the branch with `git rebase --onto origin/main
+  <last commit of the old base> <branch>` (a plain rebase replays merged commits and conflicts), then
+  check `git diff --stat origin/main..HEAD` lists only your files and rerun the checks.
+- **Resolve conflicts in your own PRs yourself, without asking.** When the owner posts the PR link
+  with "solve conflicts", or `gh pr view <n> --json mergeable` says CONFLICTING, fetch `main` and
+  merge it into your `hermes/*` branch (`git merge --no-edit origin/main`, no rebase, no force-push).
+  The usual cause is a sibling PR that added a row to the same `AGENTS.md` table: keep both rows,
+  and keep your side's wording for a row both changed. A diff3 block has a `|||||||` base section:
+  find the marker lines with `grep -n -E '^(<{7}|={7}|>{7}|\|{7})'`, delete the markers and the
+  unwanted sections by line number in one `sed -i`, and grep again for zero markers. Then rerun the
+  cheap checks (host eval, context size, the wiki check), commit, push in its own call, and confirm
+  `gh pr view <n> --json mergeable` before you report. A conflict in the owner's PR is a different
+  case (`references/omp-harness.md`).
 - **Ship before you answer side questions.** When the owner interrupts a long task with another
   question, the owner assumes finished files are already a PR. Push and open the PR as soon as
   the files are done (or say plainly that it is staged and not pushed), and give the link in the
-  next message. Never leave work only in a local branch across turns. When the owner asks for an
+  next message. Never leave work only in a local branch across turns. When he asks "where is the PR", the first
+  sentence says whether it exists; if not, name the real blocker (a killed run, a missing step) and
+  give no time you cannot back. When the owner asks for an
   update that "is not there yet" (README, wiki, DeepWiki), check first whether the PR is open and
   unmerged: `main`, the GitHub page and DeepWiki change only after the merge, so say that in the
   first sentence and give the PR link.
 - **The deny list reads the whole command text.** Run `git add`, `git commit` and `git push
   origin <branch>` as three separate calls, and push with no pipe, no `&&` chain and no second
   refspec. A blocked word inside a harmless `grep` pattern blocks the call (for example `sudo`, `.env`, or the
-  name of the secrets folder): drop the word from the pattern and search for the shape instead. When a call is blocked, split or reword it; never look for a way around.
+  name of the secrets folder, an installer word like `npx`, a Dockerfile `ENV` keyword): drop the word from the pattern and search for the shape instead. The same holds for words inside a
+  prompt string on an `omp` command line (the phrase for pushing to git trips the push rule): put
+  such text in a task file, or reword it. When a call is blocked, split or reword it; never look for a way around.
 - **An explicit order stands.** When the owner says "install X" or "do Y", do the work and put the
   cost and the risk in the PR body or the reply. Do not stop to ask for a "yes" he has already
   given. Stop only for a rule that forbids the act, and then name the rule in the first sentence.
@@ -94,7 +112,7 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   review-only), task file path, and the models and thinking level read from `hermes/omp.yml`.
   After it: files changed, checks omp ran, checks you ran, what is unverified, run time, PR link.
   The owner finds the `hermes-omp` interface unclear, so name it ("omp made the edits") and never
-  present omp's work as yours. Procedure: `references/omp-harness.md`.
+  present omp's work as yours. Procedure: `references/omp-harness.md`; to wrap omp for another program, its section "Wrapping omp".
 
 ## Bulk English cleanup (ASD-STE100 across a repo)
 
@@ -138,6 +156,11 @@ change as a patch file (never a PR), alias a renamed node, warn about a ruleset'
 and the design rules for a gated job.
 To measure or reduce a CI score (code smell, lint count), load `references/code-smell-refactor.md`.
 
+## OpenRig seats
+
+For a seat that does not start (`command not found` in the pane, "runner to report ready"), load
+`references/openrig-seat-environment.md`: how OpenRig builds the pane, the fix, and the proof.
+
 ## Skills export (piabrota/skills)
 
 For "send the skills you updated to piabrota/skills" or the daily `skills-export` job, load the
@@ -163,6 +186,10 @@ feeds, wire the script into Hermes cron, and the overnight hand-over.
 For "use a cheaper model for X", a model-ID bump, a survey of forks or plugins, or "can the box run
 service Y", load `references/model-routing-and-surveys.md`: the real routing levers, the grep
 before a model bump, how to classify and measure projects, and the three-table costing answer.
+After the owner says yes to hosting a service on a nix-os host (or to publishing another repo's
+generated files at a new subdomain), load `references/add-service-to-host.md`:
+hostname check, the `hermes-web.nix` pattern, packaging from a pinned source (an npm app too),
+the omp run order, the operating skill for a third-party tool, and how to give memory numbers.
 
 ## Loading skill repos into Hermes
 
@@ -177,22 +204,16 @@ skill, test with a temp `HERMES_HOME`.
   find them with `tool_search`, read the schema with `tool_describe`, call with `tool_call`.
 - Fetch, write and check come first; show the owner the titles, kinds and `⚠` marks, and call a
   `*_submit` only after the owner says to send. The PR text is a fixed English template.
-- When the fetch fails (YouTube's bot check on the VPS address), stop: tell the owner, offer a
-  transcript pasted in chat or a fetch on their computer, and open no PR. Do not look for another
-  route to the captions.
-- If the owner then asks for Playwright or a headless Chromium to get past the check, do not
-  write that PR. The block is on the address, not on a missing browser, so a local browser likely
-  sees the same wall (say it is an expectation, not a test); passing a bot check is also what the
-  stop rule forbids, and a browser on the box breaks the nix-os yardstick and the 1 GiB cap.
-  Offer: cookies exported by the owner (a secret on the box, the owner's call), a transcript
-  pasted in chat, a fetch on the owner's computer, or a paid cloud browser (needs a yes). Ask
-  which one before any work, and offer to measure a browser's size only if the owner insists.
+- When the fetch fails (YouTube's bot check on the VPS address), stop: tell the owner, open no PR,
+  and look for no other route to the captions. This includes a Playwright or headless-browser
+  request. Load `references/video-fetch-blocked.md` for what to offer (a fetch on the owner's
+  computer, a pasted transcript, oEmbed for the title) and why a browser does not help.
 
 ## Reviewing the owner's PR
 
 For "review PR N" (with or without "add suggestions I can approve in 1 click"), load
 `references/pr-review-suggestions.md`: post one `COMMENT` review with `suggestion` blocks for
-small safe fixes, list decisions you cannot make for the owner, never approve. For "review with
+small safe fixes, list decisions you cannot make for the owner, never approve. `hermes guide` checks the running install, not a diff: use it as a baseline of the box and review the diff with omp. For "review with
 OMP" use `references/omp-harness.md` (review-only run), and when the owner then says "fix it
 yourself", the same file and `pr-review-suggestions.md` give the stacked-PR route: you may push only
 `hermes/*`, so open a PR whose base is the owner's PR branch.
@@ -237,6 +258,7 @@ present the fix options and let the owner choose.
   later merge: say you do not know which commit it is unless you read it.
 - Offer a small real task (one skill command, one delegated run) as the proof for anything the
   checks above cannot show, such as whether the subscription accepts a newly pinned model ID.
+- "Is service X working?" after a merge: load `references/service-check.md`.
 
 ## Tuning the omp coding worker
 

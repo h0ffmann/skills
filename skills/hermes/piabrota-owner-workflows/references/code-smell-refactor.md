@@ -48,6 +48,11 @@ terminal: run the tests with `export XDG_CACHE_HOME=<scratch>/nixcache` and
   report's threshold). The first big gain came from the comment ratio, the weakest metric. Tell the
   owner in the first message that the realistic change is single digits, and never promise a band
   such as "under 25".
+- New code raises the total. A 900-line script with every function under complexity 10 still scored
+  44 on its own, above the repository's 34. For new code, ask omp for "no function over 10" and the
+  per-function complexity, not a score target (a 9-line file of trivial functions already scores
+  about 29). Re-run the analyzer on the whole repository after the work and report the new total,
+  also when it rose.
 - When the target is missed, open the PR and the reply with the real before and after and the
   reason, not with the effort. Say which metric gave the points.
 - Count a comment as done only after you read the added lines yourself
