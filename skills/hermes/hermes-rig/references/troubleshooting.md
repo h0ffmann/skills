@@ -60,10 +60,14 @@ Symptom: STARTUP `pending`, `failed` or `attention_required`; the pane shows a s
    in the per-user profile of `openrig` (`users.users.openrig.packages`), and `USER` comes from
    the RigSpec `env:`. A relaunch does not fix it. This is a nix-os fix. Tell the owner.
    `/bin/rm: No such file or directory` in the pane is harmless on NixOS.
-4. `failed` with a good pane: wait 30 seconds, the monitor re-reads it. Then check again.
-5. A seat with no session file after a restore: `rig seat launch <seat> --fresh --plan`, then
+4. "No default model selected" in the pane means the key did not reach the seat. Check that the
+   unit sets `OPENRIG_RECOVERY_PROVIDER_AUTH_ENV_ALLOWLIST=ANTHROPIC_API_KEY`. Check that the model
+   of the seat is `anthropic/...`: `not-declared` in `rig ps --nodes --rig piabrota-dev` is wrong.
+   A relaunch does not fix it. This is a nix-os fix. Tell the owner.
+5. `failed` with a good pane: wait 30 seconds, the monitor re-reads it. Then check again.
+6. A seat with no session file after a restore: `rig seat launch <seat> --fresh --plan`, then
    without `--plan` and with `--reason "<why>"`.
-6. Fix: relaunch is yours. A broken wrapper, token or spec is the owner's pull request.
+7. Fix: relaunch is yours. A broken wrapper, token or spec is the owner's pull request.
 
 ## A seat is at a prompt
 
@@ -140,7 +144,7 @@ device" for `openrig`; `rig` commands time out or fail on write.
 |`/bin/rm: No such file or directory` printed in a terminal seat (tested)|A harmless line from the daemon's paste step on NixOS. It shows in a shell seat only.|
 |`rig up <spec>` refuses|A rig of that name has live seats. Read `rig ps --nodes --rig <name>`. Do not force it.|
 |"lsof isn't installed" warning at start|Ownership of the database file is unknown. The unit has `lsof` in its path, so you should not see it.|
-|`fetch openrig-core returned 404` in the journal at start, or `rig doctor` FAIL on `claude_install`, `codex_install`, `ui_dist`|Known here, not an error: the [reference](../../hermes-omp/references/openrig-seats.md).|
+|`fetch openrig-core returned 404` in the journal at start, or `rig doctor` FAIL on `claude_install`, `codex_install`|Known here, not an error: the [reference](../../hermes-omp/references/openrig-seats.md).|
 
 Source: `rig` help of the built OpenRig `v0.7.7`; `docs/reference/agent-startup-guide.md` and
 `checked-seat-stop.md`; `openrig.nix` of piabrota/nix-os for the limits and the restart rules;

@@ -27,8 +27,8 @@ Read the result:
 - A rig that is stopped does not show in `rig ps`. The footer says "not shown: 1 stopped". Use
   `rig ps --filter status=stopped` or `rig ps --include-archived`.
 - `NRestarts` above 0 since the last deploy, or `ActiveState` not `active`: tell the owner.
-- `rig doctor` shows FAIL rows for Claude Code, Codex and the UI. They are known here (the
-  [reference](../../hermes-omp/references/openrig-seats.md)).
+- `rig doctor` shows FAIL rows for Claude Code and Codex. They are known here (the
+  [reference](../../hermes-omp/references/openrig-seats.md)). A FAIL on `ui_dist` is not: tell the owner.
 
 ## 2. Start a rig and check every seat
 
@@ -111,7 +111,7 @@ the pane shows a question or a menu.
 
 1. `rig capture <seat> --lines 40`. Read the question. Quote it to the owner.
 2. For an `omp` seat, a usual cause is a cancelled extension dialog (a cancelled approval request
-   only if the unit runs without `OPENRIG_YOLO`; see the
+   only if the rig has no `builtin:yolo` policy; see the
    [reference](../../hermes-omp/references/openrig-seats.md)). The seat then waits until the next
    agent run. Send an instruction that needs no answer: "Do not use that tool. Do this instead:
    ...". From the docs, not run.
