@@ -33,10 +33,25 @@ nix derivation show -r <drvPath> | grep -o '\\"baseVersion\\":\\"[^"\\]*'       
   file at the pinned rev (`gh api repos/<o>/<r>/contents/<path>?ref=<rev>`), then
   `pkg.override { <arg> = ...; }`. The module's own `override` chains on top; check the module's
   extra settings (for example `extraDependencyGroups`) still evaluate to the same list.
+- A derivation that proves a hand-written claim is cheaper than the system: `nix-store --realise
+  $(nix eval --raw .#nixosConfigurations.<host>.config.<path to the derivation>.drvPath)` builds
+  only it. Use this for a `runCommand` with `allowedReferences`: `fixupPhase` rewrites script
+  shebangs to store paths, so `allowedReferences = [ ]` fails with "not allowed to refer to" the
+  moment a copied script has `#!/usr/bin/env bash` or `node`. List the interpreters
+  (`pkgs.bashNonInteractive`, not `pkgs.bash`, which is the interactive variant) instead of
+  dropping the check.
+- A unit that needs a database waits for `postgresql.target`, not `postgresql.service`: the role
+  and database come from a later setup unit, so a first deploy can start the app too early.
+- A new sandbox option on a unit (`SystemCallFilter`, `CapabilityBoundingSet`) cannot be proved by
+  evaluation. Copy the set from a sibling unit that already runs, and write in the PR body that it
+  is untested and which line to remove first if the unit fails at start.
+- `jq -e` exits 4 when the filter prints nothing, which a check script may do on success. Run the
+  command the way the CI line runs it (without `-e`) before you call it a failure.
 - Flakes see only tracked files: `git add` moved and new files first. A `Git tree is dirty`
   warning is harmless.
 - To work on a second branch while omp edits the first, use `git worktree add ../<dir> -b
   hermes/<slug> origin/main`; do not switch the branch omp is editing. A worktree of a shallow
-  clone cannot evaluate the flake (`nix eval` stops with "getting Git object ... not found"): use
-  the worktree for Python, shell and docs work, and run every `nix eval` and `nix build` in the
-  primary clone on the branch you are testing.
+  clone cannot evaluate the flake (`nix eval` stops with "getting Git object ... not found"): evaluate it as a path flake
+  instead: `nix eval --raw "path:$PWD#nixosConfigurations.<host>.config.system.build.toplevel.drvPath"`
+  (and `nix build` the same way). A path flake reads the working tree with untracked files and
+  needs no `git add`. Otherwise run the `nix eval` in the primary clone on the branch you test.

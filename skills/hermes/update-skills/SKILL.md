@@ -30,7 +30,7 @@ The script keeps only the keys of the Agent Skills format in the front matter. I
 
 ## Export a Hermes skill
 
-1. Write or change the skill in `~/.hermes/skills/`. Keep the body at 150 lines or fewer. Put long data in `references/`.
+1. Write or change the skill in `~/.hermes/skills/`. Keep the body at 150 lines or fewer. Put long data in `references/`. The skill tool accepts a description of 60 characters at most, one sentence that starts with `Use when` and ends with a period, and it warns when the body has no `## When to Use` section. The export copies the description as it is.
 2. Run the dry run. Nothing is pushed.
 
    ```
@@ -124,6 +124,9 @@ Give the pull request URL, the checks with their results, each warning, and what
 ## Pitfalls
 
 - A body over 150 lines costs tokens in each use. Split it into `references/` files.
+- Before you create a skill, search the `references/` of the existing skills for the same topic. The background review often files a recipe there. Move the content into the new skill and leave a one-line pointer, so one topic has one home.
+- The checker flags a backticked path that is not inside the skill folder, also in a code block. Name the file in words, or run the command from its folder: `(cd scripts && ... check.py)`.
+- The export carries every pending change, not only the skill you made. Name the other skills in the pull request, and tell the owner to read them.
 - Edits in `skills/hermes/` by hand are lost when the export runs again. Change the source skill in `~/.hermes/skills/`.
 - A dry run changes only the local clone. It pushes nothing and calls no `gh` command.
 - The export needs the GitHub App token file. Without it the script waits and prints one line.

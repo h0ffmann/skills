@@ -47,6 +47,24 @@ sources, one dedupe across sources, an Atom output); say that in the PR.
 - Standard library only; tests make no network call (pass the fetch function in). Keep every
   function simple: the CI smell report counts (`references/code-smell-refactor.md`).
 
+## 3b. Run it on the real network before the PR, and read the distribution
+
+Offline tests pass while the design is still wrong. After the first omp run, build once with
+`--no-state --out <workspace dir>` (outputs only; the state stays empty, so the first scheduled
+digest is not empty). Then count entries and scores per group and per source, and fix what the
+numbers show with a second, small omp run:
+
+- Date a GitHub search item by `pushed_at`, not `created_at`: an old repository that is still
+  active otherwise ranks as new.
+- A global item cap lets the heaviest group take most slots and starve the others (podcasts). Give
+  each group a first-pass quota, a per-group share in the digest, and fill the rest by score.
+- A weekly show scores low on recency. Mark the curated podcast feeds `pinned` with a small
+  per-source keep, so their newest episodes always appear.
+- Add a per-source title exclude list for noise such as nightly `canary` release tags.
+- Flaky hosts (`hnrss.org` 502, a chart timeout) are normal: they must show in the digest error
+  line and `health.json`, never stop the run.
+- Parse the Atom file: feed and every entry have `id`, `title`, `updated`, `link`; ids are unique.
+
 ## 4. Wire it into Hermes
 
 - Files install through `hermesHomeFiles."scripts/<name>.py" = ./path;` and
@@ -62,5 +80,16 @@ sources, one dedupe across sources, an Atom output); say that in the PR.
 - Do the real run yourself before you hand over, so the outputs exist when he wakes. Schedule a
   one-shot `no_agent` job (`in`/date schedule, `deliver` explicit) for his morning, and read it
   back with the cron doctor. Do not create the recurring job before the merge.
+- Before the merge, copy the script and config by hand to the paths `hermesHomeFiles` will use
+  (`~/.hermes/scripts/`, `~/.hermes/feeds/`); the deploy overwrites them with the same content.
+  Dry-run with the Hermes Python that cron uses
+  (`/nix/store/*-hermes-agent-env/bin/python3.*`, `HERMES_HOME` set, `--dry-run`): it proves the
+  default paths without writing state. Then
+  `hermes cron create "<ISO date with offset>" --name <n> --no-agent --script <file>.py --deliver
+  discord --timezone America/Sao_Paulo --repeat 1`, and read it back with `hermes cron list` and
+  `hermes cron doctor`.
 - State in the first reply what is excluded and why, what needs his yes (a paid or logged-in
   source), and that the feed has no public URL yet.
+- Promise only what exists. Schedule the one-shot after the script has run once, never before. When
+  a promise lapses (the build run was killed, the script is missing), say so in the first sentence of
+  the next message, before the owner asks where the PR is.

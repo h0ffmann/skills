@@ -22,9 +22,16 @@ Run them in this order and read the verdict of each before you guess:
    is documented there (`gateway run --external-supervisor`). Then confirm in the installed
    package (`ls -d /nix/store/*-hermes-agent-*/lib/python*/site-packages`; grep `gateway/restart.py`).
 
+The guide plugin checks the running install, never a diff. When the owner says "use the guide to
+evaluate this PR", say that in the first sentence, run `hermes guide` as the baseline of the box the
+PR will change, and send the code review to omp. If `hermes guide --json` ends in a traceback
+(`PosixPath is not JSON serializable`, a plugin bug in the `update` field), use the text mode: the
+plugin's own skill allows that fallback. Do not retry the flag.
+
 Do not run `hermes gateway stop` or `restart` yourself to "test": it ends the turn you are in and
 kills the jobs you started. Give the owner the command and the consequence, and run it only on his
-"go".
+"go". The command refuses while a live session exists (the chat turn you are in counts) and offers
+`--yes`, which interrupts that session: never add `--yes` unprompted.
 
 ## Restart loop with exit 0 ("A gateway already owns this host")
 
@@ -39,6 +46,34 @@ After the fix merges the old detached gateway still owns the host, so the loop c
 owner stops it once (`sudo -u hermes hermes gateway stop`). Tell him that sequence in the PR body
 and in chat, and the check afterwards: `NRestarts` stops growing, the gateway PID is in the cgroup of
 `hermes-agent.service`, and a test reload leaves no `gateway run` process outside the unit.
+
+A health check must test `NRestarts` before it skips inactive units: a unit in a restart loop sits
+in `activating`, so a skip-first order is blind to the case it should catch. A wrapper time ceiling
+for omp (`timeout --signal=TERM --kill-after=30s <limit>` before `choom`) bounds a run that a
+reload would otherwise leave half done.
+
+While a detached gateway runs it sits in the cgroup of `hermes-backend` (2 GiB cap). The dashboard,
+the gateway and every job you start share that cap, and `kvm4-health` reports a peak near 100 %.
+Read `systemctl show hermes-backend -p MemoryCurrent -p MemoryPeak` before heavy background work.
+
+## A new secret in hermes.env needs a switch, then a reload
+
+The NixOS module copies `hermes.env` into Hermes's `.env` during activation, not when the unit
+starts. After the owner adds a key (for example `API_SERVER_KEY`), a reload or a restart alone does
+not load it. The order is `sudo /run/current-system/bin/switch-to-configuration switch` (runs
+activation again), then `sudo systemctl reload hermes-agent`. Check by the effect (the port opens),
+never by reading the file. Put the order in the PR body of any change that needs a new key, and
+tell the owner not to paste the key in chat.
+
+## After "merged": let the deploy finish before you test
+
+A merge that deploys reloads `hermes-agent`, and the reload ends the turn you are in and kills jobs
+you started. Before a test run, a long omp run or a measurement, read
+`gh run list --workflow deploy.yml --limit 1 --json status,conclusion`. If it is pending or in
+progress, wait with `timeout 280 gh run watch <id> --exit-status` (repeat once). A watch that ends
+with the gateway shutting down means the deploy landed: do not re-run the restart or the watch,
+check `systemctl is-active` of the touched units and answer the owner's latest message first.
+After it, confirm the effect on the box (a removed unit is inactive, a closed port is closed).
 
 ## A reload or restart kills background jobs
 

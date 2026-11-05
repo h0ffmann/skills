@@ -9,7 +9,9 @@ license: MPL-2.0
 
 You run on kvm4, a Hostinger KVM 4 VPS: 4 vCPU, 16 GB RAM, 200 GB disk by the plan (piabrota/nix-os
 `AGENTS.md`, "Resource budget"). systemd caps your unit, `hermes-agent`, at `MemoryMax=8G` and
-`CPUWeight=50` (nix-os `hosts/kvm4/default.nix`), and the dashboard, `hermes-backend`, at 2G. Cron
+`CPUWeight=50` (nix-os `hosts/kvm4/default.nix`), the dashboard, `hermes-backend`, at 2G, and
+Paperclip, `paperclip`, at 2G with its `postgresql` at 1G (nix-os `paperclip.nix`), and OpenRig,
+`openrig`, at 3G for its daemon, tmux and every seat (nix-os `openrig.nix`). Cron
 jobs run in transient scopes under the `hermes` user's slice, not in `hermes-agent`: the script
 counts that slice too. Above the cap the kernel kills a process of the unit, omp first.
 
@@ -36,7 +38,9 @@ kvm4-health --alert    # only findings (what the watchdog posts)
 
 Each line starts with `ok`, `WARN` or `CRIT`. Exit 1 means at least one finding. Thresholds are
 environment variables at the top of the script (`KH_DISK_WARN=80` and the like); set one on the
-command line to test (`KH_DISK_WARN=1 kvm4-health`), never in a file.
+command line to test (`KH_DISK_WARN=1 kvm4-health`), never in a file. The restart count of each unit
+(`NRestarts`, since the unit started) is WARN above `KH_RESTARTS_WARN=3` and CRIT above
+`KH_RESTARTS_CRIT=50`.
 
 ## What a finding means
 
@@ -45,6 +49,7 @@ command line to test (`KH_DISK_WARN=1 kvm4-health`), never in a file.
 | `hermes-agent: ... now (80 %+)` | Many subagents, a large clone in the page cache, an omp run | Say so. Do not start new heavy work. Do not restart the unit: `systemctl restart` is blocked, and a deploy reloads it |
 | `peak ... near the limit` | A spike since the unit started. It is history, not the current state | Name the task that ran then (the sessions of that hour). Propose a lower fan-out or a smaller clone |
 | `hermes-agent grew ... with no restart` | Growth over 24 h with the same process: a leak, or a cache that does not shrink | Report the figure and the uptime. A nix-os PR can lower a cache limit; the owner decides |
+| `restarted N times since it started` | A deploy reloads the unit, or the unit is in a restart loop (CRIT) | Say it. Do not hide it. Run `hermes doctor` and `hermes gateway status`, read `journalctl -u <unit> --since -1h`, tell the owner. The fix is a nix-os PR |
 | `RAM available` low, `swap`, `memory pressure` | The box, not only Hermes | Read the `units` lines to find the unit that holds the memory |
 | `OOM kill lines` | The kernel killed a process in 24 h | `journalctl -k --since -24h \| grep -i -A3 'killed process'` names it |
 | `load`, `I/O pressure`, `used ... % of one core` | A busy run, or a loop | The `sessions` and `cron` of that hour |

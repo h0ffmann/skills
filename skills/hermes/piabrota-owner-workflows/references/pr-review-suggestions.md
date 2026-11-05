@@ -55,9 +55,17 @@ GitHub Actions expression that only a real run proves).
 The PR branch is the owner's (`claude/...`) and you may push only `hermes/*`. Do not ask for a
 wider push right and do not look for a way around it. Instead:
 
+When the order says "push directly" to the owner's branch, the first sentence says you cannot (only
+`hermes/*`) and that the fixes go to a stacked PR.
+
 1. `git fetch --depth 1 origin <pr-branch>`, then `git switch -c hermes/<slug> FETCH_HEAD`. Refetch
    first: the owner may already have applied some of your suggestions (read `git log` and the
-   files before you redo a fix).
+   files before you redo a fix). If the PR is `CONFLICTING`, `git fetch --depth 100 origin main` and
+   `git merge --no-commit origin/main` on your branch, and list the conflicts with
+   `git diff --name-only --diff-filter=U`. Resolve a Markdown table conflict by keeping every row of
+   both sides (a short script, not a hand edit of markers), run `sh scripts/context-size.sh` (a
+   merge can push `AGENTS.md` over 30,000 characters), then commit the merge before the omp run.
+   Give omp the review and the fixes in one task file with a numbered checklist and a report format.
 2. Open your PR with `--base <pr-branch>` (a stacked PR). The owner merges it into the PR with one
    click. Say this in the first lines of your reply, before the work starts.
 3. Fix what is mechanical and checkable (commands, doc claims in both languages, contradictions
@@ -66,11 +74,28 @@ wider push right and do not look for a way around it. Instead:
    name), and a change that raises your own limits or edits your own brief (`hermes/AGENTS.md`,
    `SOUL.md`): guardrails only get stronger, so the owner chooses the numbers.
 4. Do the edits with omp (see `omp-harness.md`, "Fix runs") and review the diff before the commit.
+   Then repeat the checks yourself instead of relaying omp's table: the formatters and linters on
+   the changed files, `nix eval` of the toplevel of every host the PR touches (see
+   `nix-eval-checks.md`), `sh scripts/context-size.sh`, and the repo's wiki `jq` check. Name in the
+   PR body the builds that only omp ran and that you did not repeat.
 5. In the stacked PR body, say that the base is the owner's branch, that the merge deploys
    nothing by itself, and the merge order (stacked PR first). List what is not in it: workflow
    edits, Nix design changes, values only the owner knows.
 6. Later, re-check the owner's PR (`mergeStateStatus`): `main` moves, and a PR of your own that
    merged in between can cause the conflict. See `host-cutover.md` for the diagnosis.
+   When the owner resolves his branch himself (a new merge commit on it), your stacked PR turns
+   `CONFLICTING` on the same lines, usually the AGENTS.md rows both of you shortened. Do not
+   rebase: `git fetch origin <his-branch>`, `git merge --no-commit --no-ff origin/<his-branch>` on
+   your branch, and on a row both sides edited keep his text. Git can print nested markers (three
+   or more `<<<<<<<` levels) that a regex resolver mis-parses: take the clean file with
+   `git checkout --theirs <file>`, reapply your own distinct edit to it with a short script, then
+   check `grep -c -E '^(<{7,}|={7,}|>{7,})' <file>` is 0 and `sh scripts/context-size.sh`. Verify
+   `git diff origin/<his-branch>..HEAD --stat` lists only your files, push, and read
+   `gh pr view <n> --json mergeable,mergeStateStatus`: `MERGEABLE` with `UNSTABLE` means checks
+   still run, not a conflict.
+   When you re-run a repo check, copy the CI's own command (`nix run nixpkgs#jq -- -r -f
+   scripts/deepwiki-check.jq .devin/wiki.json`): adding `jq -e` to a filter that prints nothing
+   exits 4 and looks like a failure.
 7. Write the PR's Tested section with who did what ("Hermes read the diff", "omp made the
    edits"). Never write "a person read" for a check you did.
 

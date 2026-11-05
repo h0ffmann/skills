@@ -22,6 +22,13 @@ needs a file under `.github/workflows`.
   the owner asks "where is the PR" or "create a PR" for it, the first sentence says no PR exists
   and why, then give the patch path and the exact `git switch -c` / `git apply` / `git push`
   commands.
+- Validate the patch before you hand it over: `nix run nixpkgs#actionlint -- <file>` in the throwaway
+  clone (exit 0), then `git apply --check` in a detached worktree of fresh `origin/main`. To make a
+  report job run only while a PR is open, delete the `push` trigger and set
+  `pull_request: types: [opened, synchronize, reopened]`; put the reason in a comment at the top of
+  the workflow. The doc that describes the trigger (the AGENTS.md file-table row) is not a workflow:
+  change it in your own `hermes/*` PR from `main`, and say in both places that the owner applies the
+  patch and merge order does not matter.
 - A rename that workflows still reference (a flake node, a check name) must not break the merge:
   keep the old name as an alias in the non-workflow files, ship the workflow rename as a patch
   file, and remove the alias in the PR that applies the patch. Renaming a job also renames the
