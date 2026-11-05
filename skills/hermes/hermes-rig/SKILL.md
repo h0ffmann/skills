@@ -9,8 +9,8 @@ license: MPL-2.0
 
 [OpenRig](https://github.com/mvschwarz/openrig) (v0.7.7) is a control plane for teams of coding
 agents. A daemon keeps the state. Each agent is a **seat**: a program in a tmux pane. The command
-is `rig`. On this box the daemon is the systemd unit `openrig` on `127.0.0.1:7433` (no web page,
-no public port). The seats run `omp`, with the same Claude subscription as you. One rig is
+is the systemd unit `openrig` on `127.0.0.1:7433` (the web UI is on at that address, for the
+owner, behind nginx with a login at rig.piabrota.art; no other public port). The seats run `omp`, with the same Claude subscription as you. One rig is
 specified: `piabrota-dev`, with a builder seat and a reviewer seat. This skill and its
 `references/` are enough to run it: you do not need the web.
 
@@ -42,8 +42,8 @@ write the task that a seat gets, and both for a code task on a seat.
 3. **Two seats at the same time, no more.** The unit has `MemoryMax=2G`, `MemoryHigh=1536M`
    (the memory of one seat: the [reference](../hermes-omp/references/openrig-seats.md)). Run
    `kvm4-health` before you start. A third seat needs the owner.
-4. **Seats run without approval prompts, and you never change that.** The unit sets
-   `OPENRIG_YOLO=1`: the owner's decision in PR 124 (the
+4. **Seats run without approval prompts, and you never change that.** The rig sets
+   `permission_policy: builtin:yolo`: the owner's decision in PR 124 (the
    [reference](../hermes-omp/references/openrig-seats.md)). The deny rules of `hermes/omp.yml`
    are the guard. Never answer a trust or consent prompt of OpenRig. Show it to the owner
    (`references/safety.md`).

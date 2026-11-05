@@ -76,6 +76,15 @@ Use this when the owner wants a new pull request, and an export pull request is 
 5. Check, commit, push and open the pull request as in "Commit and pull request".
 6. Write in the pull request that another pull request adds lines at the same place of the README and the tags file. The second merge needs a rebase.
 
+## A manual export of all pending changes, with a new reference
+
+Use this when the owner says "export the skills now" and wants a reference in the same pull request.
+
+1. Put the new reference in the source skill in `~/.hermes/skills/<skill>/references/`, and a one-line pointer in its `SKILL.md`. A file added by hand in `skills/hermes/` is lost at the next export. A skill from nix-os is read-only here. Its fix goes in a nix-os pull request.
+2. Run `gh pr list -R piabrota/skills --state open`. If an export pull request is open, the real script updates it. Without one, run the dry run, then branch: `git fetch --depth 1 origin main`, `git switch -c hermes/<goal> origin/main`, `git checkout hermes/skills-export-dry -- skills/hermes www/tags.txt`.
+3. Search the exported files for a claim that the owner has since corrected. A skill from nix-os is exported as it is deployed. If a nix-os pull request has a corrected file, copy that file from its branch into the export branch with `git show <branch>:<path> > <file>`. Say it in the pull request body. Do not publish text that you know is wrong.
+4. Continue with "Check before the push" and "Commit and pull request".
+
 ## Change a skill that is not in skills/hermes
 
 1. Reuse the clone `/var/lib/hermes/workspace/skills-src`. Do not make a new clone.

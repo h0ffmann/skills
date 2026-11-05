@@ -36,7 +36,8 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   compiler and tests) and `.#checks.x86_64-linux.<name>`; `git add -A` new files first. Run
   long builds as one call under 600 s or let them background. Always available: `nix-instantiate
   --parse <file>.nix` (syntax only), the repo's reading-time script with `--check`, `perl`, `jq`. Not
-  available: `just`, Chrome. **Run the repo's lint before every push, not after CI fails.** Read
+  available on PATH: `just` (run a recipe as `nix run nixpkgs#just -- <recipe>`) and Chrome
+  (`references/docs-figures-and-wiki.md` builds one from Nix). **Run the repo's lint before every push, not after CI fails.** Read
   the `check` recipe of the justfile and run each line except `nix flake check` through
   `nix run nixpkgs#<tool>` (`nixpkgs-fmt --check <the file list>`, `statix check .`,
   `deadnix --fail .`, `shellcheck`, the `jq` wiki check), with `export XDG_CACHE_HOME=<scratch>/nixcache`
@@ -44,6 +45,12 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   "cannot create symlink". Read each exit code (`echo $?`), not the look of the output. A
   formatter failure from a hand or omp edit is fixed by running the formatter, then a separate
   commit. Never claim a lint or build that you did not run.
+- **Prove a fix on the real path, not on a model of it.** When a program starts the failing
+  process (a daemon that opens a tmux pane, a unit that runs a script), read that program's launch
+  code for what environment and arguments the process gets before you pick the fix. A test with
+  the system shell shows only that a mechanism exists. It passed for a variable that never
+  reached the process. Say in the PR what only the real start after the deploy can prove
+  (`references/openrig-seat-environment.md`).
 - **Numbers in a PR body come from a command run just before** (a count of log lines, a list of
   plugins), never from an estimate. If one is wrong after the PR is open, fix it with
   `gh pr edit <n> --body-file`. Name who did what: "omp made the edits, Hermes read the diff".
@@ -59,7 +66,11 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   `git fetch origin main` then `git cat-file -e origin/main:<a path the PR added or removed>`.
   When it is not, `git switch -c hermes/<slug>-main origin/main`, `git cherry-pick <sha>`, push, open
   a replacement PR with `--base main`, and name the replaced PR in the first lines of its body
-  and in chat. Stack only on the owner's own PR branch (see `references/pr-review-suggestions.md`),
+  and in chat. When the owner asks to "stack" PRs so he merges once, put the later commit in the first PR's
+  branch (`git cherry-pick origin/<other-branch>`, push, `gh pr edit` the title and body with a
+  section for the added change), then comment on the other PR that it now lives in the first and
+  the owner should close it (you cannot); never point a base at another `hermes/*` branch. Stack
+  only on the owner's own PR branch (see `references/pr-review-suggestions.md`),
   and re-check that base's state before you report the stacked PR as delivered. Before the push,
   `git fetch origin main`: a shallow clone does not know the owner merged another PR meanwhile, and
   a PR from the old base then reverts that work. Move the branch with `git rebase --onto origin/main
@@ -87,9 +98,15 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
 - **The deny list reads the whole command text.** Run `git add`, `git commit` and `git push
   origin <branch>` as three separate calls, and push with no pipe, no `&&` chain and no second
   refspec. A blocked word inside a harmless `grep` pattern blocks the call (for example `sudo`, `.env`, or the
-  name of the secrets folder, an installer word like `npx`, a Dockerfile `ENV` keyword): drop the word from the pattern and search for the shape instead. The same holds for words inside a
+  name of the secrets folder, an installer word like `npx`, a Dockerfile `ENV` keyword, or `env`
+  next to `-i` flags, which reads as dumping the environment): drop the word from the pattern, or
+  search source with `search_files`, and search for the shape instead. The same holds for words inside a
   prompt string on an `omp` command line (the phrase for pushing to git trips the push rule): put
-  such text in a task file, or reword it. When a call is blocked, split or reword it; never look for a way around.
+  such text in a task file, or reword it. The same holds for a commit message or a PR title that
+  names a permission-widening setting (an approval bypass, a policy that turns prompts off): write
+  the message to a file and run `git commit -F <file>`, and word the title by the effect ("set the
+  rig policy"). The PR body may name the setting: it travels as a file. When a call is blocked,
+  split or reword it; never look for a way around.
 - **An explicit order stands.** When the owner says "install X" or "do Y", do the work and put the
   cost and the risk in the PR body or the reply. Do not stop to ask for a "yes" he has already
   given. Stop only for a rule that forbids the act, and then name the rule in the first sentence.
@@ -161,6 +178,17 @@ To measure or reduce a CI score (code smell, lint count), load `references/code-
 For a seat that does not start (`command not found` in the pane, "runner to report ready"), load
 `references/openrig-seat-environment.md`: how OpenRig builds the pane, the fix, and the proof.
 
+## README, wiki and figures (docs PRs)
+
+For "update the docs / README / wiki / archify images" or an address index, load
+`references/docs-figures-and-wiki.md`: facts by command, omp writes and Hermes draws the PNGs
+(Chromium from Nix), honest status wording, wiki mirror rules.
+
+## Restyling pages and dashboard theme
+
+For "this page is horrible / must match piabrota identity", a new page, or a Hermes dashboard
+theme: load `web-ui` and then `references/site-look-and-dashboard-theme.md` before the task file.
+
 ## Skills export (piabrota/skills)
 
 For "send the skills you updated to piabrota/skills" or the daily `skills-export` job, load the
@@ -189,7 +217,8 @@ before a model bump, how to classify and measure projects, and the three-table c
 After the owner says yes to hosting a service on a nix-os host (or to publishing another repo's
 generated files at a new subdomain), load `references/add-service-to-host.md`:
 hostname check, the `hermes-web.nix` pattern, packaging from a pinned source (an npm app too),
-the omp run order, the operating skill for a third-party tool, and how to give memory numbers.
+the omp run order, a web UI behind basic auth, the operating skill for a third-party tool, and
+how to give memory numbers.
 
 ## Loading skill repos into Hermes
 
@@ -283,4 +312,6 @@ PR (deploy first in the body) instead of listing options without a next step.
   `grep -n`, `sed -n 'a,bp'`, `--stat`, or strip HTML with perl and `head -c`. A command whose
   working directory is inside a repository (or a command that `cd`s into one) re-loads that
   repo's AGENTS.md into the output even when it only runs `grep`: use absolute paths, `git -C`, or
-  `read_file` with an offset, and run from a neutral directory.
+  `read_file` with an offset, and run from a neutral directory. The first `search_files` or
+  `read_file` call into a directory with its own AGENTS.md loads it too (once per directory), so
+  search one file's directory, not the repo root, when you only need a line.

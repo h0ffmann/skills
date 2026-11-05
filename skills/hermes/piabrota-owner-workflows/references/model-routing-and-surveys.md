@@ -31,6 +31,26 @@ Three topics that come up sometimes. Each is a procedure with its own checks.
 - On NixOS set these in the module (`settings.delegation.model`, `settings.auxiliary.*`), never
   with `hermes config set`.
 
+## Context size: compression and session resets
+
+When the owner says chats grow too long or tool output is heavy, read the pinned Hermes source
+before you pick a number (a file read of `hermes_cli/config_defaults.py`, block `compression`, and
+`agent/model_metadata.py` for the model window):
+
+- `compression.threshold` is a ratio of the model window (default 0.50). A ratio below the
+  default is floored at 0.75 only for windows under 512K tokens, so check the window first: the
+  main model here has 1,000,000 tokens, so 0.40 is real (about 400K). `compression.threshold_tokens`
+  is an absolute cap and the lower of the two wins. Gateway session hygiene is a second net at 85%
+  and has no setting.
+- Each compression rewrites the cached prompt prefix once (the one sanctioned cache break); later
+  turns cost less. State this trade-off in the comment and the docs, and pick the number with the
+  owner (default offer: 0.40).
+- Core no longer resets a gateway conversation on a timer. A `session_reset` block does nothing
+  without the community plugin `hermes-session-reset-policy`. Adding it follows the plugin process
+  (`references/hermes-plugin-catalog.md`: scan, disclosure, pin, owner merges), so propose it as its
+  own PR and keep the threshold change separate.
+- Set it in `hermes.nix` (`settings.compression.threshold`), never with `hermes config set`.
+
 ## Surveying GitHub projects (forks, derivatives)
 
 - GitHub's `fork` flag is false for detached forks and renames. Classify by README and LICENSE

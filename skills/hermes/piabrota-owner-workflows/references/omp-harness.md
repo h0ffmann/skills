@@ -67,6 +67,13 @@ controls, who edits it, when it takes effect.
   cgroup holds the gateway (`cat /proc/<gateway pid>/cgroup`; `systemctl show <unit> -p MemoryCurrent
   -p MemoryPeak -p MemoryMax`). Read those before a second run. A cap near its peak makes the kernel
   kill a process inside that cgroup, and the victim can be the first omp or the gateway.
+- Name the baseline in the task file. The local `main` of a long-lived clone is stale, and omp
+  diffs against it (a 130-file diff for a three-file change). Run `git fetch --depth 1 origin
+  main` first and write "compare with `HEAD~1` (or `origin/main`), never local `main`". For a
+  follow-up run on the same branch, say "read `git show HEAD` first": the first run is that commit.
+- A heartbeat shows only the tail of the new output (the head is cut with a count of omitted
+  characters). Quote it as it is, say it is the tail, and read the final answer and `git diff`
+  for anything that matters.
 - Afterwards read `git status`, `git diff --stat` and the diff yourself, run the cheap checks
   (`nix-instantiate --parse`, a YAML load, greps for the new lines) and keep omp's claims separate
   from what you verified. For Rust, re-run `cargo test`, `clippy -D warnings` and `fmt --check`
@@ -128,7 +135,11 @@ controls, who edits it, when it takes effect.
 - **Read a finished background run by its id.** The completion notice can be cut. Call
   `process_manage` (find it with `tool_search`) with `action=poll` or `log` and the `session_id`
   from the start call; `list` shows every run of the conversation. A command the owner's message
-  interrupts is moved to the background, not killed: poll it too.
+  interrupts is moved to the background, not killed: poll it too. A correction that interrupts the
+  whole turn can still close a background omp (poll shows `exited`, code -15, `killed`): at the
+  next turn poll the session and read `git -C <tree> status --short`. A clean tree means omp made
+  no edit: restart the same task file at once and tell the owner. A dirty tree needs a
+  "continue after the last finished step" file.
 - **Start omp only when the last deploy run is `completed`.** This includes the deploy of the PR
   that you just opened and the owner just merged: a command or a flag that the PR adds does not
   exist until that deploy is active. After the owner reports a merge, run
@@ -149,10 +160,16 @@ controls, who edits it, when it takes effect.
   15 minutes when a deploy might land. After a kill, rerun with "continue after the last finished
   step" and check `git status` first.
 - **Queued omp runs.** When the owner asks for two code jobs "in parallel", write both task files
-  and prepare both branches at once (a `git worktree` each), start the first omp, and say the second
-  waits (one omp at a time). When the first completion notice arrives, start the second omp
+  and prepare both branches at once (a `git worktree` each). Each task file names the directories the
+  other run owns and says "do not touch them", and the two runs share no file (the shared
+  `AGENTS.md` gets a character budget for each run). One omp per working tree, at most two
+  at once (the `hermes-omp` table), and the second only when the memory of the unit is not at
+  WARN: start both then. Otherwise start the first and say the second waits. When the first completion notice arrives, start the second omp
   before you review the first diff: the review needs no omp, so the box stays busy and the owner
   waits less.
+- **Give `git worktree add` an absolute path.** With `git -C <repo> worktree add -b <branch> <rel>
+  origin/main`, a relative path lands inside `<repo>`. Move a misplaced one with `git worktree move
+  <old> <new>`, and run neither from a directory that holds an AGENTS.md you do not want loaded.
 - **In a `git worktree` `.git` is a file.** `echo x >> .git/info/exclude` fails there: use
   `git rev-parse --git-path info/exclude`. Run such a setup step in its own call. A `&&` chain that
   fails before `omp` starts ends the background job with only `exit=1` in the completion notice,

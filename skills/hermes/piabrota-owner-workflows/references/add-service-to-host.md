@@ -69,6 +69,31 @@ the owner's yes. The pattern to copy is `hermes-web.nix` on nix-os `main`
   daemon starts the pane before you pick a fix (`references/openrig-seat-environment.md`). A test
   with the system bash alone is not proof: it showed a fix that did nothing on the real box.
 
+## A web UI in front of a daemon that controls agents
+
+For "deploy the UI at <name>.piabrota.art" (a tool whose UI can type into running agents):
+
+- **Auth first.** The vhost needs basic auth plus TLS, and an option that defaults to off. Reuse the
+  sibling dashboard's htpasswd file (`/var/lib/hermes-web-secrets/htpasswd`, root:nginx, readable by
+  nginx) as an overridable path when the owner wants the same login: the deploy then works with no
+  manual file, and a separate file stays a one-line change. Never write or ask for a password.
+- **Give the owner the login commands**, since only root can write the file. List users (names
+  only): `sudo cut -d: -f1 <file>`. Add a user or reset a password, with no `-c` because `-c`
+  overwrites the file: `sudo nix shell nixpkgs#apacheHttpd -c htpasswd -B <file> <user>`, then
+  `sudo chown root:nginx <file>` and `sudo chmod 0640 <file>`. nginx reads the file on each request,
+  so no reload is needed. The file cannot be read by Hermes: say you do not know its users.
+- **DNS before the merge.** `dig +short A <fqdn> @1.1.1.1` must already give the box IP, or the ACME
+  order fails on the deploy.
+- **The daemon checks Host and Origin.** Read its browser-boundary middleware and put the public name
+  in its allowed hosts and origins (`https://<fqdn>`), or the proxied UI gets refused. A tunnel to
+  `localhost` needs neither.
+- **Proxy the WebSocket** (upgrade headers, long read timeout) or the terminal pane stays blank.
+- **Build the UI from the pinned source**: the daemon serves it from a fixed `ui/dist` beside the CLI
+  package, behind a setting that is off by default (an env switch in the unit turns it on). Report
+  the closure growth and that upstream may keep the UI in maintenance mode.
+- The owner's order to deploy at a name means the vhost is turned on in the host file in the same
+  change. A first draft that leaves it off needs a second small omp run to flip it.
+
 ## Order of omp runs
 
 One omp at a time, in this order, because each task depends on facts only the earlier build shows.
