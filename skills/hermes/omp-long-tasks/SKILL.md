@@ -1,0 +1,55 @@
+---
+name: omp-long-tasks
+description: Use when an omp run is PR-sized or hit its time limit.
+disable-model-invocation: true
+---
+
+# Long omp tasks: lessons from the Reels, thesis-rig and bump runs
+
+Extends `hermes-omp` (read-only, nix-os PR to change). Load both.
+
+## Size the run
+- One `omp -p --max-time` run does about 30 to 45 minutes of work. A whole rig plus toolkit plus docs does not fit.
+  Split by write set: toolkit/Nix (A), specs (B), docs and figure (C). Give each task an explicit list of files it may edit and the contract
+  (command names, paths) the other tasks rely on. Two runs at once at most.
+- Put the contract of the sibling task in the task file and ask for a name check at the end (grep every command the specs use in the toolkit).
+
+## When a run stops at its limit
+- `omp stderr: [Stopped by SIGTERM]` means the time limit: no final report was written and the work may be half done.
+  Check `git status`, then resume the same session: write the resume note as `omp-tasks/<name>.md` and run
+  `omp-run <name> --resume <session-id> --max-time 30m` (hermes-omp step 3). Without `omp-run`: `omp -p --mode json --no-title --resume <session-id> --max-time 30m < resume.md 2>&1 | omp-stream`.
+  The id is in the `[Recovery]` line. The resume task lists what is done, what is not, the order of the rest and a time budget.
+- Ask every run to keep a DRAFT report file (`/tmp/<name>-report.md`) from the first third on and to update it. Otherwise the report is lost.
+- Tell omp to run slow things (builds, test suites) detached and poll their log with one short command. A `wait` on a long job is what gets killed.
+
+## Tests that prove a fix
+- A stub must copy the real program's behaviour (exit codes, messages) taken from logs or source, not from a guess: a stub that exits 0 where the real program exits 75 passes a fix that fails on the box.
+- Require a red/green proof in the task: keep the old script from `git show HEAD:<path>`, let the suite run against any script (a variable such as `..._UNDER_TEST`), show it FAIL on the old one and pass on the new one. Only then write "fixed" in a PR. If the real program cannot run in the test, say so and name the journal lines that will prove it after deploy.
+- A fix PR for a failed earlier fix says so in the first paragraph, with the wrong assumption.
+
+## Where a run lives
+- A run started from this chat sits in the cgroup of the unit that hosts the chat (the dashboard unit, 2G, when the gateway is a stray). Restarting that unit kills the run mid-edit. After a restart: `git status` of the worktree, add a note to the task file ("a first run was killed; read the partial diff, keep what is right"), start it again.
+- Do not tell the owner to restart units while a run is active unless the run can be resumed; offer the restart for after the PR.
+
+## Measurement tasks
+- Tell omp to take baselines and measurements from the locked nixpkgs rev (`github:NixOS/nixpkgs/<rev>`), never from `nixpkgs#...`: the registry on this box differs and gives another version. Give it the rev yourself, taken from the ROOT input (`jq -r '.nodes[.nodes.root.inputs.nixpkgs].locked.rev' flake.lock`): the node named `nixpkgs` is not the hosts' one. Check the version in the first lines of the report, and check any baseline in a heartbeat line against it.
+- A run that starts scratch daemons (a hub, an agent) leaves them alive when you kill it. After a kill, `ps -eo pid,etime,args | grep <name>` and kill those PIDs, then delete the scratch dirs.
+- Heartbeat lines show what omp compares: read them, and say so at once when the baseline is wrong.
+
+## Quirks
+- A task that tests a script that rewrites a tracked file (a bump script, a formatter) must say: run it on a
+  COPY in a scratch dir, with the script path resolved after any `cd`. A run once rewrote the real tracked
+  file, restored it from `HEAD` and said so. Read the diff of that file before you commit; the report line
+  "one slip" is your cue.
+- omp's bash policy blocks `curl *`: tell it to use `gh api` for reads; a script it writes may still call curl.
+- Stop a run with `omp-run --stop <name>` (hermes-omp step 3), never `pkill -f <pattern>`: through the terminal tool the pattern is in the shell's own command line, so it kills the very call that runs it, and it can match another run. Only on a box without `omp-run`, kill by PID.
+- The completion notice shows only the last ~2,000 characters of the stream, and the draft report file may never have been finalized. Read the file, then re-run the cheap proofs yourself (the suite, the eval, one measurement on the real box) before you write the PR body; take the numbers from your own run.
+- Hermes may not write `.github/workflows/`: have omp write a workflow as `scripts/<name>.workflow.yml`
+  with a header telling the owner to copy it, and say so in the PR.
+- A terminal call whose cwd is a nix-os worktree loads that repo's AGENTS.md into the context: use `git -C` or `workdir` outside the repo for plain commands.
+- `nix eval path:$PWD#...` works in a worktree where `git+file:` fails with 'object not found'.
+- When the owner corrects the target mid-run (for example 'I mean the main branch, not the releases'), stop the run, rewrite the task
+  file (not a patch on top) and restart: a run cannot be steered. Stop it with `omp-run --stop <name>`. Only for a hand-made
+  `omp | omp-stream` pipeline, which has several processes: after `kill <pid>` of the shell, run `pgrep -a omp` and kill the
+  `omp` child too, or it keeps editing the worktree. Check `git status` of the worktree before the restart. The killed run
+  still sends a completion notice later: it is stale, ignore it.

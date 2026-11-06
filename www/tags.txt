@@ -66,7 +66,12 @@ mapbox: web maps
 humanizer: english writing
 humanizar: pt-br writing
 humanizer-pt-br: pt-br writing
+omp-long-tasks: hermes-skill
+cron-delivery-pitfalls: hermes-skill
+hermes-box-diagnosis: hermes-skill
+openrig-docs: hermes-skill
 hermes-plugin-inspection: hermes-skill
+nixpkgs-tool-research: hermes-skill
 piabrota-owner-workflows: hermes-skill
 update-skills: hermes-skill
 smart-notes: hermes-skill
