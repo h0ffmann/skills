@@ -63,6 +63,7 @@ A ⏸ skill runs only when you call it by name. Its description does not load in
 | `mip-overnight` ⏸ | Works the MIP tasks one at a time, with no human present | marola-devkit |
 | `triage` ⏸ | Turns an idea or a bug into an issue that is ready to claim | marola-devkit |
 | `easy-issues` ⏸ | Solves small open issues, one tested PR each | marola-devkit |
+| `github-better-outreach` | Writes the gh command that sets the best 20 topics of a repository | rax |
 | `bipr` ⏸ | Opens a bilingual PR, pt-BR first | gramatico, as is |
 | `pr-images` ⏸ | A `bipr` PR with before and after images | alerts |
 | `handoff` | Saves and resumes sessions as notes in an Obsidian vault | marola-devkit |

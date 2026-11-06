@@ -5,6 +5,7 @@ loco: code rust web
 agentskills-checker: skills lint
 bipr: github pr pt-br
 easy-issues: github issue pr automation
+github-better-outreach: github seo topics outreach
 handoff: notes obsidian agents
 mip-overnight: planning pr automation
 mip-tasks: planning pr github
