@@ -51,6 +51,34 @@ before you pick a number (a file read of `hermes_cli/config_defaults.py`, block 
   own PR and keep the threshold change separate.
 - Set it in `hermes.nix` (`settings.compression.threshold`), never with `hermes config set`.
 
+## Plan issues and research tickets ("create an issue to try X")
+
+An issue is Markdown, not code: write it yourself and open it with `gh issue create --body-file`, even while an
+omp run is going. The reader is the owner, who decides in one line, so the ticket must hold verified facts and the
+choices, not a guess.
+
+1. **Search before you assume what the name means.** A name the owner gives may be a method, a plugin or a
+   codename, not the thing it sounds like. Run two web searches, then read the primary source (repo README,
+   `docs/`, release notes, test record). Say in the first section what the thing is, and correct the premise
+   plainly if it was wrong.
+2. **Read primary sources with `gh api`, not with a blog page.** `web_extract` may be search-only, and a blog's
+   HTML is mostly script and style. `gh api repos/<o>/<r>/readme --jq .content | base64 -d`, `/contents/<path>`,
+   `/releases`, `/issues/<n>`, and `--jq '{license:.license.spdx_id,pushed:.pushed_at,...}'` give the facts. The
+   test record or support table of a project says what was run and what was "not run": quote that status.
+3. **State each reading of an ambiguous word.** When a term has two readings (a model endpoint or an execution
+   host; "mesh" in a tool that has no such feature), grep the tool's docs for the word, say it is absent, and write
+   the reading you used in the issue. If the owner then corrects it, rewrite the issue; do not append.
+4. **Separate the owner's facts from yours.** Hardware and OS the owner states go in as "the owner gave these
+   facts", with the consequence (a non-NixOS host cannot be managed by the repo). Your own estimates carry a mark
+   (`⚠`, "not checked") and a way to measure.
+5. **Shape.** Goal; what the thing is (verified, with links and the read date); how it fits this box and what it
+   needs (read the real source of OpenRig, omp or Hermes for each integration point; say "not run"); options with
+   pros, cons and the blocker of each; limits on this box (the 2G unit, two seats at a time, tokens); a plan of
+   steps that are each a PR or a report in the issue; "Done when"; risks; open points for the owner as numbered
+   questions. End with the signature line. English, ASD-STE100, no agent footer.
+6. **Check your own numbers before you post:** a dated count ("six weeks old") from the dates you read, a model
+   field you saw in one file is "in the adapter I read", not "in all adapters".
+
 ## Surveying GitHub projects (forks, derivatives)
 
 - GitHub's `fork` flag is false for detached forks and renames. Classify by README and LICENSE
@@ -81,6 +109,13 @@ before you pick a number (a file read of `hermes_cli/config_defaults.py`, block 
 - Packaging: `nix eval --raw nixpkgs#<attr>.version`, then `.meta.license.spdxId` and
   `.meta.unfree`, one attribute at a time with `XDG_CACHE_HOME` set (cheap, unlike `nix search`).
   Unfree is out where `allowUnfree` is off.
+- **Comparing nixpkgs tools without `nix search`** (pin to the rev in nix-os `flake.lock`, `export XDG_CACHE_HOME`):
+  `nix eval --raw github:NixOS/nixpkgs/<rev>#<pkg>.version`; `nix eval --json github:NixOS/nixpkgs/<rev>#<pkg>.meta`
+  for licence and `unfree`; closure size from the binary cache with no build:
+  `nix path-info --store https://cache.nixos.org -S -h $(nix eval --raw ...#<pkg>.outPath)`; ready-made NixOS
+  modules: `nix flake metadata --json github:NixOS/nixpkgs/<rev>`, take `.path`, then `ls
+  <path>/nixos/modules/services/monitoring` (or the right folder) and read the module's options. A
+  package with a module and a small closure beats a better tool the owner would have to package.
 - Measure the box with a tool already on it, not with vendor claims: a 10 s clip through `nice -n
   10 ffmpeg` at two presets under `/usr/bin/env time -f '%e s %M KB'`. Give the numbers as the best
   case for that clip shape, label every extrapolation, and mark speed figures from blogs as measured

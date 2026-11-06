@@ -52,8 +52,11 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   reached the process. Say in the PR what only the real start after the deploy can prove
   (`references/openrig-seat-environment.md`).
 - **Numbers in a PR body come from a command run just before** (a count of log lines, a list of
-  plugins), never from an estimate. If one is wrong after the PR is open, fix it with
-  `gh pr edit <n> --body-file`. Name who did what: "omp made the edits, Hermes read the diff".
+  plugins), never from an estimate. After an omp run was cut by its limit, take a test count from
+  the last complete summary line of the log, not from output you saw mid-run: a later run changes it.
+  If one is wrong after the PR is open, fix it with
+  `gh pr edit <n> --body-file`; when that fails, do not route around the deny list with `gh api`:
+  post a signed correction comment that gives the right number and say so in chat. Name who did what: "omp made the edits, Hermes read the diff".
 - **Evaluate when you cannot build.** For `.nix` and `flake.lock` changes, and when the owner waives
   verification, run the evaluation checks in `references/nix-eval-checks.md` (also the recipe for
   bumping a flake input) and still list in the body what did not run.
@@ -80,7 +83,10 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
   with "solve conflicts", or `gh pr view <n> --json mergeable` says CONFLICTING, fetch `main` and
   merge it into your `hermes/*` branch (`git merge --no-edit origin/main`, no rebase, no force-push).
   The usual cause is a sibling PR that added a row to the same `AGENTS.md` table: keep both rows,
-  and keep your side's wording for a row both changed. A diff3 block has a `|||||||` base section:
+  and for a row both changed keep your shorter wording and re-apply the other side's new clause to it (do not drop
+  main's change). A merge can push `AGENTS.md` over 32,000 characters even when each side fit: run
+  `sh scripts/context-size.sh` after the merge and shorten your own new row first. Do not flip a PR's draft
+  state when `gh pr view` shows it changed. A diff3 block has a `|||||||` base section:
   find the marker lines with `grep -n -E '^(<{7}|={7}|>{7}|\|{7})'`, delete the markers and the
   unwanted sections by line number in one `sed -i`, and grep again for zero markers. Then rerun the
   cheap checks (host eval, context size, the wiki check), commit, push in its own call, and confirm
@@ -89,7 +95,10 @@ Standing rules and procedures for work done as piabrota-hermes[bot] on the owner
 - **Ship before you answer side questions.** When the owner interrupts a long task with another
   question, the owner assumes finished files are already a PR. Push and open the PR as soon as
   the files are done (or say plainly that it is staged and not pushed), and give the link in the
-  next message. Never leave work only in a local branch across turns. When he asks "where is the PR", the first
+  next message. Never leave work only in a local branch across turns. When he says to open the PR "with what you
+  have" and review later, commit the tree as it stands, open a DRAFT, list the failing checks, the
+  unreviewed parts and the unmeasured numbers in the Tested section, and offer the review as the next
+  run. Do not hold the PR for the review. When he asks "where is the PR", the first
   sentence says whether it exists; if not, name the real blocker (a killed run, a missing step) and
   give no time you cannot back. When the owner asks for an
   update that "is not there yet" (README, wiki, DeepWiki), check first whether the PR is open and
@@ -170,13 +179,17 @@ then split the real run into one PR per doc group.
 For "make CI faster", a job or host rename that workflows name, or any change under
 `.github/workflows`, load `references/ci-speed-requests.md`: measure first, deliver the workflow
 change as a patch file (never a PR), alias a renamed node, warn about a ruleset's required check,
-and the design rules for a gated job.
+and the design rules for a gated job. For "update X every day with the ops bot", load
+`references/pin-bump-automation.md`: a tested script plus a draft workflow the owner copies.
 To measure or reduce a CI score (code smell, lint count), load `references/code-smell-refactor.md`.
 
 ## OpenRig seats
 
 For a seat that does not start (`command not found` in the pane, "runner to report ready"), load
 `references/openrig-seat-environment.md`: how OpenRig builds the pane, the fix, and the proof.
+For a runtime or spec change of a rig (shared agents, model-id form, unfree package, auth, a rig that does
+not follow its spec) or the design of a new rig, including a document or PDF rig, load
+`references/openrig-runtime-and-spec-changes.md`.
 
 ## README, wiki and figures (docs PRs)
 
@@ -211,8 +224,8 @@ feeds, wire the script into Hermes cron, and the overnight hand-over.
 
 ## Model routing, project surveys, service costing
 
-For "use a cheaper model for X", a model-ID bump, a survey of forks or plugins, or "can the box run
-service Y", load `references/model-routing-and-surveys.md`: the real routing levers, the grep
+For "use a cheaper model for X", a model-ID bump, a survey of forks or plugins, a plan issue with
+researched facts, or "can the box run service Y", load `references/model-routing-and-surveys.md`: the real routing levers, the grep
 before a model bump, how to classify and measure projects, and the three-table costing answer.
 After the owner says yes to hosting a service on a nix-os host (or to publishing another repo's
 generated files at a new subdomain), load `references/add-service-to-host.md`:
@@ -266,6 +279,11 @@ of stacked PRs, VPS prep and cutover, and what stays unverified.
 For a unit that restarts without end, a background job killed after a deploy, or "use the doctor
 commands", load `references/hermes-gateway-unit.md`: the read-only diagnosis order, the
 `--external-supervisor` loop, and the rule that a reload kills jobs you started.
+
+## Pending memory writes, memory cap
+
+For "approve the pending memory" or "why is memory only 2200", load `references/memory-pending-approvals.md`:
+merge the overlapping staged proposals into one net batch, check the size first, clear the staged files.
 
 ## Dashboard errors (Chat tab, nginx auth)
 

@@ -106,6 +106,30 @@ controls, who edits it, when it takes effect.
   the owner asks "still running?", answer from facts: `pgrep -af bin/omp`, `ps -o etime=,rss= -p
   <pid>`, the size of the output file and `git status --short`; give the time left on the
   `--max-time` limit. Do not guess.
+- **A run stopped by its time limit has not reported.** `[Stopped by SIGTERM]` at `--max-time` leaves edits and no
+  final report. Resume it with `omp -p --mode json --no-title --resume <session id from the Recovery line>
+  --max-time 30m < <task file> 2>&1 | omp-stream`; the task file tells it what the last output showed (for
+  example the failing checks and the log path) and asks for the report. To avoid it, tell omp in the task file to
+  append each finding and each fix to a report file as it goes, and to run its own long test suites detached and
+  poll the log, so a kill loses no report.
+- **Order a big task file by what the deliverable cannot ship without.** Given a long list, omp spends its time on the
+  first items and the polish and reaches the integration (the Nix option, the test script, the lints, the report) last or
+  never. Put the wiring, the test script and the draft report first, and the look of the output and the extra
+  measurements last. In a resume file, list the steps in the order of what is still missing, state a total time budget,
+  and ask for the report draft after the first step. Check `git status` before the resume: the files that are absent
+  (here the module change and the tests) tell you what to put first.
+- **Do not `pkill -f` a pattern that your own command line contains.** The shell that runs `pkill -f "resume <id>"`
+  matches itself and the call dies with exit -15 before it kills anything. Find pids with `pgrep -fa 'bin/omp'`
+  and `kill <pid>`, then check `pgrep` again. Killing the `omp-stream` pipeline or the `timeout` wrapper leaves
+  the `omp` child running: kill the `omp` pid too. Stop leftover test runs and ffmpeg children by pid too.
+- **omp cannot be steered once it runs.** When the owner corrects the brief in the first minutes, stop the run by
+  pid, read `git -C <tree> status --short` (clean means nothing was lost), rewrite the affected sections of the
+  task file, and start it again. Say so in one line. The completion notice of the stopped run arrives later:
+  tell the owner it is the old run and ignore it.
+- **"Create the PR with what you have"** means: stop the runs, `git add -A`, run the cheap evals and lints, commit,
+  push, open a **draft** PR whose body lists every failing check, every number not re-measured and what was never
+  run. Take the test counts from the log file, not from memory. If a count in the body turns out wrong and
+  `gh pr edit` fails, post a correction comment with the signature line; do not guess another write route.
 - **Verify before you relay.** Re-check each top finding with a grep or a read of the file (and of
   the upstream source at the pinned rev for claims about Hermes behaviour); report which findings
   you confirmed and which you only relay, and keep omp's own "unsure" labels. Do not run omp a

@@ -56,6 +56,36 @@ While a detached gateway runs it sits in the cgroup of `hermes-backend` (2 GiB c
 the gateway and every job you start share that cap, and `kvm4-health` reports a peak near 100 %.
 Read `systemctl show hermes-backend -p MemoryCurrent -p MemoryPeak` before heavy background work.
 
+### Second cause: the dashboard starts a gateway during the restart gap
+
+A reload makes the gateway exit 75, and `Restart=always` waits `RestartSec` (5 s). In that gap the
+dashboard's Chat-tab TUI (a child of `hermes-backend`) loses its websocket, retries after 1 s and 2 s,
+finds no gateway and starts an unmanaged one (`gateway run --quiet --idle-exit`, detached) in the
+cgroup of `hermes-backend`. The unit's own gateway then finds it, exits 0 and loops. The flag
+`--external-supervisor` cannot stop this: the spawner is a client, not the gateway. Hermes recognises
+only a service named `hermes-gateway.service`, so the client does not see the unit `hermes-agent`.
+Suspect it when `NRestarts` climbs after a deploy that reloaded the unit, with the flag already set.
+
+Prove it from logs, not from a guess: `logs/gateway-exit-diag.log` (the exit-75 time, then a
+`gateway.start` with `"detached": true` and `--idle-exit` in argv a few seconds later),
+`logs/tui_gateway_crash.log` (the reconnect attempts), `gateway.pid` (JSON with the foreign pid),
+`/proc/<pid>/cgroup`, and the journal's "already serves" line.
+
+Fix shape (a wrapper change in the unit, not a Hermes setting): on exit 75 the wrapper starts the
+gateway again at once, in the same process, so the gap is gone; when a child exits 0 within seconds and
+`gateway.pid` names another live pid, the wrapper waits for that pid to exit and then starts its own,
+instead of exiting; more than five exits of 75 in 60 s exit 1 so systemd's counter still works. Test
+it with a stub gateway and a temporary home, never against the live gateway. Only a real reload with
+the dashboard TUI open proves it. The stray gateway that exists when the fix merges is cleared once by
+the owner: `sudo systemctl restart hermes-backend` ends it together with the dashboard TUI and every job
+in that cgroup (omp runs too): ask for it when no background job runs. Never signal the stray gateway
+yourself: your own session may live in it.
+
+A change to the unit's `ExecStart` also changes the derivation of the web-only host: the public
+`/hermes` page renders the unit as YAML. So the check "that host's drv equals main's" does not hold for
+a `hermes.nix` change. Prove the change is not the cause instead: evaluate a copy of the tree that has
+main's `hermes.nix`, the same way (`path:`), and compare. Say in the PR body that the public page changes.
+
 ## A new secret in hermes.env needs a switch, then a reload
 
 The NixOS module copies `hermes.env` into Hermes's `.env` during activation, not when the unit

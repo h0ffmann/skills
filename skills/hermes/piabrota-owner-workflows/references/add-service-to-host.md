@@ -94,6 +94,33 @@ For "deploy the UI at <name>.piabrota.art" (a tool whose UI can type into runnin
 - The owner's order to deploy at a name means the vhost is turned on in the host file in the same
   change. A first draft that leaves it off needs a second small omp run to flip it.
 
+## A service that spans both hosts (a hub and agents, such as monitoring)
+
+nix-os has two hosts, and a service that watches both is easy to design for one. State in the first
+reply and in the task file which host runs which part, and treat the small host's RAM as the budget.
+
+- **One module, imported by `configuration.nix`, everything off by default.** Options per role
+  (`hub.enable`, `agent.enable`, `agent.hubUrl`, `agent.environmentFile`); each `hosts/<name>/default.nix`
+  turns on its own role. The big host runs the hub and an agent. The small host runs the agent only,
+  and the agent dials out: no port, no nginx and no ACME on that host. Prove it with a before/after
+  toplevel drv of each host: the module off equals `main`, and the small host's growth is the
+  agent's closure only.
+- **No basic auth on a vhost that a remote agent must reach.** The gate would stop the agent. Use the
+  tool's own login and the agent's token, and say so in the PR.
+- **Agent secrets (key, token) live in an env file on each box, written by hand**, and the unit gets
+  `unitConfig.ConditionPathExists` on that file: a deploy before the file exists then starts nothing
+  and fails nothing. The first admin account of a hub is created in its web UI: tell the owner to do
+  it right after the first deploy, and read the hub's environment options to close open sign-up
+  (use only options found in the docs or source).
+- **Read the agent's source for what it collects before you promise a metric.** A dashboard that
+  lists systemd units may show status only. The owner wants memory of a unit against its
+  `MemoryMax`: if the agent does not collect that, say so with the file and line, and name the
+  fallback (`kvm4-health`) and the heavier alternative with its measured closure.
+- **Measure the real binaries in a scratch dir**: idle RSS from `/proc/<pid>/status` (`VmRSS`) on free
+  high ports for 60 s, stopped by the PID you started. Size `MemoryMax` from it, small on the small host.
+- The owner's DNS step (an A record to the big host's address, found with `dig +short <sibling>`
+  of a service already on it) comes before the merge, as in the checklist above.
+
 ## Order of omp runs
 
 One omp at a time, in this order, because each task depends on facts only the earlier build shows.
